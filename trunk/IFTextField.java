@@ -1,11 +1,25 @@
-// Interfascia -- ALPHA 001
+// Interfascia ALPHA 002 -- http://superstable.net/interfascia/
+// GUI Library for Processing -- http://www.processing.org/
 //
-// A graphical user interface library for the
-// Processing environment.
+// Copyright (C) 2006 Brendan Berg
+// nospam (at) thbbpt (dot) net
 //
-// by Brendan Berg
+// This library is free software; you can redistribute it and/or 
+// modify it under the terms of the GNU Lesser General Public 
+// License as published by the Free Software Foundation; either 
+// version 2.1 of the License, or (at your option) any later version.
 //
-// This software is released under the LGPL?
+// This library is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public 
+// License along with this library; if not, write to the Free Software 
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA
+
+
 
 package interfascia;
 import processing.core.*;
@@ -30,8 +44,8 @@ public class IFTextField extends GUIComponent {
 	* to the PApplet.
 	*/
 	
-	public IFTextField (String argLabel, int argX, int argY) {
-		this (argLabel, argX, argY, 100, "");
+	public IFTextField (String newLabel, int newX, int newY) {
+		this (newLabel, newX, newY, 100, "");
 	}
 
 
@@ -58,11 +72,18 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	public IFTextField (String argLabel, int argX, int argY, int argWidth, String argContents) {
+		setLabel(argLabel);
+		setPosition(argX, argY);
+		setSize(argWidth, 21);
+
+		/*
 		label = argLabel;
 		x = argX;
 		y = argY;
 		wid = argWidth;
 		hgt = 21;
+		*/
+		
 		contents = argContents;
 	}
 	
@@ -181,7 +202,7 @@ public class IFTextField extends GUIComponent {
 	* @param val the string to become the text field's contents
 	*/
 	
-	public void setValue(String val) {
+	public void setValue(String newValue) {
 		letterWidths = new float[100];
 		letterWidths[0] = 0;
 		float total = 0;
@@ -189,15 +210,15 @@ public class IFTextField extends GUIComponent {
 		PFont textFont = parent.g.textFont;
 		parent.textFont(meta, 13);
 		
-		for (int i = 0; i < val.length(); i++) {
-			total += parent.textWidth(val.charAt(i));
+		for (int i = 0; i < newValue.length(); i++) {
+			total += parent.textWidth(newValue.charAt(i));
 			letterWidths[i + 1] = total;
 			letterWidths[i + 2] = total;
 		}
 		
 		parent.g.textFont = textFont;
 		
-		contents = val;
+		contents = newValue;
 		fireEventNotification(this, "Modified");
 	}
 
@@ -235,7 +256,8 @@ public class IFTextField extends GUIComponent {
 				startSelect = cursorPos = findClosestGap(parent.mouseX - x - 4);
 				draw();
 			} else {
-				if (hasFocus) {
+				//if (hasFocus) {
+				if (this == parent.getComponentWithFocus()) {
 					wasClicked = false;
 					controller.yieldFocus(this);
 					startSelect = endSelect = -1;
@@ -298,6 +320,8 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	public void draw () {
+		boolean hasFocus = parent.getFocusStatusForComponent(this);
+
 		if (wasClicked) {
 			 currentColor = lookAndFeel.activeColor;
 		} else if (isMouseOver (parent.mouseX, parent.mouseY) || hasFocus) {
@@ -315,7 +339,7 @@ public class IFTextField extends GUIComponent {
 		// Draw the surrounding box
 		parent.stroke(lookAndFeel.highlightColor);
 		parent.fill(lookAndFeel.borderColor);//currentColor);
-		parent.rect(x, y, wid, hgt);
+		parent.rect(getX(), getY(), getWidth(), getHeight());
 		//parent.fill(lookAndFeel.borderColor);
 		parent.noStroke();
 		//parent.rect(x + 2, y + 2, wid - 3, hgt - 3);
@@ -333,20 +357,20 @@ public class IFTextField extends GUIComponent {
 				tempEnd = endSelect;
 			}
 			
-			parent.rect(x + letterWidths[tempStart] + 4, y + 3, letterWidths[tempEnd] - letterWidths[tempStart] + 1, 15);
+			parent.rect(getX() + letterWidths[tempStart] + 4, getY() + 3, letterWidths[tempEnd] - letterWidths[tempStart] + 1, 15);
 		}
 		
 		// Draw the string
 		parent.fill (lookAndFeel.textColor);
 		parent.textFont (meta, 13);
 		parent.textAlign (parent.LEFT);
-		parent.text (contents, x + 4, y + 5, wid - 8, hgt - 6);
+		parent.text (contents, getX() + 4, getY() + 5, getWidth() - 8, getHeight() - 6);
 		 // (wid / 2) + x, (hgt - 4) + y);
 
 		// Draw the insertion point (it blinks!)
 		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((parent.millis() % 1000) > 500)) {
 			parent.stroke(lookAndFeel.darkGrayColor);
-			parent.line(x + letterWidths[cursorPos] + 4, y + 3, x + letterWidths[cursorPos] + 4, y + 18);
+			parent.line(getX() + letterWidths[cursorPos] + 4, getY() + 3, getX() + letterWidths[cursorPos] + 4, getY() + 18);
 		}
 		
 		// Clean up when you're done
