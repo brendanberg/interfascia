@@ -1,47 +1,79 @@
-// Interfascia -- ALPHA 001
+// Interfascia ALPHA 002 -- http://superstable.net/interfascia/
+// GUI Library for Processing -- http://www.processing.org/
 //
-// A graphical user interface library for the
-// Processing environment.
+// Copyright (C) 2006 Brendan Berg
+// interfascia (at) thbbpt (dot) net
 //
-// by Brendan Berg
+// This library is free software; you can redistribute it and/or 
+// modify it under the terms of the GNU Lesser General Public 
+// License as published by the Free Software Foundation; either 
+// version 2.1 of the License, or (at your option) any later version.
 //
-// This software is released under the LGPL?
+// This library is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public 
+// License along with this library; if not, write to the Free Software 
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA
+
+
 
 package interfascia;
 import processing.core.*;
+import java.awt.event.*;
 
-public class IFProgressBar extends GUIComponent {	private int bgColor, progressColor, borderColor;	private float progress = 0;
-		public IFProgressBar (int argX, int argY, int argWidth) {		x = argX;		y = argY;		wid = argWidth;		hgt = 14;	}
+public class IFProgressBar extends GUIComponent {
+	private int bgColor, progressColor, borderColor;
+	private float progress = 0;
+	
+	public IFProgressBar (int newX, int newY, int newWidth) {
+		setPosition(newX, newY);
+		setSize(newWidth, 14);
+	}
 
 	public void initWithParent () {
 		parent.registerDraw(this);
-		
-		// Play nicely with other people's draw methods. They
-		// may have changed the color mode.
-		int cMode;
-		float cModeX, cModeY, cModeZ, cModeA;
-
-		cMode = parent.g.colorMode;
-		cModeX = parent.g.colorModeX;
-		cModeY = parent.g.colorModeY;
-		cModeZ = parent.g.colorModeZ;
-		cModeA = parent.g.colorModeA;
-		parent.colorMode(parent.RGB, 255);
-		bgColor = parent.color(153, 153, 204);
-		progressColor = parent.color(255, 153, 51);
-		borderColor = parent.color(255);
-		
-		// Set the color mode back
-		parent.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);	}	public void update (int argMouseX, int argMouseY) {		draw ();	}
-
-	// Overriding the inherited mousePressed and mouseReleased
-	// because the progress bar doesn't need to react to them.
-
-	public void mousePressed (int mouseX, int mouseY) {
 	}
 
-	public void mouseReleased (int mouseX, int mouseY) {
-	}	public void draw () {
-		parent.stroke (borderColor);		parent.fill (bgColor);		parent.rect (x, y, wid, hgt);		parent.stroke (progressColor);		parent.fill (progressColor);		parent.rect (x + 1, y + 1, parent.floor(progress * (wid - 2)), hgt - 2);
-	}	public void setProgress (float argProgress) {		progress = argProgress;	}	public float getProgress () {		return progress;	}
-}
+	// Overriding the inherited mouseEvent because the progress bar doesn't 
+	// need to react to them.
+
+	public void mouseEvent (MouseEvent e) {
+	}
+	
+	public boolean canReceiveFocus() {
+		return false;
+	}
+
+	public void draw () {
+		boolean stroke = parent.g.stroke;
+		int strokeColor = parent.g.strokeColor;
+		int fillColor = parent.g.fillColor;
+		
+		int x = getX(), y = getY(), wid = getWidth(), hgt = getHeight();
+	
+		parent.stroke (lookAndFeel.borderColor);
+		parent.fill (lookAndFeel.baseColor);
+		parent.rect (x, y, wid, hgt);
+		parent.stroke (lookAndFeel.activeColor);
+		parent.fill (lookAndFeel.activeColor);
+		parent.rect (x + 1, y + 1, parent.floor(progress * (wid - 2)), hgt - 2);
+
+		parent.stroke(strokeColor);
+		if (!stroke)
+			parent.noStroke();
+		parent.fill(fillColor);
+	}
+
+	public void setProgress (float argProgress) {
+		progress = argProgress;
+	}
+
+	public float getProgress () {
+		return progress;
+	}
+
+}

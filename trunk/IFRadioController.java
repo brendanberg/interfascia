@@ -28,20 +28,18 @@ import java.lang.reflect.*;
 public class IFRadioController extends GUIComponent {
 	private IFRadioButton[] contents;
 	private int numItems = 0, selected = -1;
-	private String label;
-	private Object listener;
 
 	public IFRadioController() {
 		contents = new IFRadioButton[5];
 	}
 
 	public IFRadioController (String argLabel) {
-		label = argLabel;
+		setLabel(argLabel);
 		contents = new IFRadioButton[5];
 	}
 	
 	public IFRadioController (String argLabel, Object l) {
-		label = argLabel;
+		setLabel(argLabel);
 		addActionListener(l);
 		contents = new IFRadioButton[5];
 	}
@@ -72,24 +70,22 @@ public class IFRadioController extends GUIComponent {
 		}
 	}
 
-	public void buttonPressed (IFRadioButton button) {
+	public void selectButton (IFRadioButton button) {
 		for (int i = 0; i < numItems; i++) {
-			contents[i].setSelected (false);
 			if (contents[i] == button)
 			selected = i;
 		}
-		button.setSelected (true);
 		fireEventNotification (button, "Selected");
 	}
-	
-	public void setSelectedButton (IFRadioButton button) {
-		buttonPressed(button);
+		
+	public boolean getSelectionStatusForButton(IFRadioButton button) {
+		if (selected >= 0 && selected < numItems)
+			return button == contents[selected];
+		else
+			return false;
 	}
 
 	public void deselectAll () {
-		for (int i = 0; i < numItems; i++) {
-			contents[i].setSelected (false);
-		}
 		selected = -1;
 	}
 

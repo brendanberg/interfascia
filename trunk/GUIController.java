@@ -2,7 +2,7 @@
 // GUI Library for Processing -- http://www.processing.org/
 //
 // Copyright (C) 2006 Brendan Berg
-// nospam (at) thbbpt (dot) net
+// interfascia (at) thbbpt (dot) net
 //
 // This library is free software; you can redistribute it and/or 
 // modify it under the terms of the GNU Lesser General Public 
@@ -41,10 +41,6 @@ public class GUIController {
 		parent.registerKeyEvent(this);
 	}
 
-	//public GUIController (int argCapacity) {
-	//	 contents = new GUIComponent[argCapacity];
-	//}
-
 	public void add (GUIComponent component) {
 		if (numItems == contents.length) {
 			GUIComponent[] temp = contents;
@@ -63,16 +59,20 @@ public class GUIController {
 	}
 	
 	public void requestFocus(GUIComponent c) {
-		if (focusIndex >= 0 && focusIndex < contents.length)
+		/*if (focusIndex >= 0 && focusIndex < contents.length)
 			contents[focusIndex].setFocus(false);
 		c.setFocus(true);
-		focusIndex = c.getIndex();
+		focusIndex = c.getIndex();*/
+		for (int i = 0; i < numItems; i++) {
+			if (c == contents[i])
+				focusIndex = i;
+		}
 	}
 	
 	// ****** LOOK AT THIS, I DON'T THINK IT'S RIGHT ******
 	public void yieldFocus(GUIComponent c) {
 		if (focusIndex > -1 && focusIndex < numItems && contents[focusIndex] == c) {
-			c.setFocus(false);
+			//c.setFocus(false);
 			focusIndex = -1;
 		}
 	}
@@ -82,20 +82,26 @@ public class GUIController {
 	}
 	
 	public boolean getFocusStatusForComponent(GUIComponent c) {
-		return c == contents[focusIndex];
+		if (focusIndex >= 0 && focusIndex < numItems)
+			return c == contents[focusIndex];
+		else
+			return false;
 	}
 	
 	public void keyEvent(KeyEvent e) {		
 		if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_TAB) {
-			if (focusIndex >= 0 && focusIndex < contents.length)
-				contents[focusIndex].setFocus(false);
-			
-			if (focusIndex >= numItems - 1 || focusIndex < 0)
-				focusIndex = 0;
+			int shiftDownMask = KeyEvent.SHIFT_DOWN_MASK;
+			if (e.getModifiers() == shiftDownMask)
+				if (focusIndex >= numItems || focusIndex <= 0)
+					focusIndex = numItems - 1;
+				else
+					focusIndex--;
 			else
-				focusIndex++;
+				if (focusIndex >= numItems - 1 || focusIndex < 0)
+					focusIndex = 0;
+				else
+					focusIndex++;
 			
-			contents[focusIndex].setFocus(true);
 		} else if (e.getKeyCode() != KeyEvent.VK_TAB) {
 			if (focusIndex >= 0 && focusIndex < contents.length)
 				contents[focusIndex].keyEvent(e);

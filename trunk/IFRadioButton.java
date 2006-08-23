@@ -1,26 +1,76 @@
-// Interfascia -- ALPHA 001//// A graphical user interface library for the// Processing environment.//// by Brendan Berg//// This software is released under the LGPL?
+// Interfascia ALPHA 002 -- http://superstable.net/interfascia/
+// GUI Library for Processing -- http://www.processing.org/
+//
+// Copyright (C) 2006 Brendan Berg
+// interfascia (at) thbbpt (dot) net
+//
+// This library is free software; you can redistribute it and/or 
+// modify it under the terms of the GNU Lesser General Public 
+// License as published by the Free Software Foundation; either 
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public 
+// License along with this library; if not, write to the Free Software 
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA
+
+
 
 package interfascia;
 import processing.core.*;
 import java.awt.event.*;
-public class IFRadioButton extends GUIComponent {	private int currentColor;	private boolean selected;	private IFRadioController controller;	public IFRadioButton (String argLabel, int argX, int argY, IFRadioController argController) {		label = argLabel;		x = argX;		y = argY + 1;		wid = 15;		hgt = 15;		controller = argController;		controller.add (this);	}	public void initWithParent () {
+
+public class IFRadioButton extends GUIComponent {
+	private int currentColor;
+	private boolean selected;
+	private IFRadioController radioController;
+
+	public IFRadioButton (String newLabel, int newX, int newY, IFRadioController newController) {
+		setLabel(newLabel);
+		setPosition(newX, newY + 1);
+		setSize(15, 15);
+
+		radioController = newController;
+		radioController.add (this);
+	}
+
+	public void initWithParent () {
 		parent.registerDraw(this);
 		parent.registerMouseEvent(this);
-		//parent.registerKeyEvent(this);
-	}	public void mouseEvent(MouseEvent e) {
+	}
+
+	public void mouseEvent(MouseEvent e) {
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-			if (isMouseOver (parent.mouseX, parent.mouseY)) {				wasClicked = true;				draw();			}		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-			if (wasClicked && isMouseOver (parent.mouseX, parent.mouseY)) {				controller.buttonPressed(this);
-				wasClicked = false;				draw();			}		}
+			if (isMouseOver (parent.mouseX, parent.mouseY)) {
+				wasClicked = true;
+			}
+		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+			if (wasClicked && isMouseOver (parent.mouseX, parent.mouseY)) {
+				radioController.selectButton(this);
+				wasClicked = false;
+			}
+		}
 	}
 	
 	public void keyEvent(KeyEvent e) {
 		if (e.getID() == KeyEvent.KEY_TYPED && e.getKeyChar() == ' ') {
-			//fireEventNotification(this, "Selected");
-			controller.buttonPressed(this);
+			radioController.selectButton(this);
 		}
 	}
-	public void draw () {		if (isMouseOver (parent.mouseX, parent.mouseY)) {			currentColor = lookAndFeel.highlightColor;		} else if (hasFocus) {			currentColor = lookAndFeel.highlightColor;		} else {			currentColor = lookAndFeel.baseColor;		}
+
+	public void draw () {
+		if (isMouseOver (parent.mouseX, parent.mouseY)) {
+			currentColor = lookAndFeel.highlightColor;
+		} else if (controller.getFocusStatusForComponent(this)) {
+			currentColor = lookAndFeel.highlightColor;
+		} else {
+			currentColor = lookAndFeel.baseColor;
+		}
 		
 		boolean stroke = parent.g.stroke;
 		int strokeColor = parent.g.strokeColor;
@@ -28,18 +78,41 @@ import java.awt.event.*;
 		int ellipseMode = parent.g.ellipseMode;
 		PFont textFont = parent.g.textFont;
 		int textAlign = parent.g.textAlign;
+
+		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 		
-		parent.stroke(lookAndFeel.borderColor);		parent.fill(currentColor);
+		parent.stroke(lookAndFeel.borderColor);
+		parent.fill(currentColor);
 		
-		parent.ellipseMode(parent.CORNER);		parent.ellipse(x, y, wid, hgt);		if (selected == true) {			parent.fill (lookAndFeel.lightGrayColor);			parent.ellipse (x + 2, y + 2, wid - 4, hgt - 4);		}
-				parent.fill (lookAndFeel.textColor);		parent.textFont (meta, 13);		parent.textAlign (parent.LEFT);		parent.text (label, wid + x + 5, (hgt - 3) + y);
+		parent.ellipseMode(parent.CORNER);
+		parent.ellipse(x, y, wid, hgt);
+		if (radioController.getSelectionStatusForButton(this)) {
+			parent.fill (lookAndFeel.lightGrayColor);
+			parent.ellipse (x + 2, y + 2, wid - 4, hgt - 4);
+		}
+		
+		parent.fill (lookAndFeel.textColor);
+		parent.textFont (meta, 13);
+		parent.textAlign (parent.LEFT);
+		parent.text (getLabel(), wid + x + 5, (hgt - 3) + y);
 
 		parent.stroke(strokeColor);
 		if (!stroke)
 			parent.noStroke();
 		parent.fill(fillColor);
 		parent.ellipseMode(ellipseMode);
-		parent.textFont(textFont);
-		parent.textAlign(textAlign);
-	}	public boolean isSelected () {		return selected;	}	public void setSelected (boolean argSelected) {		selected = argSelected;
-	}}
+		if (textFont != null) {
+			parent.textFont(textFont);
+			parent.textAlign(textAlign);
+		}
+	}
+
+	public boolean isSelected () {
+		return radioController.getSelectionStatusForButton(this);
+	}
+
+	public void setSelected () {
+		radioController.selectButton(this);
+	}
+
+}

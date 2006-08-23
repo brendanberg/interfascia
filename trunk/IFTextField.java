@@ -2,7 +2,7 @@
 // GUI Library for Processing -- http://www.processing.org/
 //
 // Copyright (C) 2006 Brendan Berg
-// nospam (at) thbbpt (dot) net
+// interfascia (at) thbbpt (dot) net
 //
 // This library is free software; you can redistribute it and/or 
 // modify it under the terms of the GNU Lesser General Public 
@@ -32,7 +32,8 @@ import java.awt.event.*;
 public class IFTextField extends GUIComponent {
 	private int currentColor;
 	private String contents;
-	private int cursorPos = 0, startSelect = -1, endSelect = -1;
+	private int cursorPos = 0, visiblePortionStart = 0, visiblePortionEnd = 0;
+	private int startSelect = -1, endSelect = -1;
 	private float[] letterWidths = new float[100];
 
 
@@ -71,20 +72,12 @@ public class IFTextField extends GUIComponent {
 	* @param argContents the default contents of the text field
 	*/
 	
-	public IFTextField (String argLabel, int argX, int argY, int argWidth, String argContents) {
+	public IFTextField (String argLabel, int argX, int argY, int argWidth, String newValue) {
 		setLabel(argLabel);
 		setPosition(argX, argY);
 		setSize(argWidth, 21);
-
-		/*
-		label = argLabel;
-		x = argX;
-		y = argY;
-		wid = argWidth;
-		hgt = 21;
-		*/
-		
-		contents = argContents;
+		//setValue(newValue);
+		contents = newValue;
 	}
 	
 	public void initWithParent () {
@@ -171,12 +164,12 @@ public class IFTextField extends GUIComponent {
 	
 	private int findClosestGap(int x) {
 		if (x > 0) {
-			int left = 0, right = contents.length() + 1, mid = (left + right) / 2;
+			int left = visiblePortionStart, right = visiblePortionEnd + 1, mid = (left + right) / 2;
 			while (left <= right - 1) {
 				mid = (left + right) / 2;
-				if (x < letterWidths[mid])
+				if (x < letterWidths[mid] - letterWidths[visiblePortionStart])
 					right = mid - 1;
-				else if (x > letterWidths[mid])
+				else if (x > letterWidths[mid] - letterWidths[visiblePortionStart])
 					left = mid + 1;
 				else {
 					left = mid;
@@ -203,6 +196,9 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	public void setValue(String newValue) {
+		if (parent == null)
+			return;
+			
 		letterWidths = new float[100];
 		letterWidths[0] = 0;
 		float total = 0;
@@ -253,19 +249,16 @@ public class IFTextField extends GUIComponent {
 				controller.requestFocus(this);
 				wasClicked = true;
 				endSelect = -1;
-				startSelect = cursorPos = findClosestGap(parent.mouseX - x - 4);
-				draw();
+				startSelect = cursorPos = findClosestGap(parent.mouseX - getX() - 4);
 			} else {
-				//if (hasFocus) {
-				if (this == parent.getComponentWithFocus()) {
+				if (controller.getFocusStatusForComponent(this)) {
 					wasClicked = false;
 					controller.yieldFocus(this);
 					startSelect = endSelect = -1;
 				}
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_DRAGGED) {
-			endSelect = cursorPos = findClosestGap(parent.mouseX - x - 4);
-			draw();
+			endSelect = cursorPos = findClosestGap(parent.mouseX - getX() - 4);
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 			if (endSelect == startSelect) {
 				startSelect = -1;
@@ -275,8 +268,6 @@ public class IFTextField extends GUIComponent {
 	}
 
 
-
-	// **** CHECK THIS FOR CROSS-PLATFORM COMPATIBILITY *****
 	
 	/**
 	* receives KeyEvents forwarded to it by the GUIController
@@ -286,9 +277,7 @@ public class IFTextField extends GUIComponent {
 
 	public void keyEvent(KeyEvent e) {
 		if (e.getID() == KeyEvent.KEY_PRESSED) {
-			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-				deleteChar();
-			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				cursorPos = contents.length();
 			} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 				cursorPos = 0;
@@ -304,12 +293,15 @@ public class IFTextField extends GUIComponent {
 					cursorPos++;
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				fireEventNotification(this, "Completed");
+			}
+		} else if (e.getID() == KeyEvent.KEY_TYPED) {
+			if (e.getKeyChar() == '\b') {
+				deleteChar();
 			} else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
 				addChar(e.getKeyChar());
 				startSelect = endSelect = -1;
 			}
 		}
-		draw();
 	}
 	
 	
@@ -320,7 +312,7 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	public void draw () {
-		boolean hasFocus = parent.getFocusStatusForComponent(this);
+		boolean hasFocus = controller.getFocusStatusForComponent(this);
 
 		if (wasClicked) {
 			 currentColor = lookAndFeel.activeColor;
@@ -338,12 +330,10 @@ public class IFTextField extends GUIComponent {
 
 		// Draw the surrounding box
 		parent.stroke(lookAndFeel.highlightColor);
-		parent.fill(lookAndFeel.borderColor);//currentColor);
+		parent.fill(lookAndFeel.borderColor);
 		parent.rect(getX(), getY(), getWidth(), getHeight());
-		//parent.fill(lookAndFeel.borderColor);
 		parent.noStroke();
-		//parent.rect(x + 2, y + 2, wid - 3, hgt - 3);
-		
+
 		// Draw the selection rectangle
 		if (startSelect != -1 && endSelect != -1) {
 			parent.fill(lookAndFeel.selectionColor);
@@ -359,13 +349,13 @@ public class IFTextField extends GUIComponent {
 			
 			parent.rect(getX() + letterWidths[tempStart] + 4, getY() + 3, letterWidths[tempEnd] - letterWidths[tempStart] + 1, 15);
 		}
-		
+
 		// Draw the string
 		parent.fill (lookAndFeel.textColor);
 		parent.textFont (meta, 13);
 		parent.textAlign (parent.LEFT);
-		parent.text (contents, getX() + 4, getY() + 5, getWidth() - 8, getHeight() - 6);
-		 // (wid / 2) + x, (hgt - 4) + y);
+		parent.text (contents.substring(visiblePortionStart, visiblePortionEnd), 
+						getX() + 4, getY() + 5, getWidth() - 8, getHeight() - 6);
 
 		// Draw the insertion point (it blinks!)
 		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((parent.millis() % 1000) > 500)) {
@@ -378,8 +368,10 @@ public class IFTextField extends GUIComponent {
 		if (!stroke)
 			parent.noStroke();
 		parent.fill(fillColor);
-		parent.textFont(textFont);
-		parent.textAlign(textAlign);
+		if (textFont != null) {
+			parent.textFont(textFont);
+			parent.textAlign(textAlign);
+		}
 	}
 
 }

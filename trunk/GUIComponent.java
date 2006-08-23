@@ -2,7 +2,7 @@
 // GUI Library for Processing -- http://www.processing.org/
 //
 // Copyright (C) 2006 Brendan Berg
-// nospam (at) thbbpt (dot) net
+// interfascia (at) thbbpt (dot) net
 //
 // This library is free software; you can redistribute it and/or 
 // modify it under the terms of the GNU Lesser General Public 
@@ -29,20 +29,19 @@ import java.lang.reflect.*;
 abstract class GUIComponent {
 	private int x, y, wid, hgt;
 	private String label;
-	private boolean hasFocus = false, wasClicked = false;
+	
+	protected boolean wasClicked = false;
+	
+	protected PApplet parent;
 	protected Object listener;
 	protected IFLookAndFeel lookAndFeel;
-	protected int index;
 	protected GUIController controller;
-
-	protected PApplet parent;
-	
 	protected PFont meta;
+	// May not need this
+	protected int index;
+
 	
 	public GUIComponent () {
-	}
-	
-	public void initWithParent () {
 	}
 	
 	public void setIndex(int i) {
@@ -77,6 +76,9 @@ abstract class GUIComponent {
 		return parent;
 	}
 	
+	public void initWithParent () {
+	}
+	
 	public void setLookAndFeel(IFLookAndFeel lf) {
 		lookAndFeel = lf;
 	}
@@ -89,12 +91,8 @@ abstract class GUIComponent {
 		label = argLabel;
 	}
 	
-	public void setFocus (boolean argFocus) {
-		hasFocus = argFocus;
-	}
-	
-	public boolean getFocus () {
-		return hasFocus;
+	public boolean canReceiveFocus() {
+		return true;
 	}
 	
 	public int getWidth() {
@@ -149,6 +147,10 @@ abstract class GUIComponent {
 
 	public void setY(int newY) {
 		if (newY > 0) y = newY;
+	}
+	
+	public int getY() {
+		return y;
 	}
 
 	public void mouseEvent (MouseEvent e) {
