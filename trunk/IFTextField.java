@@ -81,8 +81,7 @@ public class IFTextField extends GUIComponent {
 	}
 	
 	public void initWithParent () {
-		parent.registerDraw(this);
-		parent.registerMouseEvent(this);
+		controller.parent.registerMouseEvent(this);
 		if (contents != null) {
 			setValue(contents);
 		}
@@ -115,13 +114,13 @@ public class IFTextField extends GUIComponent {
 			t1 = contents.substring(0, cursorPos);
 			t2 = contents.substring(cursorPos);
 		}
-		setValue(t1 + c + t2);
 		cursorPos++;
-		
+		setValue(t1 + c + t2);
+			
 		fireEventNotification(this, "Modified");
 	}
 	
-	
+
 	
 	/**
 	* deletes either the character directly to the left of the insertion point or the selected group of characters. It automatically handles cases where there is no character to the left of the insertion point (when the insertion point is at the beginning of the string). It is called by <pre>public void keyEvent</pre> when the delete key is pressed.
@@ -148,8 +147,8 @@ public class IFTextField extends GUIComponent {
 				cursorPos = contents.length();
 			t1 = contents.substring(0, cursorPos - 1);
 			t2 = contents.substring(cursorPos);
-			setValue(t1 + t2);
 			cursorPos--;
+			setValue(t1 + t2);
 			fireEventNotification(this, "Modified");
 		}
 	}
@@ -196,25 +195,34 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	public void setValue(String newValue) {
-		if (parent == null)
+		if (controller.parent == null)
 			return;
 			
 		letterWidths = new float[100];
 		letterWidths[0] = 0;
 		float total = 0;
 		
-		PFont textFont = parent.g.textFont;
-		parent.textFont(meta, 13);
+		controller.userState.saveSettingsForApplet(controller.parent);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
 		
 		for (int i = 0; i < newValue.length(); i++) {
-			total += parent.textWidth(newValue.charAt(i));
+			total += controller.parent.textWidth(newValue.charAt(i));
 			letterWidths[i + 1] = total;
 			letterWidths[i + 2] = total;
 		}
-		
-		parent.g.textFont = textFont;
-		
+
 		contents = newValue;
+		
+		if (letterWidths[contents.length()] < getWidth() - 8) {
+			visiblePortionStart = 0;
+			visiblePortionEnd = contents.length();
+		} else  {
+			while (letterWidths[visiblePortionEnd] - letterWidths[++visiblePortionStart] > getWidth() - 8);
+		}
+
+		
+		controller.userState.restoreSettingsToApplet(controller.parent);
+		
 		fireEventNotification(this, "Modified");
 	}
 
@@ -245,11 +253,11 @@ public class IFTextField extends GUIComponent {
 
 	public void mouseEvent(MouseEvent e) {
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-			if (isMouseOver(parent.mouseX, parent.mouseY)) {
+			if (isMouseOver(e.getX(), e.getY())) {
 				controller.requestFocus(this);
 				wasClicked = true;
 				endSelect = -1;
-				startSelect = cursorPos = findClosestGap(parent.mouseX - getX() - 4);
+				startSelect = cursorPos = findClosestGap(controller.parent.mouseX - getX() - 4);
 			} else {
 				if (controller.getFocusStatusForComponent(this)) {
 					wasClicked = false;
@@ -258,7 +266,7 @@ public class IFTextField extends GUIComponent {
 				}
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_DRAGGED) {
-			endSelect = cursorPos = findClosestGap(parent.mouseX - getX() - 4);
+			endSelect = cursorPos = findClosestGap(e.getX() - getX() - 4);
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 			if (endSelect == startSelect) {
 				startSelect = -1;
@@ -316,27 +324,21 @@ public class IFTextField extends GUIComponent {
 
 		if (wasClicked) {
 			 currentColor = lookAndFeel.activeColor;
-		} else if (isMouseOver (parent.mouseX, parent.mouseY) || hasFocus) {
+		} else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY) || hasFocus) {
 			 currentColor = lookAndFeel.highlightColor;
 		} else {
 			 currentColor = lookAndFeel.baseColor;
 		}
 
-		boolean stroke = parent.g.stroke;
-		int strokeColor = parent.g.strokeColor;
-		int fillColor = parent.g.fillColor;
-		PFont textFont = parent.g.textFont;
-		int textAlign = parent.g.textAlign;
-
 		// Draw the surrounding box
-		parent.stroke(lookAndFeel.highlightColor);
-		parent.fill(lookAndFeel.borderColor);
-		parent.rect(getX(), getY(), getWidth(), getHeight());
-		parent.noStroke();
+		controller.parent.stroke(lookAndFeel.highlightColor);
+		controller.parent.fill(lookAndFeel.borderColor);
+		controller.parent.rect(getX(), getY(), getWidth(), getHeight());
+		controller.parent.noStroke();
 
 		// Draw the selection rectangle
 		if (startSelect != -1 && endSelect != -1) {
-			parent.fill(lookAndFeel.selectionColor);
+			controller.parent.fill(lookAndFeel.selectionColor);
 			
 			int tempStart, tempEnd;
 			if (endSelect < startSelect) {
@@ -347,30 +349,18 @@ public class IFTextField extends GUIComponent {
 				tempEnd = endSelect;
 			}
 			
-			parent.rect(getX() + letterWidths[tempStart] + 4, getY() + 3, letterWidths[tempEnd] - letterWidths[tempStart] + 1, 15);
+			controller.parent.rect(getX() + letterWidths[tempStart] + 4, getY() + 3, letterWidths[tempEnd] - letterWidths[tempStart] + 1, 15);
 		}
 
 		// Draw the string
-		parent.fill (lookAndFeel.textColor);
-		parent.textFont (meta, 13);
-		parent.textAlign (parent.LEFT);
-		parent.text (contents.substring(visiblePortionStart, visiblePortionEnd), 
+		controller.parent.fill (lookAndFeel.textColor);
+		controller.parent.text (contents.substring(visiblePortionStart, visiblePortionEnd), 
 						getX() + 4, getY() + 5, getWidth() - 8, getHeight() - 6);
 
 		// Draw the insertion point (it blinks!)
-		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((parent.millis() % 1000) > 500)) {
-			parent.stroke(lookAndFeel.darkGrayColor);
-			parent.line(getX() + letterWidths[cursorPos] + 4, getY() + 3, getX() + letterWidths[cursorPos] + 4, getY() + 18);
-		}
-		
-		// Clean up when you're done
-		parent.stroke(strokeColor);
-		if (!stroke)
-			parent.noStroke();
-		parent.fill(fillColor);
-		if (textFont != null) {
-			parent.textFont(textFont);
-			parent.textAlign(textAlign);
+		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((controller.parent.millis() % 1000) > 500)) {
+			controller.parent.stroke(lookAndFeel.darkGrayColor);
+			controller.parent.line(getX() + letterWidths[cursorPos] + 4, getY() + 3, getX() + letterWidths[cursorPos] + 4, getY() + 18);
 		}
 	}
 

@@ -34,10 +34,6 @@ public class IFProgressBar extends GUIComponent {
 		setSize(newWidth, 14);
 	}
 
-	public void initWithParent () {
-		parent.registerDraw(this);
-	}
-
 	// Overriding the inherited mouseEvent because the progress bar doesn't 
 	// need to react to them.
 
@@ -49,23 +45,20 @@ public class IFProgressBar extends GUIComponent {
 	}
 
 	public void draw () {
-		boolean stroke = parent.g.stroke;
-		int strokeColor = parent.g.strokeColor;
-		int fillColor = parent.g.fillColor;
-		
 		int x = getX(), y = getY(), wid = getWidth(), hgt = getHeight();
 	
-		parent.stroke (lookAndFeel.borderColor);
-		parent.fill (lookAndFeel.baseColor);
-		parent.rect (x, y, wid, hgt);
-		parent.stroke (lookAndFeel.activeColor);
-		parent.fill (lookAndFeel.activeColor);
-		parent.rect (x + 1, y + 1, parent.floor(progress * (wid - 2)), hgt - 2);
+		controller.parent.stroke (lookAndFeel.borderColor);
+		controller.parent.fill (lookAndFeel.baseColor);
+		controller.parent.rect (x, y, wid, hgt);
+		controller.parent.stroke (lookAndFeel.activeColor);
+		controller.parent.fill (lookAndFeel.activeColor);
+		controller.parent.rect (x + 1, y + 1, (int) Math.floor(progress * (wid - 2)), hgt - 2);
 
-		parent.stroke(strokeColor);
-		if (!stroke)
-			parent.noStroke();
-		parent.fill(fillColor);
+		if (controller.showBounds) {
+			controller.parent.noFill();
+			controller.parent.stroke(255,0,0);
+			controller.parent.rect(x, y, wid, hgt);
+		}
 	}
 
 	public void setProgress (float argProgress) {

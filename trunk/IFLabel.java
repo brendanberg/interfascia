@@ -40,6 +40,8 @@ public class IFLabel extends GUIComponent {
 		else
 			textSize = 13;
 	}
+
+	// ***** SET THE LABEL'S SIZE SO WE CAN GET ITS BOUNDING BOX *****
 	
 	public boolean canReceiveFocus() {
 		return false;
@@ -56,26 +58,9 @@ public class IFLabel extends GUIComponent {
 		return textSize;
 	}
 
-	public void initWithParent () {
-		parent.registerDraw(this);
-	}
-
 	public void draw () {
-		int fillColor = parent.g.fillColor;
-		PFont textFont = parent.g.textFont;
-		int textAlign = parent.g.textAlign;
-
-		parent.fill (lookAndFeel.textColor);
-		parent.textFont (meta, textSize);
-		parent.textAlign (parent.LEFT);
-		parent.text (getLabel(), getX(), getY() + textSize - 3);
-
-		parent.fill(fillColor);
-		if (textFont != null) {
-			parent.textFont(textFont);
-			parent.textAlign(textAlign);
-		}
-
+		controller.parent.fill (lookAndFeel.textColor);
+		controller.parent.text (getLabel(), getX(), getY() + textSize - 3);
 	}
 
 }

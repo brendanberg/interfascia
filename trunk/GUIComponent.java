@@ -32,11 +32,11 @@ abstract class GUIComponent {
 	
 	protected boolean wasClicked = false;
 	
-	protected PApplet parent;
+	//protected PApplet parent;
 	protected Object listener;
 	protected IFLookAndFeel lookAndFeel;
 	protected GUIController controller;
-	protected PFont meta;
+	//protected PFont meta;
 	// May not need this
 	protected int index;
 
@@ -64,16 +64,6 @@ abstract class GUIComponent {
 	
 	public GUIController getController() {
 		return controller;
-	}
-	
-	public void setParent (PApplet argParent) {
-		parent = argParent;
-		meta = parent.loadFont ("FrutigerLight-12.vlw");
-		initWithParent ();
-	}
-	
-	public PApplet getParent () {
-		return parent;
 	}
 	
 	public void initWithParent () {
@@ -155,15 +145,13 @@ abstract class GUIComponent {
 
 	public void mouseEvent (MouseEvent e) {
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-			if (isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (isMouseOver (e.getX(), e.getY())) {
 				 wasClicked = true;
-				 draw();
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-			if (wasClicked && isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				 fireEventNotification(this, "Clicked");
 				 wasClicked = false;
-				 draw();
 			}
 		}
 	}

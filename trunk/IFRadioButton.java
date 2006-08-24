@@ -40,17 +40,26 @@ public class IFRadioButton extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		parent.registerDraw(this);
-		parent.registerMouseEvent(this);
+		controller.parent.registerMouseEvent(this);
+		
+		if (lookAndFeel == null)
+			return;
+		
+		controller.userState.saveSettingsForApplet(controller.parent);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+		
+		setSize((int) Math.ceil(controller.parent.textWidth(getLabel())) + getHeight() + 5, 14);
+
+		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 
 	public void mouseEvent(MouseEvent e) {
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-			if (isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (isMouseOver (e.getX(), e.getY())) {
 				wasClicked = true;
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-			if (wasClicked && isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				radioController.selectButton(this);
 				wasClicked = false;
 			}
@@ -64,46 +73,32 @@ public class IFRadioButton extends GUIComponent {
 	}
 
 	public void draw () {
-		if (isMouseOver (parent.mouseX, parent.mouseY)) {
+		if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY)) {
 			currentColor = lookAndFeel.highlightColor;
 		} else if (controller.getFocusStatusForComponent(this)) {
 			currentColor = lookAndFeel.highlightColor;
 		} else {
 			currentColor = lookAndFeel.baseColor;
 		}
-		
-		boolean stroke = parent.g.stroke;
-		int strokeColor = parent.g.strokeColor;
-		int fillColor = parent.g.fillColor;
-		int ellipseMode = parent.g.ellipseMode;
-		PFont textFont = parent.g.textFont;
-		int textAlign = parent.g.textAlign;
 
 		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 		
-		parent.stroke(lookAndFeel.borderColor);
-		parent.fill(currentColor);
+		controller.parent.stroke(lookAndFeel.borderColor);
+		controller.parent.fill(currentColor);
 		
-		parent.ellipseMode(parent.CORNER);
-		parent.ellipse(x, y, wid, hgt);
+		controller.parent.ellipse(x, y, hgt, hgt);
 		if (radioController.getSelectionStatusForButton(this)) {
-			parent.fill (lookAndFeel.lightGrayColor);
-			parent.ellipse (x + 2, y + 2, wid - 4, hgt - 4);
+			controller.parent.fill (lookAndFeel.lightGrayColor);
+			controller.parent.ellipse (x + 2, y + 2, hgt - 4, hgt - 4);
 		}
 		
-		parent.fill (lookAndFeel.textColor);
-		parent.textFont (meta, 13);
-		parent.textAlign (parent.LEFT);
-		parent.text (getLabel(), wid + x + 5, (hgt - 3) + y);
-
-		parent.stroke(strokeColor);
-		if (!stroke)
-			parent.noStroke();
-		parent.fill(fillColor);
-		parent.ellipseMode(ellipseMode);
-		if (textFont != null) {
-			parent.textFont(textFont);
-			parent.textAlign(textAlign);
+		controller.parent.fill (lookAndFeel.textColor);
+		controller.parent.text (getLabel(), hgt + x + 5, (hgt - 3) + y);
+		
+		if (controller.showBounds) {
+			controller.parent.noFill();
+			controller.parent.stroke(255,0,0);
+			controller.parent.rect(x, y, wid, hgt);
 		}
 	}
 

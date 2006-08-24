@@ -24,21 +24,47 @@
 package interfascia;
 import processing.core.*;
 import java.awt.event.*;
+import java.awt.datatransfer.*;
+import java.awt.Toolkit;
 
-public class GUIController {
+public class GUIController implements ClipboardOwner {
 	private GUIComponent[] contents;
 	private int numItems = 0;
 	private int focusIndex = -1;
-	private PApplet parent;
+	private boolean visible;
 	private IFLookAndFeel lookAndFeel;
+	public IFPGraphicsState userState;
+	private Clipboard clipboard;
 
+	public PApplet parent;
+
+	public boolean showBounds = true;
+	
 	public GUIController (PApplet newParent) {
-		//this (10);
-		parent = newParent;
+		this(newParent, true);
+	}
+
+	public GUIController (PApplet newParent, boolean newVisible) {
+		setParent(newParent);
+		setVisible(newVisible);
 		contents = new GUIComponent[5];
-		lookAndFeel = new IFLookAndFeel(IFLookAndFeel.DEFAULT);
-		lookAndFeel.initWithParent(parent);
-		parent.registerKeyEvent(this);
+		
+		lookAndFeel = new IFLookAndFeel(parent, IFLookAndFeel.DEFAULT);
+		userState = new IFPGraphicsState();
+		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		
+		if (visible) {
+			parent.registerKeyEvent(this);
+			parent.registerDraw(this);
+		}
+	}
+	
+	public void setLookAndFeel(IFLookAndFeel lf) {
+		lookAndFeel = lf;
+	}
+	
+	public IFLookAndFeel getLookAndFeel() {
+		return lookAndFeel;
 	}
 
 	public void add (GUIComponent component) {
@@ -47,22 +73,34 @@ public class GUIController {
 			contents = new GUIComponent[contents.length * 2];
 			System.arraycopy(temp, 0, contents, 0, numItems);
 		}
-		component.setIndex(numItems);
-		contents[numItems++] = component;
-		component.setParent (parent);
 		component.setController(this);
 		component.setLookAndFeel(lookAndFeel);
+		component.setIndex(numItems);
+		contents[numItems++] = component;
+		component.initWithParent();
 	}
 
 	public void remove (GUIComponent component) {
 		
 	}
 	
+	public void setParent (PApplet argParent) {
+		parent = argParent;
+	}
+	
+	public PApplet getParent () {
+		return parent;
+	}
+	
+	public void setVisible (boolean newVisible) {
+		visible = newVisible;
+	}
+	
+	public boolean getVisible() {
+		return visible;
+	}
+	
 	public void requestFocus(GUIComponent c) {
-		/*if (focusIndex >= 0 && focusIndex < contents.length)
-			contents[focusIndex].setFocus(false);
-		c.setFocus(true);
-		focusIndex = c.getIndex();*/
 		for (int i = 0; i < numItems; i++) {
 			if (c == contents[i])
 				focusIndex = i;
@@ -72,7 +110,6 @@ public class GUIController {
 	// ****** LOOK AT THIS, I DON'T THINK IT'S RIGHT ******
 	public void yieldFocus(GUIComponent c) {
 		if (focusIndex > -1 && focusIndex < numItems && contents[focusIndex] == c) {
-			//c.setFocus(false);
 			focusIndex = -1;
 		}
 	}
@@ -87,11 +124,43 @@ public class GUIController {
 		else
 			return false;
 	}
+
+
+
+	public void lostOwnership (Clipboard parClipboard, Transferable parTransferable) {
+		System.out.println ("Lost ownership");
+	}
 	
+	public void copy(String v)
+	{
+		StringSelection fieldContent = new StringSelection (v);
+		clipboard.setContents (fieldContent, this);
+	}
+	
+	public String paste()
+	{
+		Transferable clipboardContent = clipboard.getContents (this);
+		
+		if ((clipboardContent != null) &&
+			(clipboardContent.isDataFlavorSupported (DataFlavor.stringFlavor))) {
+			try {
+				String tempString;
+				tempString = (String) clipboardContent.getTransferData(DataFlavor.stringFlavor);
+				return tempString;
+			}
+			catch (Exception e) {
+				e.printStackTrace ();
+			}
+		}
+		return "";
+	}
+	
+
+
 	public void keyEvent(KeyEvent e) {		
 		if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_TAB) {
-			int shiftDownMask = KeyEvent.SHIFT_DOWN_MASK;
-			if (e.getModifiers() == shiftDownMask)
+			
+			if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK)
 				if (focusIndex >= numItems || focusIndex <= 0)
 					focusIndex = numItems - 1;
 				else
@@ -107,4 +176,15 @@ public class GUIController {
 				contents[focusIndex].keyEvent(e);
 		}
 	}
+
+	public void draw() {
+		userState.saveSettingsForApplet(parent);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(parent);
+		for(int i = 0; i < contents.length; i++){
+			if(contents[i] != null){
+				contents[i].draw();
+			}
+		}
+		userState.restoreSettingsToApplet(parent);    
+	}  
 }

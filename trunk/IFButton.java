@@ -43,17 +43,16 @@ public class IFButton extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		parent.registerDraw(this);
-		parent.registerMouseEvent(this);
+		controller.parent.registerMouseEvent(this);
 	}
 
 	public void mouseEvent(MouseEvent e) {
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-			if (isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (isMouseOver (e.getX(), e.getY())) {
 				wasClicked = true;
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-			if (wasClicked && isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				fireEventNotification(this, "Clicked");
 				wasClicked = false;
 			}
@@ -65,35 +64,27 @@ public class IFButton extends GUIComponent {
 	
 		if (wasClicked) {
 			 currentColor = lookAndFeel.activeColor;
-		} else if (isMouseOver (parent.mouseX, parent.mouseY) || hasFocus) {
+		} else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY) || hasFocus) {
 			 currentColor = lookAndFeel.highlightColor;
 		} else {
 			 currentColor = lookAndFeel.baseColor;
 		}
 
-		boolean stroke = parent.g.stroke;
-		int strokeColor = parent.g.strokeColor;
-		int fillColor = parent.g.fillColor;
-		PFont textFont = parent.g.textFont;
-		int textAlign = parent.g.textAlign;
-	
 		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 	
-		parent.stroke(lookAndFeel.borderColor);
-		parent.fill(currentColor);
-		parent.rect(x, y, wid, hgt);
-		parent.fill (lookAndFeel.textColor);
-		parent.textFont (meta, 13);
-		parent.textAlign (parent.CENTER);
-		parent.text (getLabel(), x, y + 3, wid, hgt); // (wid / 2) + x, (hgt - 4) + y);
+		controller.parent.stroke(lookAndFeel.borderColor);
+		controller.parent.fill(currentColor);
+		controller.parent.rect(x, y, wid, hgt);
+		controller.parent.fill (lookAndFeel.textColor);
 
-		parent.stroke(strokeColor);
-		if (!stroke)
-			parent.noStroke();
-		parent.fill(fillColor);
-		if (textFont != null) {
-			parent.textFont(textFont);
-			parent.textAlign(textAlign);
+		controller.parent.textAlign (PApplet.CENTER);
+		controller.parent.text (getLabel(), x, y + 3, wid, hgt);
+		controller.parent.textAlign (PApplet.LEFT);
+
+		if (controller.showBounds) {
+			controller.parent.noFill();
+			controller.parent.stroke(255,0,0);
+			controller.parent.rect(x, y, wid, hgt);
 		}
 	}
 		

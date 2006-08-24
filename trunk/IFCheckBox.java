@@ -36,17 +36,26 @@ public class IFCheckBox extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		parent.registerDraw(this);
-		parent.registerMouseEvent(this);
+		controller.parent.registerMouseEvent(this);
+		
+		if (lookAndFeel == null)
+			return;
+		
+		controller.userState.saveSettingsForApplet(controller.parent);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+		
+		setSize((int) Math.ceil(controller.parent.textWidth(getLabel())) + getHeight() + 5, 14);
+
+		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 
 	public void mouseEvent (MouseEvent e) {
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-			if (isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (isMouseOver (e.getX(), e.getY())) {
 				 wasClicked = true;
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-			if (wasClicked && isMouseOver (parent.mouseX, parent.mouseY)) {
+			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				if (selected) {
 					fireEventNotification(this, "Unchecked");
 					selected = false;
@@ -73,7 +82,7 @@ public class IFCheckBox extends GUIComponent {
 	}
 
 	public void draw () {
-		if (isMouseOver (parent.mouseX, parent.mouseY)) {
+		if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY)) {
 			currentColor = lookAndFeel.highlightColor;
 		} else if (controller.getFocusStatusForComponent(this)) {
 			currentColor = lookAndFeel.highlightColor;
@@ -83,23 +92,27 @@ public class IFCheckBox extends GUIComponent {
 
 		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 
-		parent.stroke(lookAndFeel.borderColor);
-		parent.fill(currentColor);
-		parent.rect(x, y, wid, hgt);
+		controller.parent.stroke(lookAndFeel.borderColor);
+		controller.parent.fill(currentColor);
+		controller.parent.rect(x, y, hgt, hgt);
 		if (selected == true) {
-			parent.stroke (lookAndFeel.darkGrayColor);
-			parent.line (x + 3, y + 3, wid + x - 3, hgt + y - 3);
-			parent.line (x + 3, y + 4, wid + x - 4, hgt + y - 3);
-			parent.line (x + 4, y + 3, wid + x - 3, hgt + y - 4);
-			parent.line (x + 3, hgt + y - 3, wid + x - 3, y + 3 );
-			parent.line (x + 4, hgt + y - 3, wid + x - 3, y + 4 );
-			parent.line (x + 3, hgt + y - 4, wid + x - 4, y + 3);
+			controller.parent.stroke (lookAndFeel.darkGrayColor);
+			controller.parent.line (x + 3, y + 2, hgt + x - 3, hgt + y - 4);
+			controller.parent.line (x + 3, y + 3, hgt + x - 4, hgt + y - 4);
+			controller.parent.line (x + 4, y + 2, hgt + x - 3, hgt + y - 5);
+			controller.parent.line (x + 3, hgt + y - 4, hgt + x - 3, y + 2);
+			controller.parent.line (x + 4, hgt + y - 4, hgt + x - 3, y + 3);
+			controller.parent.line (x + 3, hgt + y - 5, hgt + x - 4, y + 2);
 		}
 		
-		parent.fill (lookAndFeel.textColor);
-		parent.textFont (meta, 13);
-		parent.textAlign (parent.LEFT);
-		parent.text (getLabel(), wid + x + 5, (hgt - 2) + y);
+		controller.parent.fill (lookAndFeel.textColor);
+		controller.parent.text (getLabel(), hgt + x + 5, (hgt - 2) + y);
+		
+		if (controller.showBounds) {
+			controller.parent.noFill();
+			controller.parent.stroke(255,0,0);
+			controller.parent.rect(x, y, wid, hgt);
+		}
 	}
 
 	public boolean isSelected() {

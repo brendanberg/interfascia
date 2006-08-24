@@ -27,36 +27,48 @@ import processing.core.*;
 public class IFLookAndFeel {
 	public int baseColor, borderColor, highlightColor, selectionColor, 
 				activeColor, textColor, lightGrayColor, darkGrayColor;
-	
+	public IFPGraphicsState defaultGraphicsState;
 	public static final char DEFAULT = 1;
 	
 	public IFLookAndFeel(char type) {
-		
+		defaultGraphicsState = new IFPGraphicsState();
 	}
 	
-	public void initWithParent(PApplet parent) {
-		// Play nicely with other people's draw methods. They
-		// may have changed the color mode.
-		int cMode;
-		float cModeX, cModeY, cModeZ, cModeA;
-
-		cMode = parent.g.colorMode;
-		cModeX = parent.g.colorModeX;
-		cModeY = parent.g.colorModeY;
-		cModeZ = parent.g.colorModeZ;
-		cModeA = parent.g.colorModeA;
-		parent.colorMode(parent.RGB, 255);
-
-		baseColor = parent.color(153, 153, 204);
-		highlightColor = parent.color(102, 102, 204);
-		activeColor = parent.color (255, 153, 51);
-		selectionColor = parent.color (255, 255, 0);
-		borderColor = parent.color (255);
-		textColor = parent.color (0);
-		lightGrayColor = parent.color(100);
-		darkGrayColor = parent.color(50);
+	public IFLookAndFeel(PApplet parent, char type) {
+		defaultGraphicsState = new IFPGraphicsState();
 		
-		// Set the color mode back
-		parent.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);
+		if (type == DEFAULT) {
+			// Play nicely with other people's draw methods. They
+			// may have changed the color mode.
+			IFPGraphicsState temp = new IFPGraphicsState(parent);
+			
+			parent.colorMode(parent.RGB, 255);
+
+			baseColor = parent.color(153, 153, 204);
+			highlightColor = parent.color(102, 102, 204);
+			activeColor = parent.color (255, 153, 51);
+			selectionColor = parent.color (255, 255, 0);
+			borderColor = parent.color (255);
+			textColor = parent.color (0);
+			lightGrayColor = parent.color(100);
+			darkGrayColor = parent.color(50);
+			
+			PFont tempFont = parent.loadFont ("FrutigerLight-13.vlw");
+			parent.textFont(tempFont, 13);
+			parent.textAlign(PApplet.LEFT);
+			
+			parent.rectMode(PApplet.CORNER);
+			parent.ellipseMode(PApplet.CORNER);
+			
+			parent.strokeWeight(1);
+			
+			parent.colorMode(PApplet.RGB, 255);
+			parent.smooth();
+			
+			defaultGraphicsState.saveSettingsForApplet(parent);
+			
+			// Set the color mode back
+			temp.restoreSettingsToApplet(parent);
+		}
 	}
 }
