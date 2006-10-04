@@ -34,9 +34,8 @@ public class IFTextField extends GUIComponent {
 	private String contents = "";
 	private int cursorPos = 0, visiblePortionStart = 0, visiblePortionEnd = 0;
 	private int startSelect = -1, endSelect = -1;
-	private float[] letterWidths = new float[100];
 	private float contentWidth = 0, visiblePortionWidth = 0;
-
+	private float cursorXPos = 0, startSelectXPos = 0, endSelectXPos = 0;
 
 	/**
 	* creates an empty IFTextField with the specified label, with specified position, and a default width of 100 pixels.
@@ -77,15 +76,145 @@ public class IFTextField extends GUIComponent {
 		setLabel(argLabel);
 		setPosition(argX, argY);
 		setSize(argWidth, 21);
-		//setValue(newValue);
-		//contents = newValue;
+		setValue(newValue);
 	}
 	
+
+	public static boolean validUnicode(char b)
+	{
+		int c = (int)b;
+		return (
+				(c >= 0x0020 && c <= 0x007E) ||
+				(c >= 0x00A1 && c <= 0x017F) ||
+				(c == 0x018F) ||
+				(c == 0x0192) ||
+				(c >= 0x01A0 && c <= 0x01A1) ||
+				(c >= 0x01AF && c <= 0x01B0) ||
+				(c >= 0x01D0 && c <= 0x01DC) ||
+				(c >= 0x01FA && c <= 0x01FF) ||
+				(c >= 0x0218 && c <= 0x021B) ||
+				(c >= 0x0250 && c <= 0x02A8) ||
+				(c >= 0x02B0 && c <= 0x02E9) ||
+				(c >= 0x0300 && c <= 0x0345) ||
+				(c >= 0x0374 && c <= 0x0375) ||
+				(c == 0x037A) ||
+				(c == 0x037E) ||
+				(c >= 0x0384 && c <= 0x038A) ||
+				(c >= 0x038E && c <= 0x03A1) ||
+				(c >= 0x03A3 && c <= 0x03CE) ||
+				(c >= 0x03D0 && c <= 0x03D6) ||
+				(c >= 0x03DA) ||
+				(c >= 0x03DC) ||
+				(c >= 0x03DE) ||
+				(c >= 0x03E0) ||
+				(c >= 0x03E2 && c <= 0x03F3) ||
+				(c >= 0x0401 && c <= 0x044F) ||
+				(c >= 0x0451 && c <= 0x045C) ||
+				(c >= 0x045E && c <= 0x0486) ||
+				(c >= 0x0490 && c <= 0x04C4) ||
+				(c >= 0x04C7 && c <= 0x04C9) ||
+				(c >= 0x04CB && c <= 0x04CC) ||
+				(c >= 0x04D0 && c <= 0x04EB) ||
+				(c >= 0x04EE && c <= 0x04F5) ||
+				(c >= 0x04F8 && c <= 0x04F9) ||
+				(c >= 0x0591 && c <= 0x05A1) ||
+				(c >= 0x05A3 && c <= 0x05C4) ||
+				(c >= 0x05D0 && c <= 0x05EA) ||
+				(c >= 0x05F0 && c <= 0x05F4) ||
+				(c >= 0x060C) ||
+				(c >= 0x061B) ||
+				(c >= 0x061F) ||
+				(c >= 0x0621 && c <= 0x063A) ||
+				(c >= 0x0640 && c <= 0x0655) ||
+				(c >= 0x0660 && c <= 0x06EE) ||
+				(c >= 0x06F0 && c <= 0x06FE) ||
+				(c >= 0x0901 && c <= 0x0939) ||
+				(c >= 0x093C && c <= 0x094D) ||
+				(c >= 0x0950 && c <= 0x0954) ||
+				(c >= 0x0958 && c <= 0x0970) ||
+				(c >= 0x0E01 && c <= 0x0E3A) ||
+				(c >= 0x1E80 && c <= 0x1E85) ||
+				(c >= 0x1EA0 && c <= 0x1EF9) ||
+				(c >= 0x2000 && c <= 0x202E) ||
+				(c >= 0x2030 && c <= 0x2046) ||
+				(c == 0x2070) ||
+				(c >= 0x2074 && c <= 0x208E) ||
+				(c == 0x2091) ||
+				(c >= 0x20A0 && c <= 0x20AC) ||
+				(c >= 0x2100 && c <= 0x2138) ||
+				(c >= 0x2153 && c <= 0x2182) ||
+				(c >= 0x2190 && c <= 0x21EA) ||
+				(c >= 0x2190 && c <= 0x21EA) ||
+				(c >= 0x2000 && c <= 0x22F1) ||
+				(c == 0x2302) ||
+				(c >= 0x2320 && c <= 0x2321) ||
+				(c >= 0x2460 && c <= 0x2469) ||
+				(c == 0x2500) ||
+				(c == 0x2502) ||
+				(c == 0x250C) ||
+				(c == 0x2510) ||
+				(c == 0x2514) ||
+				(c == 0x2518) ||
+				(c == 0x251C) ||
+				(c == 0x2524) ||
+				(c == 0x252C) ||
+				(c == 0x2534) ||
+				(c == 0x253C) ||
+				(c >= 0x2550 && c <= 0x256C) ||
+				(c == 0x2580) ||
+				(c == 0x2584) ||
+				(c == 0x2588) ||
+				(c == 0x258C) ||
+				(c >= 0x2590 && c <= 0x2593) ||
+				(c == 0x25A0) ||
+				(c >= 0x25AA && c <= 0x25AC) ||
+				(c == 0x25B2) ||
+				(c == 0x25BA) ||
+				(c == 0x25BC) ||
+				(c == 0x25C4) ||
+				(c == 0x25C6) ||
+				(c >= 0x25CA && c <= 0x25CC) ||
+				(c == 0x25CF) ||
+				(c >= 0x25D7 && c <= 0x25D9) ||
+				(c == 0x25E6) ||
+				(c == 0x2605) ||
+				(c == 0x260E) ||
+				(c == 0x261B) ||
+				(c == 0x261E) ||
+				(c >= 0x263A && c <= 0x263C) ||
+				(c == 0x2640) ||
+				(c == 0x2642) ||
+				(c == 0x2660) ||
+				(c == 0x2663) ||
+				(c == 0x2665) ||
+				(c == 0x2666) ||
+				(c == 0x266A) ||
+				(c == 0x266B) ||
+				(c >= 0x2701 && c <= 0x2709) ||
+				(c >= 0x270C && c <= 0x2727) ||
+				(c >= 0x2729 && c <= 0x274B) ||
+				(c == 0x274D) ||
+				(c >= 0x274F && c <= 0x2752) ||
+				(c == 0x2756) ||
+				(c >= 0x2758 && c <= 0x275E) ||
+				(c >= 0x2761 && c <= 0x2767) ||
+				(c >= 0x2776 && c <= 0x2794) ||
+				(c >= 0x2798 && c <= 0x27BE) ||
+				(c >= 0xF001 && c <= 0xF002) ||
+				(c >= 0xF021 && c <= 0xF0FF) ||
+				(c >= 0xF601 && c <= 0xF605) ||
+				(c >= 0xF610 && c <= 0xF616) ||
+				(c >= 0xF800 && c <= 0xF807) ||
+				(c >= 0xF80A && c <= 0xF80B) ||
+				(c >= 0xF80E && c <= 0xF811) ||
+				(c >= 0xF814 && c <= 0xF815) ||
+				(c >= 0xF81F && c <= 0xF820) ||
+				(c >= 0xF81F && c <= 0xF820) ||
+				(c == 0xF833));
+	}
+
 	public void initWithParent () {
 		controller.parent.registerMouseEvent(this);
-		//if (contents != null) {
-		//	setValue(contents);
-		//}
 	}
 	
 
@@ -115,79 +244,33 @@ public class IFTextField extends GUIComponent {
 			t2 = contents.substring(cursorPos);
 		}
 		
-		System.arraycopy(letterWidths, cursorPos, letterWidths, cursorPos + 1, t2.length());
-
-		controller.userState.saveSettingsForApplet(controller.parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
-		letterWidths[cursorPos] = controller.parent.textWidth(c);
-		controller.userState.restoreSettingsToApplet(controller.parent);
-			
 		contents = t1 + c + t2;
-		contentWidth += letterWidths[cursorPos];
-		visiblePortionWidth += letterWidths[cursorPos];
 		cursorPos++;
 				
-		if (contents.length() == letterWidths.length) {
-			float[] temp = new float[letterWidths.length + 50];
-			System.arraycopy(letterWidths, 0, temp, 0, letterWidths.length);
-			letterWidths = temp;
-		}
-
-		/*
-		contentWidth = 0;
-		visiblePortionWidth = 0;
-		for (int i = 0; i < contents.length(); i++) {
-			contentWidth += letterWidths[i];
-			if (i >= visiblePortionStart && i < visiblePortionEnd)
-				visiblePortionWidth += letterWidths[i];
-		}
-		*/
-
-		if (contentWidth < getWidth() - 12) {
-			// The contents fit in the text box
+		// Adjust the start and end positions of the visible portion of the string
+		
+		if (controller.parent.textWidth(contents) < getWidth() - 12) {
 			visiblePortionStart = 0;
 			visiblePortionEnd = contents.length();
 		} else {
 			if (cursorPos == contents.length()) {
-				visiblePortionEnd++;
-				
-				while (visiblePortionWidth > getWidth() - 12)
-					visiblePortionWidth -= letterWidths[visiblePortionStart++];
+				visiblePortionEnd = cursorPos;
+				shrinkLeft();
 			} else {
-				if (cursorPos >= visiblePortionEnd) {
-					visiblePortionStart = (visiblePortionEnd - visiblePortionStart) / 2;
+				if (cursorPos >= visiblePortionEnd)
+					centerCursor();
+				else {
 					visiblePortionEnd = visiblePortionStart;
-
-					visiblePortionWidth = 0;
-					while (visiblePortionWidth < getWidth() - 12)
-						visiblePortionWidth += letterWidths[visiblePortionEnd++];
-				} else {
-					//visiblePortionWidth += letterWidths[visiblePortionEnd];
-					//visiblePortionEnd++;
-					
-					//if (visiblePortionWidth > getWidth() - 12)
-						while (visiblePortionWidth > getWidth() - 12)
-							visiblePortionWidth -= letterWidths[--visiblePortionEnd];
-					/*else
-						while (visiblePortionWidth < getWidth() - 12)
-							visiblePortionWidth += letterWidths[++visiblePortionEnd]; */
+					growRight();
 				}
+				//while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12)
+				//	visiblePortionEnd++;
 			}
 		}
-		
+
 		fireEventNotification(this, "Modified");
 	}
 	
-
-
-	private void adjustVisiblePortion() {
-		
-		//while (visiblePortionWidth > getWidth() - 8) {
-		//	visiblePortionWidth -= letterWidths[++visiblePortionStart];
-		//}
-		
-	
-	}
 	
 	
 	
@@ -195,7 +278,7 @@ public class IFTextField extends GUIComponent {
 	* deletes either the character directly to the left of the insertion point or the selected group of characters. It automatically handles cases where there is no character to the left of the insertion point (when the insertion point is at the beginning of the string). It is called by <pre>public void keyEvent</pre> when the delete key is pressed.
 	*/
 	
-	private void deleteChar() {
+	private void backspaceChar() {
 		String t1 = "", t2 = "";
 		if (startSelect != -1 && endSelect != -1) {
 			if (startSelect > endSelect) {
@@ -209,16 +292,132 @@ public class IFTextField extends GUIComponent {
 			t2 = contents.substring(endSelect);
 			cursorPos = startSelect;
 			startSelect = endSelect = -1;
-			setValue(t1 + t2);				
-			fireEventNotification(this, "Modified");
+			contents = t1 + t2;
 		} else if (cursorPos > 0) {
 			if (cursorPos > contents.length())
 				cursorPos = contents.length();
 			t1 = contents.substring(0, cursorPos - 1);
 			t2 = contents.substring(cursorPos);
 			cursorPos--;
-			setValue(t1 + t2);
-			fireEventNotification(this, "Modified");
+			contents = t1 + t2;
+		}
+		
+		
+		// Adjust the start and end positions of the visible portion of the string
+		
+		if (controller.parent.textWidth(contents) < getWidth() - 12) {
+			visiblePortionStart = 0;
+			visiblePortionEnd = contents.length();
+		} else {
+			if (cursorPos == contents.length()) {
+				visiblePortionEnd = cursorPos;
+				growLeft();
+			} else {
+				if (cursorPos <= visiblePortionStart) {
+					centerCursor();
+				} else {
+					visiblePortionEnd = visiblePortionStart;
+					growRight();
+				
+				//while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+				//	if (visiblePortionEnd == contents.length())
+				//		break;
+				//	visiblePortionEnd++;
+				//}
+				}
+			}
+		}
+
+		fireEventNotification(this, "Modified");
+		//controller.userState.restoreSettingsToApplet(controller.parent);
+	}
+
+
+
+	private void deleteChar() {
+		if(cursorPos >= contents.length()) return;
+		cursorPos++;
+		backspaceChar();
+	}
+
+
+
+	// ***** UNTIL GRAPHICS SETTINGS ARE STORED IN A QUEUE, MAKE SURE	   *****
+	// ***** TO ALWAYS CALL THESE FUNCTIONS INSIDE THE INTERFASCIA DEFAULT *****
+	// ***** GRAPHICS STATE. I'M NOT TOUCHING THE GRAPHICS STATE HERE.     *****
+
+	private void updateXPos() {
+		cursorXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, cursorPos));
+		if (startSelect != -1 && endSelect != -1) {
+		
+			int tempStart, tempEnd;
+			if (endSelect < startSelect) {
+				tempStart = endSelect;
+				tempEnd = startSelect;
+			} else {
+				tempStart = startSelect;
+				tempEnd = endSelect;
+			}
+			
+			if (tempStart < visiblePortionStart)
+				startSelectXPos = 0;
+			else
+				startSelectXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, tempStart));
+			
+			if (tempEnd > visiblePortionEnd)
+				endSelectXPos = getWidth() - 4;
+			else
+				endSelectXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, tempEnd));
+		}
+	}
+	
+	
+	private void growRight() {
+		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			if (visiblePortionEnd == contents.length())
+				if (visiblePortionStart == 0)
+					break;
+				else
+					visiblePortionStart--;
+			visiblePortionEnd++;
+		}
+	}
+
+	private void growLeft() {
+		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			if (visiblePortionStart == 0)
+				if (visiblePortionEnd == contents.length())
+					break;
+				else
+					visiblePortionEnd++;
+			visiblePortionStart--;
+		}
+	}
+
+	private void shrinkRight() {
+		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
+			visiblePortionEnd--;
+		}
+	}
+
+	private void shrinkLeft() {
+		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
+			visiblePortionStart++;
+		}
+	}
+
+	private void centerCursor() {
+		visiblePortionStart = visiblePortionEnd = cursorPos;
+		
+		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			if (visiblePortionStart != 0)
+				visiblePortionStart--;
+				
+			if (visiblePortionEnd != contents.length())
+				visiblePortionEnd++;
+				
+			if (visiblePortionEnd == contents.length() && visiblePortionStart == 0)
+				break;
 		}
 	}
 
@@ -232,42 +431,20 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	private int findClosestGap(int x) {
-		float tempWidth = 0;
+		float prev = 0, cur;
 		for (int i = visiblePortionStart; i < visiblePortionEnd; i++) {
-			tempWidth += letterWidths[i];
-			if (tempWidth > x) {
-				if (tempWidth - x < x - (tempWidth - letterWidths[i]))
+			cur = controller.parent.textWidth(contents.substring(visiblePortionStart, i));
+			if (cur > x) {
+				if (cur - x < x - prev)
 					return i;
 				else
 					return i - 1;
 			}
+			prev = cur;
 		}
 		
 		// Don't know what else to return
-		return visiblePortionStart;
-		
-		/*if (x > 0) {
-			int left = visiblePortionStart, right = visiblePortionEnd + 1, mid = (left + right) / 2;
-			while (left <= right - 1) {
-				mid = (left + right) / 2;
-				if (x < letterWidths[mid] - letterWidths[visiblePortionStart])
-					right = mid - 1;
-				else if (x > letterWidths[mid] - letterWidths[visiblePortionStart])
-					left = mid + 1;
-				else {
-					left = mid;
-					right = mid;
-				}
-			}
-			
-			if (Math.abs(letterWidths[left] - x) < Math.abs(letterWidths[right] - x)) {
-				return left;
-			} else {
-				return right;
-			}
-		} else {
-			return 0;
-		}*/
+		return contents.length();
 	}
 	
 	
@@ -279,35 +456,22 @@ public class IFTextField extends GUIComponent {
 	*/
 	
 	public void setValue(String newValue) {
-/*		if (controller.parent == null)
-			return;
-			
-		letterWidths = new float[100];
-		letterWidths[0] = 0;
-		float total = 0;
 		
-		controller.userState.saveSettingsForApplet(controller.parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
-		
-		for (int i = 0; i < newValue.length(); i++) {
-			total += controller.parent.textWidth(newValue.charAt(i));
-			letterWidths[i + 1] = total;
-			letterWidths[i + 2] = total;
-		}
-
 		contents = newValue;
+		cursorPos = contents.length();
+		startSelect = endSelect = -1;
 		
-		if (letterWidths[contents.length()] < getWidth() - 8) {
-			visiblePortionStart = 0;
-			visiblePortionEnd = contents.length();
-		} else  {
-			while (letterWidths[visiblePortionEnd] - letterWidths[++visiblePortionStart] > getWidth() - 8);
+		visiblePortionStart = 0;
+		visiblePortionEnd = contents.length();
+		
+		// Adjust the start and end positions of the visible portion of the string
+		if (controller != null) {
+			if (controller.parent.textWidth(contents) > getWidth() - 12) {
+				shrinkRight();
+			}
 		}
 
-		
-		controller.userState.restoreSettingsToApplet(controller.parent);
-		
-		fireEventNotification(this, "Modified");*/
+		fireEventNotification(this, "Set");
 	}
 
 
@@ -336,6 +500,9 @@ public class IFTextField extends GUIComponent {
 	*/
 
 	public void mouseEvent(MouseEvent e) {
+		controller.userState.saveSettingsForApplet(controller.parent);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+
 		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
 			if (isMouseOver(e.getX(), e.getY())) {
 				controller.requestFocus(this);
@@ -357,6 +524,9 @@ public class IFTextField extends GUIComponent {
 				endSelect = -1;
 			}
 		}
+		updateXPos();
+
+		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 
 
@@ -368,32 +538,122 @@ public class IFTextField extends GUIComponent {
 	*/
 
 	public void keyEvent(KeyEvent e) {
+		controller.userState.saveSettingsForApplet(controller.parent);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+
+		int shortcutMask = java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		boolean shiftDown = ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK);
 		if (e.getID() == KeyEvent.KEY_PRESSED) {
 			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-				cursorPos = visiblePortionEnd = contents.length();
-			} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-				cursorPos = visiblePortionStart = 0;
-			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				if (startSelect != -1 && endSelect != -1)
-					cursorPos = Math.min(startSelect, endSelect);
-				else if (cursorPos > 0)
-					cursorPos--;
-			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				if (startSelect != -1 && endSelect != -1)
-					cursorPos = Math.max(startSelect, endSelect);
-				else if (cursorPos < contents.length())
-					cursorPos++;
-			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (shiftDown) {
+					if (startSelect == -1)
+						startSelect = cursorPos;
+					endSelect = cursorPos = visiblePortionEnd = contents.length();
+				} else {
+					// Shift isn't down
+					startSelect = endSelect = -1;
+					cursorPos = visiblePortionEnd = contents.length();
+				}
+				visiblePortionStart = visiblePortionEnd;
+				growLeft();
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_UP) {
+				if (shiftDown) {
+					if (endSelect == -1)
+						endSelect = cursorPos;
+					startSelect = cursorPos = visiblePortionStart = 0;
+				} else {
+					// Shift isn't down
+					startSelect = endSelect = -1;
+					cursorPos = visiblePortionStart = 0;
+				}
+				visiblePortionEnd = visiblePortionStart;
+				growRight();
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				if (shiftDown) {
+					if (cursorPos > 0) {
+						if (startSelect != -1 && endSelect != -1) {
+							startSelect--;
+							cursorPos--;
+						} else {
+							endSelect = cursorPos;
+							cursorPos--;
+							startSelect = cursorPos;
+						}
+					}
+				} else {
+					if (startSelect != -1 && endSelect != -1) {
+						cursorPos = Math.min(startSelect, endSelect);
+						startSelect = endSelect = -1;
+					} else if (cursorPos > 0) {
+						cursorPos--;
+					}
+				}
+				centerCursor();
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				if (shiftDown) {
+					if (cursorPos < contents.length()) {
+						if (startSelect != -1 && endSelect != -1) {
+							endSelect++;
+							cursorPos++;
+						} else {
+							startSelect = cursorPos;
+							cursorPos++;
+							endSelect = cursorPos;
+						}
+					}
+				} else {
+					if (startSelect != -1 && endSelect != -1) {
+						cursorPos = Math.max(startSelect, endSelect);
+						startSelect = endSelect = -1;
+					} else if (cursorPos < contents.length()) {
+						cursorPos++;
+					}
+				}
+				centerCursor();
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+				deleteChar();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				fireEventNotification(this, "Completed");
 			}
-		} else if (e.getID() == KeyEvent.KEY_TYPED) {
-			if (e.getKeyChar() == '\b') {
-				deleteChar();
-			} else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
-				addChar(e.getKeyChar());
-				startSelect = endSelect = -1;
+			else{
+				if ((e.getModifiers() & shortcutMask) == shortcutMask) {
+					switch (e.getKeyCode()) {
+						case KeyEvent.VK_C:
+							System.out.println("Copy");
+							break;
+						case KeyEvent.VK_V:
+							System.out.println("Paste");
+							break;
+						case KeyEvent.VK_X:
+							System.out.println("Cut");
+							break;
+						case KeyEvent.VK_A:
+							startSelect = 0;
+							endSelect = contents.length();
+							break;
+					}
+				} 
+			}
+		} 
+		else if (e.getID() == KeyEvent.KEY_TYPED) {
+			if ((e.getModifiers() & shortcutMask) == shortcutMask) {
+			}
+			else if (e.getKeyChar() == '\b') {
+				backspaceChar();
+			} 
+			else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
+				if(validUnicode(e.getKeyChar()))
+					addChar(e.getKeyChar());
 			}
 		}
+		updateXPos();
+
+		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 	
 	
@@ -405,13 +665,13 @@ public class IFTextField extends GUIComponent {
 	
 	public void draw () {
 		boolean hasFocus = controller.getFocusStatusForComponent(this);
-
+		
 		if (wasClicked) {
-			 currentColor = lookAndFeel.activeColor;
+			currentColor = lookAndFeel.activeColor;
 		} else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY) || hasFocus) {
-			 currentColor = lookAndFeel.highlightColor;
+			currentColor = lookAndFeel.highlightColor;
 		} else {
-			 currentColor = lookAndFeel.baseColor;
+			currentColor = lookAndFeel.baseColor;
 		}
 
 		// Draw the surrounding box
@@ -420,37 +680,44 @@ public class IFTextField extends GUIComponent {
 		controller.parent.rect(getX(), getY(), getWidth(), getHeight());
 		controller.parent.noStroke();
 
+		// Compute the left offset for the start of text
+		// ***** MOVE THIS TO SOMEWHERE THAT DOESN'T GET CALLED 50 MILLION TIMES PER SECOND ******
+		float offset;
+		if (cursorPos == contents.length() && controller.parent.textWidth(contents) > getWidth() - 8)
+			offset = (getWidth() - 4) - controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd));
+		else
+			offset = 4;
+
 		// Draw the selection rectangle
-		if (startSelect != -1 && endSelect != -1) {
+		if (hasFocus && startSelect != -1 && endSelect != -1) {
 			controller.parent.fill(lookAndFeel.selectionColor);
-			
-			int tempStart, tempEnd;
-			if (endSelect < startSelect) {
-				tempStart = endSelect;
-				tempEnd = startSelect;
-			} else {
-				tempStart = startSelect;
-				tempEnd = endSelect;
-			}
-			
-			controller.parent.rect(getX() + letterWidths[tempStart] + 4, getY() + 3, letterWidths[tempEnd] - letterWidths[tempStart] + 1, 15);
+			controller.parent.rect(getX() + startSelectXPos + offset, getY() + 3, endSelectXPos - startSelectXPos + 1, 15);
 		}
 
 		// Draw the string
 		controller.parent.fill (lookAndFeel.textColor);
-		controller.parent.text (contents.substring(visiblePortionStart, visiblePortionEnd), getX() + 4, getY() + 5, getWidth() - 8, getHeight() - 6);
+		controller.parent.text (contents.substring(visiblePortionStart, visiblePortionEnd), getX() + offset, getY() + 5, getWidth() - 8, getHeight() - 6);
 
 		// Draw the insertion point (it blinks!)
 		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((controller.parent.millis() % 1000) > 500)) {
 			controller.parent.stroke(lookAndFeel.darkGrayColor);
-
-			float cursorXPos = 0;
-			for (int i = visiblePortionStart; i < cursorPos; i++) {
-				cursorXPos += letterWidths[i];
-			}
-
-			controller.parent.line(getX() + (int) cursorXPos + 4, getY() + 3, getX() + (int) cursorXPos + 4, getY() + 18);
+			controller.parent.line(getX() + (int) cursorXPos + offset, getY() + 3, getX() + (int) cursorXPos + offset, getY() + 18);
 		}
 	}
 
+	public void actionPerformed(GUIEvent e) {
+		super.actionPerformed(e);
+		if (e.getSource() == this) {
+			if (e.getMessage().equals("Received Focus")) {
+				if (contents != "") {
+					startSelect = 0;
+					endSelect = contents.length();
+				}
+			} else if (e.getMessage().equals("Lost Focus")) {
+				if (contents != "") {
+					startSelect = endSelect = -1;
+				}
+			}
+		}
+	}
 }

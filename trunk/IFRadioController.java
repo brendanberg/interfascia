@@ -55,6 +55,22 @@ public class IFRadioController extends GUIComponent {
 	}
 
 	public void remove (IFRadioButton button) {
+		int componentIndex = -1;
+		
+		for (int i = 0; i < numItems; i++) {
+			if (button == contents[i]){
+				componentIndex = i;
+				break;
+			}
+		}
+		
+		if (componentIndex != -1) {
+			contents[componentIndex] = null;
+			if (componentIndex < numItems - 1) {
+				System.arraycopy(contents, componentIndex + 1, contents, componentIndex, numItems);
+			}
+			numItems--;
+		}
 
 	}
 
