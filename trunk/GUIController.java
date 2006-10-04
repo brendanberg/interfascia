@@ -38,7 +38,7 @@ public class GUIController implements ClipboardOwner {
 
 	public PApplet parent;
 
-	public boolean showBounds = true;
+	public boolean showBounds = false;
 	
 	public GUIController (PApplet newParent) {
 		this(newParent, true);
@@ -51,12 +51,25 @@ public class GUIController implements ClipboardOwner {
 		
 		lookAndFeel = new IFLookAndFeel(parent, IFLookAndFeel.DEFAULT);
 		userState = new IFPGraphicsState();
-		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		
-		if (visible) {
-			parent.registerKeyEvent(this);
-			parent.registerDraw(this);
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			try {
+				security.checkSystemClipboardAccess();
+				clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			} catch (SecurityException e) {
+				clipboard = new Clipboard("Interfascia Clipboard");
+			}
+		} else {
+			try {
+				clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			} catch (Exception e) {
+				// THIS IS DUMB
+			}
 		}
+		
+		parent.registerKeyEvent(this);
+		parent.registerDraw(this);
 	}
 	
 	public void setLookAndFeel(IFLookAndFeel lf) {
@@ -75,13 +88,28 @@ public class GUIController implements ClipboardOwner {
 		}
 		component.setController(this);
 		component.setLookAndFeel(lookAndFeel);
-		component.setIndex(numItems);
+		//component.setIndex(numItems);
 		contents[numItems++] = component;
 		component.initWithParent();
 	}
 
 	public void remove (GUIComponent component) {
+		int componentIndex = -1;
 		
+		for (int i = 0; i < numItems; i++) {
+			if (component == contents[i]){
+				componentIndex = i;
+				break;
+			}
+		}
+		
+		if (componentIndex != -1) {
+			contents[componentIndex] = null;
+			if (componentIndex < numItems - 1) {
+				System.arraycopy(contents, componentIndex + 1, contents, componentIndex, numItems);
+			}
+			numItems--;
+		}
 	}
 	
 	public void setParent (PApplet argParent) {
@@ -157,34 +185,60 @@ public class GUIController implements ClipboardOwner {
 	
 
 
-	public void keyEvent(KeyEvent e) {		
-		if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_TAB) {
-			
-			if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK)
-				if (focusIndex >= numItems || focusIndex <= 0)
-					focusIndex = numItems - 1;
+	public void keyEvent(KeyEvent e) {
+		if (visible) {
+			if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_TAB) {
+				if (focusIndex != -1 && contents[focusIndex] != null) {
+					contents[focusIndex].actionPerformed(
+						new GUIEvent(contents[focusIndex], "Lost Focus")
+					);
+				}
+				
+				if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK)
+					giveFocusToPreviousComponent();
 				else
-					focusIndex--;
-			else
-				if (focusIndex >= numItems - 1 || focusIndex < 0)
-					focusIndex = 0;
-				else
-					focusIndex++;
-			
-		} else if (e.getKeyCode() != KeyEvent.VK_TAB) {
-			if (focusIndex >= 0 && focusIndex < contents.length)
-				contents[focusIndex].keyEvent(e);
+					giveFocusToNextComponent();
+				
+				if (focusIndex != -1 && contents[focusIndex] != null) {
+					contents[focusIndex].actionPerformed(
+						new GUIEvent(contents[focusIndex], "Received Focus")
+					);
+				}
+
+			} else if (e.getKeyCode() != KeyEvent.VK_TAB) {
+				if (focusIndex >= 0 && focusIndex < contents.length)
+					contents[focusIndex].keyEvent(e);
+			}
+		}
+	}
+	
+	private void giveFocusToPreviousComponent() {
+		int oldFocus = focusIndex;
+		focusIndex = (focusIndex - 1) % numItems;
+		while (!contents[focusIndex].canReceiveFocus() && focusIndex != oldFocus) {
+			focusIndex = (focusIndex - 1) % numItems;
+		}
+	}
+	
+	private void giveFocusToNextComponent() {
+		int oldFocus = focusIndex;
+		focusIndex = (focusIndex + 1) % numItems;
+		while (!contents[focusIndex].canReceiveFocus() && focusIndex != oldFocus) {
+			focusIndex = (focusIndex + 1) % numItems;
 		}
 	}
 
 	public void draw() {
-		userState.saveSettingsForApplet(parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(parent);
-		for(int i = 0; i < contents.length; i++){
-			if(contents[i] != null){
-				contents[i].draw();
+		if (visible) {
+			userState.saveSettingsForApplet(parent);
+			lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(parent);
+			//parent.background(parent.g.backgroundColor);
+			for(int i = 0; i < contents.length; i++){
+				if(contents[i] != null){
+					contents[i].draw();
+				}
 			}
+			userState.restoreSettingsToApplet(parent);   
 		}
-		userState.restoreSettingsToApplet(parent);    
 	}  
 }
