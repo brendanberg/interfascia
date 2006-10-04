@@ -23,6 +23,7 @@
 
 package interfascia;
 import processing.core.*;
+
 import java.awt.event.*;
 
 public class IFCheckBox extends GUIComponent {

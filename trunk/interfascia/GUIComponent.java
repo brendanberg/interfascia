@@ -158,6 +158,10 @@ abstract class GUIComponent {
 	
 	public void keyEvent (KeyEvent e) {
 	}
+	
+	public void actionPerformed (GUIEvent e) {
+		
+	}
 
 	
 	public void fireEventNotification (GUIComponent argComponent, String argMessage) {
