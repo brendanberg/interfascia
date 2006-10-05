@@ -433,6 +433,11 @@ public class IFTextField extends GUIComponent {
 	
 	private int findClosestGap(int x) {
 		float prev = 0, cur;
+		if (x < 0) {
+			return visiblePortionStart;
+		} else if (x > getWidth()) {
+			return visiblePortionEnd;
+		}
 		for (int i = visiblePortionStart; i < visiblePortionEnd; i++) {
 			cur = controller.parent.textWidth(contents.substring(visiblePortionStart, i));
 			if (cur > x) {
@@ -518,6 +523,18 @@ public class IFTextField extends GUIComponent {
 				}
 			}
 		} else if (e.getID() == MouseEvent.MOUSE_DRAGGED) {
+			/*if (controller.parent.millis() % 500 == 0) {
+				System.out.println("MOVE");
+				if (e.getX() < getX() && endSelect > 0) {
+					// move left
+					endSelect = visiblePortionStart = endSelect - 1;
+					shrinkRight();
+				} else if (e.getX() > getX() + getWidth() && endSelect < contents.length() - 1) {
+					// move right
+					endSelect = visiblePortionEnd = endSelect + 1;
+					shrinkLeft();
+				}
+			}*/
 			endSelect = cursorPos = findClosestGap(e.getX() - getX());
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 			if (endSelect == startSelect) {
@@ -526,7 +543,6 @@ public class IFTextField extends GUIComponent {
 			}
 		}
 		updateXPos();
-
 		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 
