@@ -42,7 +42,7 @@ public class IFLookAndFeel {
 			// may have changed the color mode.
 			IFPGraphicsState temp = new IFPGraphicsState(parent);
 			
-			parent.colorMode(parent.RGB, 255);
+			parent.colorMode(PApplet.RGB, 255);
 
 			baseColor = parent.color(153, 153, 204);
 			highlightColor = parent.color(102, 102, 204);
