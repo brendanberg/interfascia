@@ -32,7 +32,7 @@ import java.awt.event.*;
 
 public class IFTextField extends GUIComponent {
 	private int currentColor;
-	private String contents = "";
+	protected String contents = "";
 	private int cursorPos = 0, visiblePortionStart = 0, visiblePortionEnd = 0;
 	private int startSelect = -1, endSelect = -1;
 	private float contentWidth = 0, visiblePortionWidth = 0;
@@ -225,7 +225,7 @@ public class IFTextField extends GUIComponent {
 	* @param c the character to be added
 	*/
 	
-	private void addChar(char c) {
+	protected void addChar(char c) {
 	
 		String t1, t2;
 		if (startSelect != -1 && endSelect != -1) {
@@ -422,6 +422,50 @@ public class IFTextField extends GUIComponent {
 		}
 	}
 
+	public int getVisiblePortionStart()
+	{
+		return visiblePortionStart;
+	}
+	public void setVisiblePortionStart(int VisiblePortionStart)
+	{
+		visiblePortionStart = VisiblePortionStart;
+	}
+	
+	public int getVisiblePortionEnd()
+	{
+		return visiblePortionEnd;
+	}
+	public void setVisiblePortionEnd(int VisiblePortionEnd)
+	{
+		visiblePortionEnd = VisiblePortionEnd;
+	}
+
+	public int getStartSelect()
+	{
+		return startSelect;
+	}
+	public void setStartSelect(int StartSelect)
+	{
+		startSelect = StartSelect;
+	}
+
+	public int getEndSelect()
+	{
+		return endSelect;
+	}
+	public void setEndSelect(int EndSelect)
+	{
+		endSelect = EndSelect;
+	}
+
+	public int getCursorPosition()
+	{
+		return cursorPos;
+	}	
+	public void setCursorPosition(int CursorPos)
+	{
+		cursorPos = CursorPos;
+	}
 
 
 	/**
