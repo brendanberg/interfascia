@@ -73,6 +73,10 @@ abstract class GUIComponent {
 		lookAndFeel = lf;
 	}
 	
+	public IFLookAndFeel getLookAndFeel() {
+		return lookAndFeel;
+	}
+	
 	public String getLabel() {
 		return label;
 	}
