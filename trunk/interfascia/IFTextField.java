@@ -22,7 +22,7 @@
 
 
 package interfascia;
-import processing.core.*;
+//import processing.core.*;
 
 import java.awt.event.*;
 
@@ -31,11 +31,11 @@ import java.awt.event.*;
 /** The IFTextField class is used for a simple one-line text field */
 
 public class IFTextField extends GUIComponent {
-	private int currentColor;
-	protected String contents = "";
-	private int cursorPos = 0, visiblePortionStart = 0, visiblePortionEnd = 0;
+
+	private String contents = "";
+	private int cursorPos = 0;
+	private int visiblePortionStart = 0, visiblePortionEnd = 0;
 	private int startSelect = -1, endSelect = -1;
-	private float contentWidth = 0, visiblePortionWidth = 0;
 	private float cursorXPos = 0, startSelectXPos = 0, endSelectXPos = 0;
 
 	/**
@@ -225,44 +225,53 @@ public class IFTextField extends GUIComponent {
 	* @param c the character to be added
 	*/
 	
-	protected void addChar(char c) {
+	protected void appendToRightOfCursor(char c) {
+		appendToRightOfCursor("" + c);
+	}
+	
+	
+	/**
+	* adds a string to the immediate right of the insertion point or replaces the selected group of characters.
+	* @param s the string to be added
+	*/
+	
+	protected void appendToRightOfCursor(String s) {
 	
 		String t1, t2;
 		if (startSelect != -1 && endSelect != -1) {
-			if (startSelect > endSelect) {
-				int temp = startSelect;
-				startSelect = endSelect;
-				endSelect = temp;
+			int start = Math.min(startSelect, endSelect);
+			int end = Math.max(startSelect, endSelect);
+			if (start >= end || start < 0 || end > contents.length()) {
+				System.out.println("Brendan needs to check array bounds.");
+				return;
 			}
-			if (endSelect > contents.length())
-				endSelect = contents.length();
-			t1 = contents.substring(0, startSelect);
-			t2 = contents.substring(endSelect);
-			cursorPos = startSelect;
+			
+			t1 = contents.substring(0, start);
+			t2 = contents.substring(end);
+			cursorPos = start;
 			startSelect = endSelect = -1;
 		} else {
 			t1 = contents.substring(0, cursorPos);
 			t2 = contents.substring(cursorPos);
 		}
 		
-		contents = t1 + c + t2;
-		cursorPos++;
+		contents = t1 + s + t2;
+		cursorPos += s.length();
 				
 		// Adjust the start and end positions of the visible portion of the string
-		
 		if (controller.parent.textWidth(contents) < getWidth() - 12) {
 			visiblePortionStart = 0;
 			visiblePortionEnd = contents.length();
 		} else {
 			if (cursorPos == contents.length()) {
 				visiblePortionEnd = cursorPos;
-				shrinkLeft();
+				adjustVisiblePortionStart();
 			} else {
 				if (cursorPos >= visiblePortionEnd)
 					centerCursor();
 				else {
-					visiblePortionEnd = visiblePortionStart;
-					growRight();
+					//visiblePortionEnd = visiblePortionStart;
+					adjustVisiblePortionEnd();
 				}
 				//while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12)
 				//	visiblePortionEnd++;
@@ -274,37 +283,39 @@ public class IFTextField extends GUIComponent {
 	
 	
 	
-	
 	/**
 	* deletes either the character directly to the left of the insertion point or the selected group of characters. It automatically handles cases where there is no character to the left of the insertion point (when the insertion point is at the beginning of the string). It is called by <pre>public void keyEvent</pre> when the delete key is pressed.
 	*/
 	
-	private void backspaceChar() {
-		String t1 = "", t2 = "";
+	protected void backspaceChar() {
 		if (startSelect != -1 && endSelect != -1) {
-			if (startSelect > endSelect) {
-				int temp = startSelect;
-				startSelect = endSelect;
-				endSelect = temp;
-			}
-			if (endSelect > contents.length())
-				endSelect = contents.length();
-			t1 = contents.substring(0, startSelect);
-			t2 = contents.substring(endSelect);
-			cursorPos = startSelect;
-			startSelect = endSelect = -1;
-			contents = t1 + t2;
-		} else if (cursorPos > 0) {
-			if (cursorPos > contents.length())
-				cursorPos = contents.length();
-			t1 = contents.substring(0, cursorPos - 1);
-			t2 = contents.substring(cursorPos);
-			cursorPos--;
-			contents = t1 + t2;
+			deleteSubstring(startSelect, endSelect);
+		} else if (cursorPos > 0){
+			deleteSubstring(cursorPos - 1, cursorPos);
+		}
+	}
+
+
+
+	protected void deleteChar() {
+		if (startSelect != -1 && endSelect != -1) {
+			deleteSubstring(startSelect, endSelect);
+		} else if (cursorPos < contents.length()){
+			deleteSubstring(cursorPos, cursorPos + 1);
+		}
+	}
+
+
+	protected void deleteSubstring(int startString, int endString) {
+		int start = Math.min(startString, endString);
+		int end = Math.max(startString, endString);
+		if (start >= end || start < 0 || end > contents.length()) {
+			System.out.println("Brendan needs to check array bounds.");
+			return;
 		}
 		
-		
-		// Adjust the start and end positions of the visible portion of the string
+		contents = contents.substring(0, start) + contents.substring(end);
+		cursorPos = start;
 		
 		if (controller.parent.textWidth(contents) < getWidth() - 12) {
 			visiblePortionStart = 0;
@@ -312,35 +323,27 @@ public class IFTextField extends GUIComponent {
 		} else {
 			if (cursorPos == contents.length()) {
 				visiblePortionEnd = cursorPos;
-				growLeft();
+				adjustVisiblePortionStart();
 			} else {
 				if (cursorPos <= visiblePortionStart) {
 					centerCursor();
 				} else {
-					visiblePortionEnd = visiblePortionStart;
-					growRight();
-				
-				//while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
-				//	if (visiblePortionEnd == contents.length())
-				//		break;
-				//	visiblePortionEnd++;
-				//}
+					adjustVisiblePortionEnd();
 				}
 			}
 		}
+		
+		startSelect = endSelect = -1;
 
 		fireEventNotification(this, "Modified");
-		//controller.userState.restoreSettingsToApplet(controller.parent);
+		//controller.userState.restoreSettingsToApplet(controller.parent);		
 	}
 
-
-
-	private void deleteChar() {
-		if(cursorPos >= contents.length()) return;
-		cursorPos++;
-		backspaceChar();
+	protected void copySubstring(int start, int end) {
+		int s = Math.min(start, end);
+		int e = Math.max(start, end);
+		controller.copy(getValue().substring(s, e));
 	}
-
 
 
 	// ***** UNTIL GRAPHICS SETTINGS ARE STORED IN A QUEUE, MAKE SURE	   *****
@@ -372,40 +375,43 @@ public class IFTextField extends GUIComponent {
 		}
 	}
 	
-	
-	private void growRight() {
-		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
-			if (visiblePortionEnd == contents.length())
+	private void adjustVisiblePortionStart() {
+		if (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
 				if (visiblePortionStart == 0)
 					break;
 				else
 					visiblePortionStart--;
-			visiblePortionEnd++;
+			}
+		} else {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
+				visiblePortionStart++;
+			}
 		}
 	}
-
-	private void growLeft() {
-		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
-			if (visiblePortionStart == 0)
+	
+	private void adjustVisiblePortionEnd() {
+		//System.out.println(visiblePortionStart + " to " + visiblePortionEnd + " out of " + contents.length());
+		
+		// Temporarily correcting for an erroneus precondition. Looking for the real issue
+		visiblePortionEnd = Math.min(visiblePortionEnd, contents.length()); 
+		
+		if (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
 				if (visiblePortionEnd == contents.length())
 					break;
 				else
 					visiblePortionEnd++;
-			visiblePortionStart--;
+			}
+		} else {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
+				visiblePortionEnd--;
+			}
 		}
 	}
+	
+	
 
-	private void shrinkRight() {
-		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
-			visiblePortionEnd--;
-		}
-	}
-
-	private void shrinkLeft() {
-		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
-			visiblePortionStart++;
-		}
-	}
 
 	private void centerCursor() {
 		visiblePortionStart = visiblePortionEnd = cursorPos;
@@ -421,6 +427,36 @@ public class IFTextField extends GUIComponent {
 				break;
 		}
 	}
+
+	/**
+	* given the X position of the mouse in relation to the X
+	* position of the text field, findClosestGap(int x) will
+	* return the index of the closest letter boundary in the 
+	* letterWidths array.
+	*/
+	
+	private int findClosestGap(int x) {
+		float prev = 0, cur;
+		if (x < 0) {
+			return visiblePortionStart;
+		} else if (x > getWidth()) {
+			return visiblePortionEnd;
+		}
+		for (int i = visiblePortionStart; i < visiblePortionEnd; i++) {
+			cur = controller.parent.textWidth(contents.substring(visiblePortionStart, i));
+			if (cur > x) {
+				if (cur - x < x - prev)
+					return i;
+				else
+					return i - 1;
+			}
+			prev = cur;
+		}
+		
+		// Don't know what else to return
+		return contents.length();
+	}
+
 
 	public int getVisiblePortionStart()
 	{
@@ -469,37 +505,6 @@ public class IFTextField extends GUIComponent {
 
 
 	/**
-	* given the X position of the mouse in relation to the X
-	* position of the text field, findClosestGap(int x) will
-	* return the index of the closest letter boundary in the 
-	* letterWidths array.
-	*/
-	
-	private int findClosestGap(int x) {
-		float prev = 0, cur;
-		if (x < 0) {
-			return visiblePortionStart;
-		} else if (x > getWidth()) {
-			return visiblePortionEnd;
-		}
-		for (int i = visiblePortionStart; i < visiblePortionEnd; i++) {
-			cur = controller.parent.textWidth(contents.substring(visiblePortionStart, i));
-			if (cur > x) {
-				if (cur - x < x - prev)
-					return i;
-				else
-					return i - 1;
-			}
-			prev = cur;
-		}
-		
-		// Don't know what else to return
-		return contents.length();
-	}
-	
-	
-	
-	/**
 	* sets the contents of the text box and displays the
 	* specified string in the text box widget.
 	* @param val the string to become the text field's contents
@@ -517,7 +522,7 @@ public class IFTextField extends GUIComponent {
 		// Adjust the start and end positions of the visible portion of the string
 		if (controller != null) {
 			if (controller.parent.textWidth(contents) > getWidth() - 12) {
-				shrinkRight();
+				adjustVisiblePortionEnd();
 			}
 		}
 
@@ -615,8 +620,8 @@ public class IFTextField extends GUIComponent {
 					startSelect = endSelect = -1;
 					cursorPos = visiblePortionEnd = contents.length();
 				}
-				visiblePortionStart = visiblePortionEnd;
-				growLeft();
+				//visiblePortionStart = visiblePortionEnd;
+				adjustVisiblePortionStart();
 			} 
 			else if (e.getKeyCode() == KeyEvent.VK_UP) {
 				if (shiftDown) {
@@ -628,8 +633,8 @@ public class IFTextField extends GUIComponent {
 					startSelect = endSelect = -1;
 					cursorPos = visiblePortionStart = 0;
 				}
-				visiblePortionEnd = visiblePortionStart;
-				growRight();
+				//visiblePortionEnd = visiblePortionStart;
+				adjustVisiblePortionEnd();
 			} 
 			else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				if (shiftDown) {
@@ -685,13 +690,18 @@ public class IFTextField extends GUIComponent {
 				if ((e.getModifiers() & shortcutMask) == shortcutMask) {
 					switch (e.getKeyCode()) {
 						case KeyEvent.VK_C:
-							System.out.println("Copy");
+							if (startSelect != -1 && endSelect != -1) {
+								copySubstring(startSelect, endSelect);
+							}
 							break;
 						case KeyEvent.VK_V:
-							System.out.println("Paste");
+							appendToRightOfCursor(controller.paste());
 							break;
 						case KeyEvent.VK_X:
-							System.out.println("Cut");
+							if (startSelect != -1 && endSelect != -1) {
+								copySubstring(startSelect, endSelect);
+								deleteSubstring(startSelect, endSelect);
+							}
 							break;
 						case KeyEvent.VK_A:
 							startSelect = 0;
@@ -709,7 +719,7 @@ public class IFTextField extends GUIComponent {
 			} 
 			else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
 				if(validUnicode(e.getKeyChar()))
-					addChar(e.getKeyChar());
+					appendToRightOfCursor(e.getKeyChar());
 			}
 		}
 		updateXPos();
@@ -727,13 +737,13 @@ public class IFTextField extends GUIComponent {
 	public void draw () {
 		boolean hasFocus = controller.getFocusStatusForComponent(this);
 		
-		if (wasClicked) {
+		/*if (wasClicked) {
 			currentColor = lookAndFeel.activeColor;
 		} else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY) || hasFocus) {
 			currentColor = lookAndFeel.highlightColor;
 		} else {
 			currentColor = lookAndFeel.baseColor;
-		}
+		}*/
 
 		// Draw the surrounding box
 		controller.parent.stroke(lookAndFeel.highlightColor);
