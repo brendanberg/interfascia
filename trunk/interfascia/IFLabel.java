@@ -22,7 +22,7 @@
 
 
 package interfascia;
-import processing.core.*;
+
 
 public class IFLabel extends GUIComponent {
 	private int textSize = 13;

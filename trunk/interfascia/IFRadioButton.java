@@ -22,13 +22,11 @@
 
 
 package interfascia;
-import processing.core.*;
 
 import java.awt.event.*;
 
 public class IFRadioButton extends GUIComponent {
 	private int currentColor;
-	private boolean selected;
 	private IFRadioController radioController;
 
 	public IFRadioButton (String newLabel, int newX, int newY, IFRadioController newController) {
