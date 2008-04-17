@@ -99,9 +99,17 @@ public class IFPGraphicsState {
 	*/
 	
 	public void restoreSettingsToApplet(PApplet applet)
-	{
-		if(smooth) applet.smooth();
-		else applet.noSmooth();
+	{	
+
+		try {
+			if (smooth == true) {
+				applet.smooth();
+			} else {
+				applet.noSmooth();
+			}
+		} catch (RuntimeException e) {
+			// Can't smooth in P3D, throws exception
+		}
 		
 		applet.rectMode(rectMode);
 		applet.ellipseMode(ellipseMode);
