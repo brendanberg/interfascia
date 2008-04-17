@@ -62,7 +62,7 @@ public class IFProgressBar extends GUIComponent {
 	}
 
 	public void setProgress (float argProgress) {
-		progress = argProgress;
+		progress = (argProgress < 0) ? 0 : ((argProgress > 1) ? 1 : argProgress);
 	}
 
 	public float getProgress () {
