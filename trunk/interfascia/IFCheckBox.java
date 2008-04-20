@@ -57,11 +57,11 @@ public class IFCheckBox extends GUIComponent {
 		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				if (selected) {
-					fireEventNotification(this, "Unchecked");
 					selected = false;
+					fireEventNotification(this, "Unchecked");
 				} else {
-					fireEventNotification(this, "Checked");
 					selected = true;
+					fireEventNotification(this, "Checked");
 				}
 				wasClicked = false;
 			}
@@ -72,11 +72,11 @@ public class IFCheckBox extends GUIComponent {
 		if (e.getID() == KeyEvent.KEY_TYPED && e.getKeyChar() == ' ') {
 			fireEventNotification(this, "Selected");
 			if (selected) {
-				fireEventNotification(this, "Unchecked");
 				selected = false;
+				fireEventNotification(this, "Unchecked");
 			} else {
-				fireEventNotification(this, "Checked");
 				selected = true;
+				fireEventNotification(this, "Checked");
 			}
 		}
 	}
