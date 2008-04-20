@@ -24,15 +24,14 @@
 package interfascia;
 
 import java.awt.event.*;
-import java.lang.reflect.*;
 
 abstract class GUIComponent {
 	private int x, y, wid, hgt;
 	private String label;
 	
+	// TODO Can I get rid of this?
 	protected boolean wasClicked = false;
 	
-	//protected PApplet parent;
 	protected Object listener;
 	protected IFLookAndFeel lookAndFeel;
 	protected GUIController controller;
@@ -121,7 +120,7 @@ abstract class GUIComponent {
 	//}
 	
 	public void setPosition(int newX, int newY) {
-		if (newX > 0 && newY > 0) {
+		if (newX >= 0 && newY >= 0) {
 			x = newX;
 			y = newY;
 		}
@@ -132,19 +131,33 @@ abstract class GUIComponent {
 	//}
 		
 	public void setX(int newX) {
-		if (newX > 0) x = newX;
+		if (newX >= 0) x = newX;
 	}
 
 	public int getX() {
 		return x;
 	}
+	
+	public int getAbsoluteX() {
+		if (controller != null) 
+			return controller.getAbsoluteX() + x;
+		else
+			return x;
+	}
 
 	public void setY(int newY) {
-		if (newY > 0) y = newY;
+		if (newY >= 0) y = newY;
 	}
 	
 	public int getY() {
 		return y;
+	}
+	
+	public int getAbsoluteY() {
+		if (controller != null)
+			return controller.getAbsoluteY() + y;
+		else
+			return y;
 	}
 
 	public void mouseEvent (MouseEvent e) {
@@ -172,21 +185,8 @@ abstract class GUIComponent {
 		if (listener == null)
 			return;
 		
-		try {
-			GUIEvent e = new GUIEvent(argComponent, argMessage);
-			Method m = listener.getClass().getDeclaredMethod("actionPerformed", new Class[] { e.getClass() });
-			
-			try {
-				m.invoke(listener, new Object[] { e });
-			} catch (InvocationTargetException ex) {
-				// Spit out the cause of the exception
-				System.out.println(ex.getCause().getMessage());
-			} catch (IllegalAccessException ex) {
-			}
-			
-		} catch (NoSuchMethodException ex) {
-			System.out.println( "NoSuchMethodException" );
-		}
+		GUIEvent e = new GUIEvent(argComponent, argMessage);
+		IFDelegation.callDelegate(listener, "actionPerformed", new Object[] { e });
 			
 	}
 	
