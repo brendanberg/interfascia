@@ -28,7 +28,7 @@ import java.awt.event.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 
-public class GUIController implements ClipboardOwner {
+public class GUIController extends GUIComponent implements ClipboardOwner {
 	private GUIComponent[] contents;
 	private int numItems = 0;
 	private int focusIndex = -1;
@@ -43,6 +43,12 @@ public class GUIController implements ClipboardOwner {
 	
 	public GUIController (PApplet newParent) {
 		this(newParent, true);
+	}
+	
+	public GUIController (PApplet newParent, int x, int y, int width, int height) {
+		this(newParent, true);
+		setPosition(x, y);
+		setSize(width, height);
 	}
 
 	public GUIController (PApplet newParent, boolean newVisible) {
@@ -107,7 +113,7 @@ public class GUIController implements ClipboardOwner {
 		if (componentIndex != -1) {
 			contents[componentIndex] = null;
 			if (componentIndex < numItems - 1) {
-				System.arraycopy(contents, componentIndex + 1, contents, componentIndex, numItems);
+				System.arraycopy(contents, componentIndex + 1, contents, componentIndex, numItems - (componentIndex + 1));
 			}
 			numItems--;
 		}
@@ -234,8 +240,11 @@ public class GUIController implements ClipboardOwner {
 			userState.saveSettingsForApplet(parent);
 			lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(parent);
 			//parent.background(parent.g.backgroundColor);
+			parent.fill(parent.color(0));
+			parent.rect(getX(), getY(), getWidth(), getHeight());
 			for(int i = 0; i < contents.length; i++){
 				if(contents[i] != null){
+					//parent.smooth();
 					contents[i].draw();
 				}
 			}
