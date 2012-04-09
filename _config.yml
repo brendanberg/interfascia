@@ -1,4 +1,6 @@
 permalink: /:title
+safe: true
+lsi: false
 auto: true
 server: true
 pygments: true

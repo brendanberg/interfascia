@@ -183,6 +183,34 @@ footer {
   bottom:50px;
 }
 
+.method {
+	border: 1px solid #e5e5e5;
+	border-bottom: 0;
+	background-color: #F0F0FF;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	margin: 0;
+	padding: 8px 15px;
+}
+
+/*.method code {
+	font-family: courier;
+	color: #777;
+}
+*/
+ul.description {
+	background: #f8f8f8;  
+	border: 1px solid #e5e5e5;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	padding: 8px 15px;
+	list-style-type: none;
+}
+
+ul.description li + li {
+	padding-top: 6px;
+}
+
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {
