@@ -1,4 +1,4 @@
-permalink: /:title
+permalink: /:categories/:title
 safe: true
 lsi: false
 auto: true

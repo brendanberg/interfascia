@@ -1,6 +1,7 @@
 ---
 layout: default
 title: GUIController
+category: documentation
 description: Interfascia's GUIController object
 
 ---
@@ -16,8 +17,8 @@ Syntax
 	c.requestFocus(button);
 
 
-Methods
--------
+Method Summary
+--------------
 
 <p class="method">
 	<code>GUIController(PApplet parent);<br />

@@ -22,14 +22,17 @@ h1, h2, h3 {
 
 h1 {
   font-size:28px;
+  font-weight: 600;
 }
 
 h2 {
   color:#393939;
+  font-weight: 300;
 }
 
 h3, h4, h5, h6 {
   color:#494949;
+  font-weight: 300;
 }
 
 a {
@@ -139,7 +142,7 @@ header ul a {
 }
 
 strong {
-  color:#222;
+  color:#444;
   font-weight:700;
 }
 
