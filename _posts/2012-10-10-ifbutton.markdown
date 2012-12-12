@@ -1,0 +1,170 @@
+---
+layout: page
+title: IFButton
+category: documentation
+description: Interfascia's IFButton object
+
+---
+
+The `IFButton` object creates a new button GUI component.
+
+
+Syntax
+------
+
+	IFButton b = new IFButton("Click Me", 30, 30);
+	b.addActionListener(this);
+
+
+Method Summary
+--------------
+
+<p class="method">
+	<code>IFButton(String label, int x, int y);<br />
+		IFButton(String label, int x, int y, int width);;
+	</code>
+</p>
+<ul class="description">
+	<li><code>label</code>, the text displayed on the button.</li>
+	<li><code>x</code>, the X position of the button's upper left hand corner..</li>
+	<li><code>y</code>, the Y position of the button's upper left hand corner.</li>
+	<li><code>width</code>, the width in pixels of the button.</li>
+</ul>
+
+<p class="method">
+	<code>setLabel(String newLabel)</code>
+</p>
+<ul class="description">
+	<li>Sets the name of the button. The button name is used when submitting the interface's
+		current state to a web server.</li>
+	<li><code>newLabel</code>, the new name for the button.</li>
+</ul>
+
+<p class="method">
+	<code>getLabel()</code>
+</p>
+<ul class="description">
+	<li>Returns the button's name as a String.</li>
+</ul>
+
+<p class="method">
+	<code>setWidth(int width)</code>
+</p>
+<ul class="description">
+	<li>Sets the width of the button.</li>
+	<li><code>width</code>, the new width for the button.</li>
+</ul>
+
+<p class="method">
+	<code>getWidth()</code>
+</p>
+<ul class="description">
+	<li>Returns the width in pixels of the button in integer form.</li>
+</ul>
+
+<p class="method">
+	<code>setHeight(int height)</code>
+</p>
+<ul class="description">
+	<li>Sets the height of the button.</li>
+	<li><code>height</code>, the new height for the button.</li>
+</ul>
+
+<p class="method">
+	<code>getHeight()</code>
+</p>
+<ul class="description">
+	<li>Returns the height in pixels of the button in integer form.</li>
+</ul>
+
+<p class="method">
+	<code>setSize(int width, int height)</code>
+</p>
+<ul class="description">
+	<li>A convenience method to set both dimensions of the button.</li>
+	<li><code>width</code>, the new width for the button.</li>
+	<li><code>height</code>, the new height for the button.</li>
+</ul>
+
+<p class="method">
+	<code>setX(int x)</code>
+</p>
+<ul class="description">
+	<li>Sets the X position of the button relative to its GUIController.</li>
+	<li><code>x</code>, the new X position for the button.</li>
+</ul>
+
+<p class="method">
+	<code>getX()</code>
+</p>
+<ul class="description">
+	<li>Returns the X position in pixels of the button relative to its GUIController.</li>
+</ul>
+
+<p class="method">
+	<code>setY(int y)</code>
+</p>
+<ul class="description">
+	<li>Sets the Y position of the button relative to its GUIController.</li>
+	<li><code>y</code>, the new Y position for the button.</li>
+</ul>
+
+<p class="method">
+	<code>getY()</code>
+</p>
+<ul class="description">
+	<li>Returns the Y position in pixels of the button relative to its GUIController.</li>
+</ul>
+
+<p class="method">
+	<code>setPosition(int x, int y)</code>
+</p>
+<ul class="description">
+	<li>A convenience method to set both the X and Y position of the button.</li>
+	<li><code>X</code>, the new X position for the button.</li>
+	<li><code>Y</code>, the new Y position for the button.</li>
+</ul>
+
+<p class="method">
+	<code>addActionListener(Object listener)</code>
+</p>
+<ul class="description">
+	<li>Adds an action listener object which receives `GUIEvent` notifications when the button is
+		clicked or released. You must implement the [actionPerformed()](/documentation/actionperformed/)
+		method in order to receive events from the button.</li>
+	<li><code>listener</code>, the object that events are sent to. (Usually `this`.)</li>
+</ul>
+
+
+Example
+-------
+
+	import interfascia.*;
+	
+	GUIController c;
+	IFButton b1, b2;
+	
+	void setup() {
+	  c = new GUIController (this);
+	  
+	  b1 = new IFButton ("One", 30, 20, 40, 17);
+	  b2 = new IFButton ("Two", 30, 60, 40, 17);
+	
+	  b1.addActionListener(this);
+	  b2.addActionListener(this);
+	
+	  c.add (b1);
+	  c.add (b2);
+	}
+	
+	void draw() {
+	}
+	
+	void actionPerformed (GUIEvent e) {
+	  if (e.getSource() == b1) {
+	    println("Button one was clicked");
+	  } else if (e.getSource() == b2) {
+	    println("Button two was clicked");
+	  }
+	}
+

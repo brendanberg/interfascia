@@ -1,0 +1,40 @@
+---
+layout: page
+title: GUIEvent
+category: documentation
+description: An object describing user interface events
+
+---
+
+The `GUIEvent` object is passed to the [actionPerformed()](/documentation/actionperformed/) method every time a GUI component
+generates an event. A `GUIEvent` has two fields, `source` and `message`. The methods `getSource()` and `getMessage()` will
+return those values. The event's source is the component that generated the event, the message is a string that describes the
+nature of the event.
+
+
+Method Summary
+--------------
+
+<p class="method">
+	<code>getSource()</code>
+</p>
+<ul class="description">
+	<li>The getSource() method returns the GUI component that generated the event.</li>
+</ul>
+
+<p class="method">
+	<code>getMessage()</code>
+</p>
+<ul class="description">
+	<li>The getMessage() method returns a string containing a description of the event.</li>
+</ul>
+
+
+Example
+-------
+
+	void actionPerformed (GUIEvent e) {
+		print ("Component: " + e.getSource().getLabel());
+		print ("Message: " + e.getMessage());
+	}
+

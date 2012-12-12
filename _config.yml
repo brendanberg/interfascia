@@ -1,6 +1,6 @@
 permalink: /:categories/:title
 safe: true
-lsi: false
+lsi: true
 auto: true
 server: true
 pygments: true
