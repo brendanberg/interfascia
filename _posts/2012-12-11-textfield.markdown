@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Text Field
 category: examples
 skill_level: easy

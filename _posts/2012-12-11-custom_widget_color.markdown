@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Custom Widget Color
 category: examples
 skill_level: advanced

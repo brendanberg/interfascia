@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Temperature Converter
 category: examples
 skill_level: advanced

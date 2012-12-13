@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Radio Buttons
 category: examples
 skill_level: easy

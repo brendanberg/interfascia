@@ -1,9 +1,13 @@
+---
+layout: default
+title: Documentation
+---
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Interfascia &raquo; Home</title>
+	<title>Interfascia &raquo; {{ page.title }}</title>
     
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -24,16 +28,22 @@
           <li><a href="https://github.com/brendn/interfascia">Fork On <strong>GitHub</strong></a></li>
         </ul>
       </header>
-      <section>
-<p><img src="http://interfascia.plusminusfive.com/screenshot.jpg" alt="Screenshot" /></p>
+	  <section>
+	  	<h1>Documentation</h1>
 
-<p><strong>Interfascia</strong> is a graphical user interface library for the <a href="http://processing.org/">Processing</a> graphics programming environment. It provides a toolkit of standard interface widgets like text fields, buttons, checkboxes, sliders, etc. Interfascia automatically handles interactions within the collection of widgets and sends event messages to your project.</p>
+		<p>
+			{% for post in site.categories.documentation %}
+			<a href="{{ post.url }}">{{ post.title }}</a><br />
+			{% endfor %}
+		</p>
 
-<p>
-	<h1><a href="/about/">About Interfascia</a></h1>
-	<h1><a href="/documentation/">Documentation and Examples</a></h1>
-</p>
+		<h1>Examples</h1>
 
+		<p>
+			{% for post in site.categories.examples %}
+			<a href="{{ post.url }}">{{ post.title }}</a><br />
+			{% endfor %}
+		</p>
       </section>
       <footer>
         <p>Interfascia is a project initiated and maintained by <a href="https://github.com/brendn">Brendan Berg</a> and released under the <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL</a>.</p>

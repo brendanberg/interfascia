@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Button
 category: examples
 skill_level: easy
@@ -8,12 +8,21 @@ description: Attach action listeners to IFButton objects to react to click event
 ---
 
 
-<applet code="custom_color" archive="applets/button.jar" width="200" height="100" mayscript="true">
-<param name="image" value="loading.gif">
-<param name="boxmessage" value="Loading Processing software...">
-<param name="boxbgcolor" value="#FFFFFF">
-To view this content, you need to install Java from <a href="http://java.com">java.com</a>
-</applet>
+<object classid="clsid:java.test">
+	<param name="code" value="applets/button.jar" />
+	<param name="image" value="loading.gif">
+	
+	<comment>
+		<embed code="custom_color"
+			archive="applets/button.jar" 
+			type="application/x-java-applet;jpi-version=1.5.0"
+			pluginspage="http://java.sun.com/j2se/1.5.0/>
+		<noembed>
+			To view this content, you need to install Java from <a href="http://java.com">java.com</a>
+		</noembed>
+		</embed>
+	</comment>
+</object>
 
 
 Source

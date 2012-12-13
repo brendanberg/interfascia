@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: GUIController
 category: documentation
 description: Interfascia's GUIController object
