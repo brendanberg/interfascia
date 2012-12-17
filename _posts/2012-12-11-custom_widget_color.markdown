@@ -4,16 +4,12 @@ title: Custom Widget Color
 category: examples
 skill_level: advanced
 description: Specify custom colors for GUIComponents
+applet_html: custom_color.html
 
 ---
 
 
-<applet code="custom_color" archive="applets/custom_color.jar" width="200" height="100" mayscript="true">
-<param name="image" value="loading.gif">
-<param name="boxmessage" value="Loading Processing software...">
-<param name="boxbgcolor" value="#FFFFFF">
-To view this content, you need to install Java from <a href="http://java.com">java.com</a>
-</applet>
+<iframe src="/applets/{{ page.applet_html }}" class="applet"></iframe>
 
 
 Source

@@ -4,16 +4,12 @@ title: Radio Buttons
 category: examples
 skill_level: easy
 description: Create an IFRadioController object to manage IFRadioButton objects
+applet_html: radiobutton.html
 
 ---
 
 
-<applet code="custom_color" archive="applets/radiobutton.jar" width="200" height="100" mayscript="true">
-<param name="image" value="loading.gif">
-<param name="boxmessage" value="Loading Processing software...">
-<param name="boxbgcolor" value="#FFFFFF">
-To view this content, you need to install Java from <a href="http://java.com">java.com</a>
-</applet>
+<iframe src="/applets/{{ page.applet_html }}" class="applet"></iframe>
 
 
 Source

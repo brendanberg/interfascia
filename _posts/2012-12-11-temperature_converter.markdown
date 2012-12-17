@@ -4,16 +4,12 @@ title: Temperature Converter
 category: examples
 skill_level: advanced
 description: An application to convert temperatures from Fahrenheit to Celsius and vice versa
+applet_html: temperature_converter.html
 
 ---
 
 
-<applet code="custom_color" archive="applets/convert.jar" width="200" height="100" mayscript="true">
-<param name="image" value="loading.gif">
-<param name="boxmessage" value="Loading Processing software...">
-<param name="boxbgcolor" value="#FFFFFF">
-To view this content, you need to install Java from <a href="http://java.com">java.com</a>
-</applet>
+<iframe src="/applets/{{ page.applet_html }}" class="applet"></iframe>
 
 
 Source
