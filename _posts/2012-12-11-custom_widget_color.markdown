@@ -9,7 +9,7 @@ applet_html: custom_color.html
 ---
 
 
-<iframe src="/applets/{{ page.applet_html }}" class="applet"></iframe>
+<iframe src="/applets/{{ page.applet_html }}" class="applet">Your browser does not support iframes.</iframe>
 
 
 Source

@@ -186,6 +186,10 @@ footer {
   bottom:50px;
 }
 
+iframe {
+	border: 0;
+}
+
 .method {
 	border: 1px solid #e5e5e5;
 	border-bottom: 0;
