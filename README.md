@@ -5,4 +5,4 @@ __Interfascia__ is a graphical user interface library for the [Processing](http:
 
 Interfascia is a project initiated and maintained by [Brendan Berg](http://plusminusfive.com/) and released under the [GNU LGPL](http://www.gnu.org/licenses/lgpl.html).
 
-Questions, comments, and suggestions can be addressed to [interfascia &Auml;T superstable D&Oslash;T net](mailto:interfascia%20%C3%84T%20superstable%20D%C3%98Tnet).
+Questions, comments, and suggestions can be addressed to [interfascia &Auml;T plusminusfive D&Oslash;T com](mailto:interfascia%20%C3%84T%20plusminusfive%20D%C3%98Tcom).
