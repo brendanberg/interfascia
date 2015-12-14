@@ -11,13 +11,14 @@
   </fileset>
  
   <target name="compile" depends="clean" description="compile the source tree">
+    <mkdir dir="${build.dir}" />
     <javac source="6" target="6" srcdir="${src}" destdir="${src}">
       <classpath path="${processing_lib}/core/library/core.jar" />
     </javac>
   </target>
 
   <target name="clean" description="Clean output directories">
-     <delete>
+     <delete quiet="true">
        <fileset dir="${build.dir}">
          <include name="**/*.class"/>
        </fileset>
