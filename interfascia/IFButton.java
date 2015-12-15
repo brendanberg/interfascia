@@ -44,7 +44,7 @@ public class IFButton extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		controller.parent.registerMouseEvent(this);
+		controller.parent.registerMethod("mouseEvent", this);
 	}
 
 	public void mouseEvent(MouseEvent e) {

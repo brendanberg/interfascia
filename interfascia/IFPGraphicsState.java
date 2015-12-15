@@ -25,7 +25,7 @@ package interfascia;
 import processing.core.*;
 
 public class IFPGraphicsState {
-	public boolean smooth;
+	public int smooth;
 	
 	public int rectMode, ellipseMode;
 	
@@ -102,7 +102,7 @@ public class IFPGraphicsState {
 	{	
 
 		try {
-			if (smooth == true) {
+			if (smooth > 0) {
 				applet.smooth();
 			} else {
 				applet.noSmooth();

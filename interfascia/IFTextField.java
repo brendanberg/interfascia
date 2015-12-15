@@ -215,7 +215,7 @@ public class IFTextField extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		controller.parent.registerMouseEvent(this);
+		controller.parent.registerMethod("mouseEvent", this);
 	}
 	
 

@@ -75,8 +75,8 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 			}
 		}
 		
-		parent.registerKeyEvent(this);
-		parent.registerDraw(this);
+    newParent.registerMethod("keyEvent", this);
+    newParent.registerMethod("draw", this);
 	}
 	
 	public void setLookAndFeel(IFLookAndFeel lf) {

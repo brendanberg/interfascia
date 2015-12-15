@@ -39,7 +39,7 @@ public class IFRadioButton extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		controller.parent.registerMouseEvent(this);
+		controller.parent.registerMethod("mouseEvent", this);
 		
 		if (lookAndFeel == null)
 			return;
