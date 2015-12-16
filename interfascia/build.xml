@@ -1,14 +1,22 @@
 <?xml version="1.0"?>
 <!-- This is the ANT build configuration file. Just run 'ant' -->
-<project name="interfascia" default="compile">
+<project name="interfascia" default="jar">
    
   <property name="processing_version" value="3.0.1"/>
   <property name="processing_lib" value="/home/nicb/me/src/processing-3.0.1/"/> <!-- this needs to be adjusted by hand -->
   <property name="src" value="." />
   <property name="build.dir" value="${src}/${ant.project.name}" />
+  <property name="dest.dir" value=".." />
   <fileset dir="${src}" casesensitive="yes">
     <include name="**/*.java" />
   </fileset>
+
+  <target name="jar" depends="compile" description="prepare the jar file">
+    <jar destfile="${dest.dir}/${ant.project.name}.jar">
+      <fileset dir="${src}" includes="**/*.class" />
+      <fileset dir="${dest.dir}" includes="data/**/*.vlw" />
+    </jar>
+  </target>
  
   <target name="compile" depends="clean" description="compile the source tree">
     <mkdir dir="${build.dir}" />
