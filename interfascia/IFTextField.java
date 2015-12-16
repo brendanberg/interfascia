@@ -19,15 +19,14 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
 
-
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 package interfascia;
-//import processing.core.*;
 
-//import java.awt.event.*;
 import processing.event.*;
-
-
 
 /** The IFTextField class is used for a simple one-line text field */
 
@@ -559,40 +558,39 @@ public class IFTextField extends GUIComponent {
     controller.userState.saveSettingsForApplet(controller.parent);
     lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
 
-// TODO: this is to be refactored with Processing 3 Events
-//  if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-//    if (isMouseOver(e.getX(), e.getY())) {
-//      controller.requestFocus(this);
-//      wasClicked = true;
-//      endSelect = -1;
-//      startSelect = cursorPos = findClosestGap(e.getX() - getX());
-//    } else {
-//      if (controller.getFocusStatusForComponent(this)) {
-//        wasClicked = false;
-//        controller.yieldFocus(this);
-//        startSelect = endSelect = -1;
-//      }
-//    }
-//  } else if (e.getID() == MouseEvent.MOUSE_DRAGGED) {
-//    /*if (controller.parent.millis() % 500 == 0) {
-//      System.out.println("MOVE");
-//      if (e.getX() < getX() && endSelect > 0) {
-//        // move left
-//        endSelect = visiblePortionStart = endSelect - 1;
-//        shrinkRight();
-//      } else if (e.getX() > getX() + getWidth() && endSelect < contents.length() - 1) {
-//        // move right
-//        endSelect = visiblePortionEnd = endSelect + 1;
-//        shrinkLeft();
-//      }
-//    }*/
-//    endSelect = cursorPos = findClosestGap(e.getX() - getX());
-//  } else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-//    if (endSelect == startSelect) {
-//      startSelect = -1;
-//      endSelect = -1;
-//    }
-//  }
+    if (e.getAction() == MouseEvent.PRESS) {
+      if (isMouseOver(e.getX(), e.getY())) {
+        controller.requestFocus(this);
+        wasClicked = true;
+        endSelect = -1;
+        startSelect = cursorPos = findClosestGap(e.getX() - getX());
+      } else {
+        if (controller.getFocusStatusForComponent(this)) {
+          wasClicked = false;
+          controller.yieldFocus(this);
+          startSelect = endSelect = -1;
+        }
+      }
+    } else if (e.getAction() == MouseEvent.DRAG) {
+      /*if (controller.parent.millis() % 500 == 0) {
+        System.out.println("MOVE");
+        if (e.getX() < getX() && endSelect > 0) {
+          // move left
+          endSelect = visiblePortionStart = endSelect - 1;
+          shrinkRight();
+        } else if (e.getX() > getX() + getWidth() && endSelect < contents.length() - 1) {
+          // move right
+          endSelect = visiblePortionEnd = endSelect + 1;
+          shrinkLeft();
+        }
+      }*/
+      endSelect = cursorPos = findClosestGap(e.getX() - getX());
+    } else if (e.getAction() == MouseEvent.RELEASE) {
+      if (endSelect == startSelect) {
+        startSelect = -1;
+        endSelect = -1;
+      }
+    }
     updateXPos();
     controller.userState.restoreSettingsToApplet(controller.parent);
   }
@@ -610,121 +608,120 @@ public class IFTextField extends GUIComponent {
     lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
 
     int shortcutMask = java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-// TODO: this is to be refactored with Processing 3 Events
-//  boolean shiftDown = ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK);
-//  if (e.getID() == KeyEvent.KEY_PRESSED) {
-//    if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//      if (shiftDown) {
-//        if (startSelect == -1)
-//          startSelect = cursorPos;
-//        endSelect = cursorPos = visiblePortionEnd = contents.length();
-//      } else {
-//        // Shift isn't down
-//        startSelect = endSelect = -1;
-//        cursorPos = visiblePortionEnd = contents.length();
-//      }
-//      //visiblePortionStart = visiblePortionEnd;
-//      adjustVisiblePortionStart();
-//    } 
-//    else if (e.getKeyCode() == KeyEvent.VK_UP) {
-//      if (shiftDown) {
-//        if (endSelect == -1)
-//          endSelect = cursorPos;
-//        startSelect = cursorPos = visiblePortionStart = 0;
-//      } else {
-//        // Shift isn't down
-//        startSelect = endSelect = -1;
-//        cursorPos = visiblePortionStart = 0;
-//      }
-//      //visiblePortionEnd = visiblePortionStart;
-//      adjustVisiblePortionEnd();
-//    } 
-//    else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-//      if (shiftDown) {
-//        if (cursorPos > 0) {
-//          if (startSelect != -1 && endSelect != -1) {
-//            startSelect--;
-//            cursorPos--;
-//          } else {
-//            endSelect = cursorPos;
-//            cursorPos--;
-//            startSelect = cursorPos;
-//          }
-//        }
-//      } else {
-//        if (startSelect != -1 && endSelect != -1) {
-//          cursorPos = Math.min(startSelect, endSelect);
-//          startSelect = endSelect = -1;
-//        } else if (cursorPos > 0) {
-//          cursorPos--;
-//        }
-//      }
-//      centerCursor();
-//    } 
-//    else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//      if (shiftDown) {
-//        if (cursorPos < contents.length()) {
-//          if (startSelect != -1 && endSelect != -1) {
-//            endSelect++;
-//            cursorPos++;
-//          } else {
-//            startSelect = cursorPos;
-//            cursorPos++;
-//            endSelect = cursorPos;
-//          }
-//        }
-//      } else {
-//        if (startSelect != -1 && endSelect != -1) {
-//          cursorPos = Math.max(startSelect, endSelect);
-//          startSelect = endSelect = -1;
-//        } else if (cursorPos < contents.length()) {
-//          cursorPos++;
-//        }
-//      }
-//      centerCursor();
-//    } 
-//    else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-//      deleteChar();
-//    }
-//    else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//      fireEventNotification(this, "Completed");
-//    }
-//    else{
-//      if ((e.getModifiers() & shortcutMask) == shortcutMask) {
-//        switch (e.getKeyCode()) {
-//          case KeyEvent.VK_C:
-//            if (startSelect != -1 && endSelect != -1) {
-//              copySubstring(startSelect, endSelect);
-//            }
-//            break;
-//          case KeyEvent.VK_V:
-//            appendToRightOfCursor(controller.paste());
-//            break;
-//          case KeyEvent.VK_X:
-//            if (startSelect != -1 && endSelect != -1) {
-//              copySubstring(startSelect, endSelect);
-//              deleteSubstring(startSelect, endSelect);
-//            }
-//            break;
-//          case KeyEvent.VK_A:
-//            startSelect = 0;
-//            endSelect = contents.length();
-//            break;
-//        }
-//      } 
-//    }
-//  } 
-//  else if (e.getID() == KeyEvent.KEY_TYPED) {
-//    if ((e.getModifiers() & shortcutMask) == shortcutMask) {
-//    }
-//    else if (e.getKeyChar() == '\b') {
-//      backspaceChar();
-//    } 
-//    else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
-//      if(validUnicode(e.getKeyChar()))
-//        appendToRightOfCursor(e.getKeyChar());
-//    }
-//  }
+    boolean shiftDown = e.isShiftDown();
+    if (e.getAction() == KeyEvent.PRESS) {
+      if (e.getKey() == java.awt.event.KeyEvent.VK_DOWN) {
+        if (shiftDown) {
+          if (startSelect == -1)
+            startSelect = cursorPos;
+          endSelect = cursorPos = visiblePortionEnd = contents.length();
+        } else {
+          // Shift isn't down
+          startSelect = endSelect = -1;
+          cursorPos = visiblePortionEnd = contents.length();
+        }
+        //visiblePortionStart = visiblePortionEnd;
+        adjustVisiblePortionStart();
+      } 
+      else if (e.getKey() == java.awt.event.KeyEvent.VK_UP) {
+        if (shiftDown) {
+          if (endSelect == -1)
+            endSelect = cursorPos;
+          startSelect = cursorPos = visiblePortionStart = 0;
+        } else {
+          // Shift isn't down
+          startSelect = endSelect = -1;
+          cursorPos = visiblePortionStart = 0;
+        }
+        //visiblePortionEnd = visiblePortionStart;
+        adjustVisiblePortionEnd();
+      } 
+      else if (e.getKey() == java.awt.event.KeyEvent.VK_LEFT) {
+        if (shiftDown) {
+          if (cursorPos > 0) {
+            if (startSelect != -1 && endSelect != -1) {
+              startSelect--;
+              cursorPos--;
+            } else {
+              endSelect = cursorPos;
+              cursorPos--;
+              startSelect = cursorPos;
+            }
+          }
+        } else {
+          if (startSelect != -1 && endSelect != -1) {
+            cursorPos = Math.min(startSelect, endSelect);
+            startSelect = endSelect = -1;
+          } else if (cursorPos > 0) {
+            cursorPos--;
+          }
+        }
+        centerCursor();
+      } 
+      else if (e.getKey() == java.awt.event.KeyEvent.VK_RIGHT) {
+        if (shiftDown) {
+          if (cursorPos < contents.length()) {
+            if (startSelect != -1 && endSelect != -1) {
+              endSelect++;
+              cursorPos++;
+            } else {
+              startSelect = cursorPos;
+              cursorPos++;
+              endSelect = cursorPos;
+            }
+          }
+        } else {
+          if (startSelect != -1 && endSelect != -1) {
+            cursorPos = Math.max(startSelect, endSelect);
+            startSelect = endSelect = -1;
+          } else if (cursorPos < contents.length()) {
+            cursorPos++;
+          }
+        }
+        centerCursor();
+      } 
+      else if (e.getKey() == java.awt.event.KeyEvent.VK_DELETE) {
+        deleteChar();
+      }
+      else if (e.getKey() == java.awt.event.KeyEvent.VK_ENTER) {
+        fireEventNotification(this, "Completed");
+      }
+      else{
+        if ((e.getModifiers() & shortcutMask) == shortcutMask) {
+          switch (e.getKey()) {
+            case java.awt.event.KeyEvent.VK_C:
+              if (startSelect != -1 && endSelect != -1) {
+                copySubstring(startSelect, endSelect);
+              }
+              break;
+            case java.awt.event.KeyEvent.VK_V:
+              appendToRightOfCursor(controller.paste());
+              break;
+            case java.awt.event.KeyEvent.VK_X:
+              if (startSelect != -1 && endSelect != -1) {
+                copySubstring(startSelect, endSelect);
+                deleteSubstring(startSelect, endSelect);
+              }
+              break;
+            case java.awt.event.KeyEvent.VK_A:
+              startSelect = 0;
+              endSelect = contents.length();
+              break;
+          }
+        } 
+      }
+    } 
+    else if (e.getAction() == KeyEvent.TYPE) {
+      if ((e.getModifiers() & shortcutMask) == shortcutMask) {
+      }
+      else if (e.getKey() == '\b') {
+        backspaceChar();
+      } 
+      else if (e.getKey() != java.awt.event.KeyEvent.CHAR_UNDEFINED) {
+        if(validUnicode(e.getKey()))
+          appendToRightOfCursor(e.getKey());
+      }
+    }
     updateXPos();
 
     controller.userState.restoreSettingsToApplet(controller.parent);

@@ -19,7 +19,10 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
 
-
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 package interfascia;
 
@@ -50,37 +53,35 @@ public class IFCheckBox extends GUIComponent {
   }
 
   public void mouseEvent (MouseEvent e) {
-// TODO: this is to be refactored with Processing 3 Events
-//  if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-//    if (isMouseOver (e.getX(), e.getY())) {
-//       wasClicked = true;
-//    }
-//  } else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-//    if (wasClicked && isMouseOver (e.getX(), e.getY())) {
-//      if (selected) {
-//        selected = false;
-//        fireEventNotification(this, "Unchecked");
-//      } else {
-//        selected = true;
-//        fireEventNotification(this, "Checked");
-//      }
-//      wasClicked = false;
-//    }
-//  }
+    if (e.getAction() == MouseEvent.PRESS) {
+      if (isMouseOver (e.getX(), e.getY())) {
+         wasClicked = true;
+      }
+    } else if (e.getAction() == MouseEvent.RELEASE) {
+      if (wasClicked && isMouseOver (e.getX(), e.getY())) {
+        if (selected) {
+          selected = false;
+          fireEventNotification(this, "Unchecked");
+        } else {
+          selected = true;
+          fireEventNotification(this, "Checked");
+        }
+        wasClicked = false;
+      }
+    }
   }
   
   public void keyEvent(KeyEvent e) {
-// TODO: this is to be refactored with Processing 3 Events
-//  if (e.getID() == KeyEvent.KEY_TYPED && e.getKeyChar() == ' ') {
-//    fireEventNotification(this, "Selected");
-//    if (selected) {
-//      selected = false;
-//      fireEventNotification(this, "Unchecked");
-//    } else {
-//      selected = true;
-//      fireEventNotification(this, "Checked");
-//    }
-//  }
+    if (e.getAction() == KeyEvent.TYPE && e.getKey() == ' ') {
+      fireEventNotification(this, "Selected");
+      if (selected) {
+        selected = false;
+        fireEventNotification(this, "Unchecked");
+      } else {
+        selected = true;
+        fireEventNotification(this, "Checked");
+      }
+    }
   }
 
   public void draw () {
