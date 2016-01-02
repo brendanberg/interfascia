@@ -3,7 +3,7 @@
 <project name="interfascia" default="jar">
    
   <property name="processing_version" value="3.0.1"/>
-  <property name="processing_lib" value="/home/nicb/me/src/processing-3.0.1/"/> <!-- this needs to be adjusted by hand -->
+  <property name="processing_lib" value="/Users/anna/Desktop/Contents-p3/Java"/> <!-- this needs to be adjusted by hand -->
   <property name="src" value="." />
   <property name="build.dir" value="${src}/${ant.project.name}" />
   <property name="dest.dir" value=".." />
