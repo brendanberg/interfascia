@@ -99,7 +99,7 @@ public class IFPGraphicsState {
 	*/
 	
 	public void restoreSettingsToApplet(PApplet applet)
-	{	
+	{ 
 
 		try {
 			if (smooth > 0) {
@@ -132,7 +132,7 @@ public class IFPGraphicsState {
 		else applet.noStroke();
 		
 		applet.strokeWeight(strokeWeight);
-		applet.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);    
+		applet.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);		
 	}
 	
 }
