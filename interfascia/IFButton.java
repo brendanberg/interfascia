@@ -19,12 +19,14 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
 
-
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 package interfascia;
 import processing.core.*;
-
-import java.awt.event.*;
+import processing.event.*;
 
 public class IFButton extends GUIComponent {
 	private int currentColor;
@@ -44,15 +46,15 @@ public class IFButton extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		controller.parent.registerMouseEvent(this);
+		controller.parent.registerMethod("mouseEvent", this);
 	}
 
 	public void mouseEvent(MouseEvent e) {
-		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+		if (e.getAction() == MouseEvent.PRESS) {
 			if (isMouseOver (e.getX(), e.getY())) {
 				wasClicked = true;
 			}
-		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				fireEventNotification(this, "Clicked");
 				wasClicked = false;
@@ -90,7 +92,7 @@ public class IFButton extends GUIComponent {
 	}
 		
 	public void keyEvent(KeyEvent e) {
-		if (e.getID() == KeyEvent.KEY_TYPED && e.getKeyChar() == ' ') {
+		if (e.getAction() == KeyEvent.TYPE && e.getKey() == ' ') {
 			fireEventNotification(this, "Selected");
 		}
 	}

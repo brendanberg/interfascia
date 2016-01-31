@@ -1,2 +1,5 @@
 .DS_Store
-.class
+*.class
+*~
+/interfascia/interfascia/interfascia
+*.jar

@@ -19,11 +19,14 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
 
-
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 package interfascia;
 
-import java.awt.event.*;
+import processing.event.*;
 
 abstract class GUIComponent {
 	private int x, y, wid, hgt;
@@ -161,11 +164,11 @@ abstract class GUIComponent {
 	}
 
 	public void mouseEvent (MouseEvent e) {
-		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+		if (e.getAction() == MouseEvent.PRESS) {
 			if (isMouseOver (e.getX(), e.getY())) {
 				 wasClicked = true;
 			}
-		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				 fireEventNotification(this, "Clicked");
 				 wasClicked = false;

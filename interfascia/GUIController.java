@@ -19,12 +19,15 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
 
-
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 package interfascia;
 import processing.core.*;
+import processing.event.*;
 
-import java.awt.event.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 
@@ -75,8 +78,8 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 			}
 		}
 		
-		parent.registerKeyEvent(this);
-		parent.registerDraw(this);
+		newParent.registerMethod("keyEvent", this);
+		newParent.registerMethod("draw", this);
 	}
 	
 	public void setLookAndFeel(IFLookAndFeel lf) {
@@ -194,14 +197,14 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 
 	public void keyEvent(KeyEvent e) {
 		if (visible) {
-			if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_TAB) {
+			if (e.getAction() == KeyEvent.PRESS && e.getKeyCode() == java.awt.event.KeyEvent.VK_TAB) {
 				if (focusIndex != -1 && contents[focusIndex] != null) {
 					contents[focusIndex].actionPerformed(
 						new GUIEvent(contents[focusIndex], "Lost Focus")
 					);
 				}
 				
-				if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK)
+				if (e.isShiftDown())
 					giveFocusToPreviousComponent();
 				else
 					giveFocusToNextComponent();
@@ -212,7 +215,7 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 					);
 				}
 
-			} else if (e.getKeyCode() != KeyEvent.VK_TAB) {
+			} else if (e.getKeyCode() != java.awt.event.KeyEvent.VK_TAB) {
 				if (focusIndex >= 0 && focusIndex < contents.length)
 					contents[focusIndex].keyEvent(e);
 			}
@@ -248,7 +251,7 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 					contents[i].draw();
 				}
 			}
-			userState.restoreSettingsToApplet(parent);   
+			userState.restoreSettingsToApplet(parent);	 
 		}
-	}  
+	}	 
 }
