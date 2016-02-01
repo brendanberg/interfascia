@@ -3,4 +3,5 @@ safe: true
 lsi: true
 auto: true
 server: true
+highlighter: pygments
 pygments: true

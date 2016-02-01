@@ -15,6 +15,7 @@ applet_html: textfield.html
 Source
 ------
 
+{% highlight java %}
 	import interfascia.*;
 	
 	GUIController c;
@@ -45,4 +46,4 @@ Source
 	    l.setLabel(t.getValue());
 	  }
 	}
-
+{% endhighlight %}
