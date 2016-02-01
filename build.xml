@@ -34,6 +34,7 @@
     </target>
 
     <target name="clean" description="Clean output directories">
+        <delete file="interfascia.jar" quiet="true"/>
         <delete quiet="true">
             <fileset dir="${build.dir}">
                 <include name="**/*.class"/>
