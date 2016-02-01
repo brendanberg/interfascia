@@ -1,0 +1,48 @@
+---
+sidebar_sections:
+- About Interfascia
+- Examples
+- Documentation
+
+---
+<!doctype html>
+<html>
+	{% include head.html %}
+	<body>
+		<div class="wrapper">
+			<header>
+				{% include preamble.html withlink=true withblurb=false %}
+
+				<h2>Class Listing</h2>
+
+				<p>
+					{% for post in site.categories.documentation %}
+					<a href="{{ post.url }}">{{ post.title }}</a><br />
+					{% endfor %}
+				</p>
+
+				<h2>Examples</h2>
+
+				<p>
+					{% for post in site.categories.examples %}
+					<a href="{{ post.url }}">{{ post.title }}</a><br />
+					{% endfor %}
+				</p>
+			</header>
+			<section>
+				<div class="content">
+					<h1>{{ page.title }}</h1>
+
+					<iframe src="/applets/{{ page.applet_html }}" class="applet">Your browser does not support iframes.</iframe>
+					
+					<h2>Source</h2>
+					
+{% highlight java %}
+{{ content }}
+{% endhighlight %}
+				</div>
+			</section>
+		</div>
+		<script src="{{ site.baseurl }}/javascripts/scale.fix.js"></script>
+	</body>
+</html>

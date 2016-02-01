@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: example
 title: Button
 category: examples
 skill_level: easy
@@ -7,45 +7,36 @@ description: Attach action listeners to IFButton objects to react to click event
 applet_html: buttons.html
 
 ---
+import interfascia.*;
 
+GUIController c;
+IFButton b1, b2;
+IFLabel l;
 
-<iframe src="/applets/{{ page.applet_html }}" class="applet">Your browser does not support iframes.</iframe>
+void setup() {
+  size(200, 100);
+  background(155);
+  
+  c = new GUIController (this);
+  
+  b1 = new IFButton ("Green", 40, 40, 40, 17);
+  b2 = new IFButton ("Blue", 120, 40, 40, 17);
 
+  b1.addActionListener(this);
+  b2.addActionListener(this);
 
-Source
-------
+  c.add (b1);
+  c.add (b2);
+}
 
-	import interfascia.*;
-	
-	GUIController c;
-	IFButton b1, b2;
-	IFLabel l;
-	
-	void setup() {
-	  size(200, 100);
-	  background(155);
-	  
-	  c = new GUIController (this);
-	  
-	  b1 = new IFButton ("Green", 40, 40, 40, 17);
-	  b2 = new IFButton ("Blue", 120, 40, 40, 17);
-	
-	  b1.addActionListener(this);
-	  b2.addActionListener(this);
-	
-	  c.add (b1);
-	  c.add (b2);
-	}
-	
-	void draw() {
-	
-	}
-	
-	void actionPerformed (GUIEvent e) {
-	  if (e.getSource() == b1) {
-	    background(100, 155, 100);
-	  } else if (e.getSource() == b2) {
-	    background(100, 100, 130);
-	  }
-	}
+void draw() {
 
+}
+
+void actionPerformed (GUIEvent e) {
+  if (e.getSource() == b1) {
+    background(100, 155, 100);
+  } else if (e.getSource() == b2) {
+    background(100, 100, 130);
+  }
+}
