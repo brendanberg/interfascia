@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- This is the ANT build configuration file. Just run 'ant' -->
+<project name="interfascia" default="jar">
+
+    <!-- NOTE: This is the path to the processing library. If you're on a Mac and
+         installed Processing in your Applications directory, this value should
+         be fine. Otherwise, set the correct value for your system here. -->
+    <property name="processing_lib" value="/Applications/Processing.app/Contents/Java"/>
+
+    <property name="processing_version" value="3.0.1"/>
+    <property name="src" value="interfascia"/>
+    <property name="build.dir" value="build"/>
+    <property name="dest.dir" value="."/>
+    <fileset dir="${src}" casesensitive="yes">
+        <include name="**/*.java"/>
+    </fileset>
+
+    <target name="setup" description="Configure build properties">
+
+    </target>
+
+    <target name="jar" depends="compile" description="Create the JAR file">
+        <jar destfile="${dest.dir}/${ant.project.name}.jar">
+            <fileset dir="${build.dir}" includes="**/*.class"/>
+            <fileset dir="${dest.dir}" includes="data/**/*.vlw"/>
+        </jar>
+    </target>
+
+    <target name="compile" depends="clean" description="Compile the source tree">
+        <mkdir dir="${build.dir}"/>
+        <javac source="6" target="6" srcdir="${src}" destdir="${build.dir}">
+            <classpath path="${processing_lib}/core.jar"/>
+        </javac>
+    </target>
+
+    <target name="clean" description="Clean output directories">
+        <delete quiet="true">
+            <fileset dir="${build.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+    </target>
+
+</project>
