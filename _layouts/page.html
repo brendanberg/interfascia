@@ -7,29 +7,11 @@ sidebar_sections:
 ---
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="chrome=1">
-		<title>Interfascia &raquo; {{ page.title }}</title>
-		
-		<link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/styles.css">
-		<link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/pygment_trac.css">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-		<!--[if lt IE 9]>
-		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-	</head>
+	{% include head.html %}
 	<body>
 		<div class="wrapper">
 			<header>
-				<h1><a href="/">Interfascia</a></h1>
-				<p>A graphical user interface library for the Processing graphics programming environment</p>
-				<p class="view"><a href="https://github.com/brendanberg/interfascia">View the Project on GitHub <small>brendanberg/interfascia</small></a></p>
-				<ul>
-					<li><a href="https://github.com/brendanberg/interfascia/zipball/master">Download <strong>ZIP File</strong></a></li>
-					<li><a href="https://github.com/brendanberg/interfascia/tarball/master">Download <strong>TAR Ball</strong></a></li>
-					<li><a href="https://github.com/brendanberg/interfascia">Fork On <strong>GitHub</strong></a></li>
-				</ul>
+				{% include preamble.html withlink=true %}
 
 				<h2>Class Listing</h2>
 
@@ -53,14 +35,7 @@ sidebar_sections:
 					{{ content }}
 				</div>
 			</section>
-			<footer>
-        <p>Interfascia is a project initiated and maintained by <a href="https://github.com/brendanberg">Brendan Berg</a> and released under the <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL</a>.</p>
-		
-		<p>Questions, comments, and suggestions can be addressed to <br />
-		<a href="mailto:interfascia%20%C3%84T%20plusminusfive%20D%C3%98T%20com">interfascia &Auml;T plusminusfive D&Oslash;T com</a>.</p>
-
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-			</footer>
+			{% include footer.html %}
 		</div>
 		<script src="{{ site.baseurl }}/javascripts/scale.fix.js"></script>
 	</body>

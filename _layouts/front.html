@@ -10,14 +10,9 @@ sidebar_sections:
 	{% include head.html %}
 	<body>
 		<div class="wrapper">
-			<header>{% include preamble.html withlink=true %}</header>
-			<section>
-				<div class="content">
-					<h1>{{ page.title }}</h1>
-					{{ content }}
-				</div>
-			</section>
-			{% include footer.hmtl %}
+			<header>{% include preamble.html withlink=false %}</header>
+			<section>{{ content }}</section>
+			{% include footer.html %}
 		</div>
 		<script src="{{ site.baseurl }}/javascripts/scale.fix.js"></script>
 	</body>
