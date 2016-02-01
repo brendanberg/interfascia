@@ -11,7 +11,7 @@ sidebar_sections:
 	<body>
 		<div class="wrapper">
 			<header>
-				{% include preamble.html withlink=true %}
+				{% include preamble.html withlink=true withblurb=false %}
 
 				<h2>Class Listing</h2>
 
@@ -35,7 +35,6 @@ sidebar_sections:
 					{{ content }}
 				</div>
 			</section>
-			{% include footer.html %}
 		</div>
 		<script src="{{ site.baseurl }}/javascripts/scale.fix.js"></script>
 	</body>
