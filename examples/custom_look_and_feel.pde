@@ -11,7 +11,7 @@ boolean running = false;
 void setup() {
   size(200, 100);
   frameRate(60);
-  background(155);
+  background(200);
   
   c = new GUIController (this);
   

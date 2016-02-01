@@ -7,7 +7,7 @@ IFRadioButton b1, b2, b3;
 
 void setup() {
   size(200, 100);
-  background(150);
+  background(200);
   
   c = new GUIController(this);
   rc = new IFRadioController("Mode Selector");
@@ -22,4 +22,5 @@ void setup() {
 }
 
 void draw() {
+  background(200);
 }

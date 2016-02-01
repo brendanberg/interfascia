@@ -6,7 +6,7 @@ IFLabel l;
 
 void setup() {
   size(200, 100);
-  background(150);
+  background(200);
   
   c = new GUIController(this);
   t = new IFTextField("Text Field", 25, 30, 150);
@@ -16,11 +16,10 @@ void setup() {
   c.add(l);
   
   t.addActionListener(this);
-  
 }
 
 void draw() {
-  
+  background(200);
 }
 
 void actionPerformed(GUIEvent e) {

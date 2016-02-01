@@ -32,6 +32,7 @@ void setup() {
 }
 
 void draw() {
+  background(200);
 }
 
 void actionPerformed(GUIEvent e) {

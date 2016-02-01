@@ -6,12 +6,12 @@ IFLabel l;
 
 void setup() {
   size(200, 100);
-  background(155);
+  background(200);
   
   c = new GUIController (this);
   
-  b1 = new IFButton ("Green", 40, 40, 40, 17);
-  b2 = new IFButton ("Blue", 120, 40, 40, 17);
+  b1 = new IFButton ("Green", 30, 35, 60, 30);
+  b2 = new IFButton ("Blue", 110, 35, 60, 30);
 
   b1.addActionListener(this);
   b2.addActionListener(this);
