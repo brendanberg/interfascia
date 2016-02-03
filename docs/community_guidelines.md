@@ -62,7 +62,7 @@ __We welcome participation by everyone.__
 We welcome and support people of every
 gender identity or expression, race, ethnicity, sexual orientation,
 nationality, religion, age, ability, culture, political stance, skill level,
-occumation, and background.
+occupation, and background.
 
 __We are inspired by creativity.__
 Poets, painters, engineers, novelists, architects, photographers, and musicians
@@ -74,7 +74,7 @@ as many humans as possible.
 Whether someone deals with limited mobility, low vision, or colorblindness
 shouldn't prevent them from using Interfascia or projects that employ it.
 We strongly encourage all contributors to read the
-[accessibility guidelines][ag] and consider how to make Interfascia easier to
+[accessibility standards][as] and consider how to make Interfascia easier to
 use for everyone.
 
 __We know we won't get this right all the time, but this guide is a testament
@@ -123,7 +123,7 @@ the [Django Code of Conduct][django], and
 the [P5.js Community Statement][p5].
 This document is shared under the [Creative Commons Attribution License][cc].
 
-[ag]: https://github.com/brendanberg/interfascia/blob/master/docs/accessibility.md
+[as]: https://github.com/brendanberg/interfascia/blob/master/docs/accessibility.md
 [community_email]: mailto:community@interfascia.berg.industries
 [asf]: https://www.apache.org/foundation/policies/conduct.html
 [django]: https://www.djangoproject.com/conduct/
