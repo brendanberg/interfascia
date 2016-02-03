@@ -5,3 +5,9 @@ auto: true
 server: true
 highlighter: pygments
 pygments: true
+defaults:
+  -
+    scope:
+      path: ''
+    values:
+      version: '004'
