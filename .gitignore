@@ -5,5 +5,5 @@
 build/
 distribution/
 tmp/
-bin/*
+bin/
 .idea
