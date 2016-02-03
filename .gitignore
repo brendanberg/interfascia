@@ -3,4 +3,7 @@
 *.jar
 *~
 build/
+distribution/
+tmp/
+bin/*
 .idea
