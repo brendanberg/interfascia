@@ -117,6 +117,16 @@ helping the community avoid making the same mistakes again.
 Guidelines specific to specific tasks (like coding guidelines or usability
 testing guidelines) will be added in separate documents as the need arises.
 
+The community reserves the right to amend these guidelines in response to any
+unforseen situations that arise.
+If your behavior violates these guidelines, we will contact you by email.
+If you don't take action to explain or correct your behavior, we may ask you
+to stop participating in community discussions and communication.
+Being asked to leave the community does not oblige the Interfascia team to
+remove your prior contributions to the project.
+The community leaders reserve the right to enforce these guidelines at our
+sole discretion.
+
 Parts of this document were inspired by
 the [Apache Software Foundation Code of Conduct][asf],
 the [Django Code of Conduct][django], and
