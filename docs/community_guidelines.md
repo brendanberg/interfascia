@@ -32,7 +32,7 @@ work of others. Any decision you make will affect users and colleagues, and
 you should be aware of these consequences when making decisions.
 
 - __Be respectful.__ Not all of us will agree all the time, but disagreement is
-no excuse for poor behaviour and poor manners.
+no excuse for bad behaviour and poor manners.
 
 - __Be careful in the words that we choose.__ Remember that sexist, racist, and
 other exclusionary speech can be offensive and hurtful to those around us.
@@ -64,11 +64,11 @@ gender identity or expression, race, ethnicity, sexual orientation,
 nationality, religion, age, ability, culture, political stance, skill level,
 occumation, and background.
 
-We are inspired by creativity.
+__We are inspired by creativity.__
 Poets, painters, engineers, novelists, architects, photographers, and musicians
 all have something meaningful to add to the community.
 
-Accessibility for people with disabilities is a priority, not an afterthought.
+__Accessibility for people with disabilities is a priority, not an afterthought.__
 Interfascia is a *human* interface library, and that means we need to support
 as many humans as possible.
 Whether someone deals with limited mobility, low vision, or colorblindness
@@ -77,8 +77,8 @@ We strongly encourage all contributors to read the
 [accessibility guidelines][ag] and consider how to make Interfascia easier to
 use for everyone.
 
-We know we won't get this right all the time, but this guide is a testament
-to what we strive for.
+__We know we won't get this right all the time, but this guide is a testament
+to what we strive for.__
 It is important to have patience, resilience, and composure.
 We promise that if we get it wrong, we'll listen carefully and respectfully
 to you when you point it out to us, and we'll do our best to make good on our
@@ -102,7 +102,7 @@ Different people have different perspectives on issues.
 Being unable to understand why someone holds a viewpoint doesn't mean that
 they're wrong.
 
-When things do go wrong, remember that blaming people is not constructive.
+__When things do go wrong, remember that blaming people is not constructive.__
 Part of learning and growing as a developer is being able to make mistakes
 without fear of punishment or retribution.
 The goal of the community is to resolve issues in a way that makes us
