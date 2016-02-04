@@ -7,7 +7,8 @@ description: An application to convert temperatures from Fahrenheit to Celsius a
 # applet_html: temperature_converter.html
 
 ---
-{% highlight java %}
+
+```java
 import interfascia.*;
 
 GUIController c;
@@ -59,5 +60,5 @@ void actionPerformed(GUIEvent e) {
     }
   }
 }
-{% endhighlight %}
+```
 

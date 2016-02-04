@@ -7,7 +7,8 @@ description: Capture live data input with a UITextField
 # applet_html: textfield.html
 
 ---
-{% highlight java %}
+
+```java
 import interfascia.*;
 
 GUIController c;
@@ -38,5 +39,5 @@ void actionPerformed(GUIEvent e) {
     l.setLabel(t.getValue());
   }
 }
-{% endhighlight %}
+```
 

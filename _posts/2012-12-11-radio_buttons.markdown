@@ -7,7 +7,8 @@ description: Create an IFRadioController object to manage IFRadioButton objects
 # applet_html: radiobutton.html
 
 ---
-{% highlight java %}
+
+```java
 import interfascia.*;
 
 GUIController c;
@@ -33,5 +34,5 @@ void setup() {
 
 void draw() {
 }
-{% endhighlight %}
+```
 

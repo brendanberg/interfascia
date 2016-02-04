@@ -1,4 +1,7 @@
 permalink: /:categories/:title
 safe: true
-lsi: true
+lsi: false
+markdown: kramdown
 highlighter: rouge
+kramdown:
+  input: GFM

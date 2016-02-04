@@ -7,7 +7,8 @@ description: Specify custom colors for GUIComponents
 # applet_html: custom_color.html
 
 ---
-{% highlight java %}
+
+```java
 import interfascia.*;
 
 GUIController c;
@@ -81,5 +82,5 @@ void actionPerformed (GUIEvent e) {
       nothing.setLookAndFeel(greenLook);
   }
 }
-{% endhighlight %}
+```
 
