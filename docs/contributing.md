@@ -33,6 +33,6 @@ Questions, comments, and suggestions can be addressed to
 [interfascia &Auml;T plusminusfive D&Oslash;T com][mailto].
 
 
-[cg]: https://github.com/brendanberg/interfascia/blob/master/docs/community_guidelines.md
+[cg]: docs/community_guidelines.md
 [issues]: https://github.com/brendanberg/interfascia/issues
 [mailto]: mailto:interfascia%20%C3%84T%20plusminusfive%20D%C3%98Tcom
