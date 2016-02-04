@@ -29,6 +29,6 @@ Questions, comments, and suggestions can be addressed to
 [interfascia]: http://interfascia.berg.industries/
 [berg]: https://berg.industries/
 [lgpl]: http://www.gnu.org/licenses/lgpl.html
-[guide]: https://github.com/brendanberg/interfascia/blob/master/docs/contributing.md
-[cg]: https://github.com/brendanberg/interfascia/blob/master/docs/community_guidelines.md
+[guide]: docs/contributing.md
+[cg]: docs/community_guidelines.md
 [mailto]: mailto:interfascia%20%C3%84T%20plusminusfive%20D%C3%98Tcom
