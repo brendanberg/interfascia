@@ -4,9 +4,10 @@ title: Button
 category: examples
 skill_level: easy
 description: Attach action listeners to IFButton objects to react to click events
-applet_html: buttons.html
+# applet_html: buttons.html
 
 ---
+{% highlight java %}
 import interfascia.*;
 
 GUIController c;
@@ -40,3 +41,5 @@ void actionPerformed (GUIEvent e) {
     background(100, 100, 130);
   }
 }
+{% endhighlight %}
+

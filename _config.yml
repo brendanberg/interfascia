@@ -1,12 +1,4 @@
 permalink: /:categories/:title
 safe: true
 lsi: true
-auto: true
-server: true
 highlighter: rouge
-defaults:
-  -
-    scope:
-      path: ''
-    values:
-      version: '004'

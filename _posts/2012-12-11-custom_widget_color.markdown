@@ -4,9 +4,10 @@ title: Custom Widget Color
 category: examples
 skill_level: advanced
 description: Specify custom colors for GUIComponents
-applet_html: custom_color.html
+# applet_html: custom_color.html
 
 ---
+{% highlight java %}
 import interfascia.*;
 
 GUIController c;
@@ -80,3 +81,5 @@ void actionPerformed (GUIEvent e) {
       nothing.setLookAndFeel(greenLook);
   }
 }
+{% endhighlight %}
+

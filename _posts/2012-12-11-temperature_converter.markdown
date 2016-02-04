@@ -4,9 +4,10 @@ title: Temperature Converter
 category: examples
 skill_level: advanced
 description: An application to convert temperatures from Fahrenheit to Celsius and vice versa
-applet_html: temperature_converter.html
+# applet_html: temperature_converter.html
 
 ---
+{% highlight java %}
 import interfascia.*;
 
 GUIController c;
@@ -58,3 +59,5 @@ void actionPerformed(GUIEvent e) {
     }
   }
 }
+{% endhighlight %}
+

@@ -218,6 +218,10 @@ ul.description li + li {
 	padding-top: 6px;
 }
 
+figure.highlight {
+	margin: 0;
+}
+
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {
