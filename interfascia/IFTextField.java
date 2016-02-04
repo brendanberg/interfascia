@@ -1,32 +1,34 @@
-// Interfascia ALPHA 002 -- http://superstable.net/interfascia/
+// Interfascia ALPHA 004 -- http://interfascia.plusminusfive.com/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006 Brendan Berg
-// interfascia (at) thbbpt (dot) net
+// Copyright (C) 2006-2016 Brendan Berg
+// interfascia (at) plusminusfive (dot) com
 //
-// This library is free software; you can redistribute it and/or 
-// modify it under the terms of the GNU Lesser General Public 
-// License as published by the Free Software Foundation; either 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
 //
-// This library is distributed in the hope that it will be useful, 
-// but WITHOUT ANY WARRANTY; without even the implied warranty of 
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesser General Public 
-// License along with this library; if not, write to the Free Software 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
+// --------------------------------------------------------------------
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 
 
 package interfascia;
-//import processing.core.*;
 
-import java.awt.event.*;
-
-
+import processing.event.*;
 
 /** The IFTextField class is used for a simple one-line text field */
 
@@ -215,7 +217,7 @@ public class IFTextField extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		controller.parent.registerMouseEvent(this);
+		controller.parent.registerMethod("mouseEvent", this);
 	}
 	
 
@@ -242,7 +244,8 @@ public class IFTextField extends GUIComponent {
 			int start = Math.min(startSelect, endSelect);
 			int end = Math.max(startSelect, endSelect);
 			if (start >= end || start < 0 || end > contents.length()) {
-				System.out.println("Brendan needs to check array bounds.");
+				// TODO: Check array bounds!
+				// System.out.println("Brendan needs to check array bounds.");
 				return;
 			}
 			
@@ -310,7 +313,8 @@ public class IFTextField extends GUIComponent {
 		int start = Math.min(startString, endString);
 		int end = Math.max(startString, endString);
 		if (start >= end || start < 0 || end > contents.length()) {
-			System.out.println("Brendan needs to check array bounds.");
+			// TODO: Check array bounds!
+			// System.out.println("Brendan needs to check array bounds.");
 			return;
 		}
 		
@@ -346,9 +350,9 @@ public class IFTextField extends GUIComponent {
 	}
 
 
-	// ***** UNTIL GRAPHICS SETTINGS ARE STORED IN A QUEUE, MAKE SURE	   *****
+	// ***** UNTIL GRAPHICS SETTINGS ARE STORED IN A QUEUE, MAKE SURE		 *****
 	// ***** TO ALWAYS CALL THESE FUNCTIONS INSIDE THE INTERFASCIA DEFAULT *****
-	// ***** GRAPHICS STATE. I'M NOT TOUCHING THE GRAPHICS STATE HERE.     *****
+	// ***** GRAPHICS STATE. I'M NOT TOUCHING THE GRAPHICS STATE HERE.		 *****
 
 	private void updateXPos() {
 		cursorXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, cursorPos));
@@ -497,7 +501,7 @@ public class IFTextField extends GUIComponent {
 	public int getCursorPosition()
 	{
 		return cursorPos;
-	}	
+	} 
 	public void setCursorPosition(int CursorPos)
 	{
 		cursorPos = CursorPos;
@@ -558,7 +562,7 @@ public class IFTextField extends GUIComponent {
 		controller.userState.saveSettingsForApplet(controller.parent);
 		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
 
-		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+		if (e.getAction() == MouseEvent.PRESS) {
 			if (isMouseOver(e.getX(), e.getY())) {
 				controller.requestFocus(this);
 				wasClicked = true;
@@ -571,7 +575,7 @@ public class IFTextField extends GUIComponent {
 					startSelect = endSelect = -1;
 				}
 			}
-		} else if (e.getID() == MouseEvent.MOUSE_DRAGGED) {
+		} else if (e.getAction() == MouseEvent.DRAG) {
 			/*if (controller.parent.millis() % 500 == 0) {
 				System.out.println("MOVE");
 				if (e.getX() < getX() && endSelect > 0) {
@@ -585,7 +589,7 @@ public class IFTextField extends GUIComponent {
 				}
 			}*/
 			endSelect = cursorPos = findClosestGap(e.getX() - getX());
-		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (endSelect == startSelect) {
 				startSelect = -1;
 				endSelect = -1;
@@ -608,9 +612,9 @@ public class IFTextField extends GUIComponent {
 		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
 
 		int shortcutMask = java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-		boolean shiftDown = ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK);
-		if (e.getID() == KeyEvent.KEY_PRESSED) {
-			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		boolean shiftDown = e.isShiftDown();
+		if (e.getAction() == KeyEvent.PRESS) {
+			if (e.getKey() == java.awt.event.KeyEvent.VK_DOWN) {
 				if (shiftDown) {
 					if (startSelect == -1)
 						startSelect = cursorPos;
@@ -623,7 +627,7 @@ public class IFTextField extends GUIComponent {
 				//visiblePortionStart = visiblePortionEnd;
 				adjustVisiblePortionStart();
 			} 
-			else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			else if (e.getKey() == java.awt.event.KeyEvent.VK_UP) {
 				if (shiftDown) {
 					if (endSelect == -1)
 						endSelect = cursorPos;
@@ -636,7 +640,7 @@ public class IFTextField extends GUIComponent {
 				//visiblePortionEnd = visiblePortionStart;
 				adjustVisiblePortionEnd();
 			} 
-			else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			else if (e.getKey() == java.awt.event.KeyEvent.VK_LEFT) {
 				if (shiftDown) {
 					if (cursorPos > 0) {
 						if (startSelect != -1 && endSelect != -1) {
@@ -658,7 +662,7 @@ public class IFTextField extends GUIComponent {
 				}
 				centerCursor();
 			} 
-			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			else if (e.getKey() == java.awt.event.KeyEvent.VK_RIGHT) {
 				if (shiftDown) {
 					if (cursorPos < contents.length()) {
 						if (startSelect != -1 && endSelect != -1) {
@@ -680,30 +684,30 @@ public class IFTextField extends GUIComponent {
 				}
 				centerCursor();
 			} 
-			else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+			else if (e.getKey() == java.awt.event.KeyEvent.VK_DELETE) {
 				deleteChar();
 			}
-			else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			else if (e.getKey() == java.awt.event.KeyEvent.VK_ENTER) {
 				fireEventNotification(this, "Completed");
 			}
 			else{
 				if ((e.getModifiers() & shortcutMask) == shortcutMask) {
-					switch (e.getKeyCode()) {
-						case KeyEvent.VK_C:
+					switch (e.getKey()) {
+						case java.awt.event.KeyEvent.VK_C:
 							if (startSelect != -1 && endSelect != -1) {
 								copySubstring(startSelect, endSelect);
 							}
 							break;
-						case KeyEvent.VK_V:
+						case java.awt.event.KeyEvent.VK_V:
 							appendToRightOfCursor(controller.paste());
 							break;
-						case KeyEvent.VK_X:
+						case java.awt.event.KeyEvent.VK_X:
 							if (startSelect != -1 && endSelect != -1) {
 								copySubstring(startSelect, endSelect);
 								deleteSubstring(startSelect, endSelect);
 							}
 							break;
-						case KeyEvent.VK_A:
+						case java.awt.event.KeyEvent.VK_A:
 							startSelect = 0;
 							endSelect = contents.length();
 							break;
@@ -711,15 +715,15 @@ public class IFTextField extends GUIComponent {
 				} 
 			}
 		} 
-		else if (e.getID() == KeyEvent.KEY_TYPED) {
+		else if (e.getAction() == KeyEvent.TYPE) {
 			if ((e.getModifiers() & shortcutMask) == shortcutMask) {
 			}
-			else if (e.getKeyChar() == '\b') {
+			else if (e.getKey() == '\b') {
 				backspaceChar();
 			} 
-			else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
-				if(validUnicode(e.getKeyChar()))
-					appendToRightOfCursor(e.getKeyChar());
+			else if (e.getKey() != java.awt.event.KeyEvent.CHAR_UNDEFINED) {
+				if(validUnicode(e.getKey()))
+					appendToRightOfCursor(e.getKey());
 			}
 		}
 		updateXPos();

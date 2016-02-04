@@ -1,8 +1,8 @@
-// Interfascia ALPHA 002 -- http://superstable.net/interfascia/
+// Interfascia ALPHA 004 -- http://interfascia.plusminusfive.com/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006 Brendan Berg
-// interfascia (at) thbbpt (dot) net
+// Copyright (C) 2006-2016 Brendan Berg
+// interfascia (at) plusminusfive (dot) com
 //
 // This library is free software; you can redistribute it and/or 
 // modify it under the terms of the GNU Lesser General Public 
@@ -18,12 +18,17 @@
 // License along with this library; if not, write to the Free Software 
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
+// --------------------------------------------------------------------
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 
 
 package interfascia;
 
-import java.awt.event.*;
+import processing.event.*;
 
 abstract class GUIComponent {
 	private int x, y, wid, hgt;
@@ -161,11 +166,11 @@ abstract class GUIComponent {
 	}
 
 	public void mouseEvent (MouseEvent e) {
-		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+		if (e.getAction() == MouseEvent.PRESS) {
 			if (isMouseOver (e.getX(), e.getY())) {
 				 wasClicked = true;
 			}
-		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				 fireEventNotification(this, "Clicked");
 				 wasClicked = false;

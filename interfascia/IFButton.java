@@ -1,30 +1,34 @@
-// Interfascia ALPHA 002 -- http://superstable.net/interfascia/
+// Interfascia ALPHA 004 -- http://interfascia.plusminusfive.com/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006 Brendan Berg
-// interfascia (at) thbbpt (dot) net
+// Copyright (C) 2006-2016 Brendan Berg
+// interfascia (at) plusminusfive (dot) com
 //
-// This library is free software; you can redistribute it and/or 
-// modify it under the terms of the GNU Lesser General Public 
-// License as published by the Free Software Foundation; either 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
 //
-// This library is distributed in the hope that it will be useful, 
-// but WITHOUT ANY WARRANTY; without even the implied warranty of 
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesser General Public 
-// License along with this library; if not, write to the Free Software 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA
+// --------------------------------------------------------------------
+//
+// Updated for Processing 3 by Anna Terzaroli 2015
+// anna.giw (at) libero (dot) it
+//
 
 
 
 package interfascia;
 import processing.core.*;
-
-import java.awt.event.*;
+import processing.event.*;
 
 public class IFButton extends GUIComponent {
 	private int currentColor;
@@ -44,15 +48,15 @@ public class IFButton extends GUIComponent {
 	}
 
 	public void initWithParent () {
-		controller.parent.registerMouseEvent(this);
+		controller.parent.registerMethod("mouseEvent", this);
 	}
 
 	public void mouseEvent(MouseEvent e) {
-		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+		if (e.getAction() == MouseEvent.PRESS) {
 			if (isMouseOver (e.getX(), e.getY())) {
 				wasClicked = true;
 			}
-		} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (wasClicked && isMouseOver (e.getX(), e.getY())) {
 				fireEventNotification(this, "Clicked");
 				wasClicked = false;
@@ -90,7 +94,7 @@ public class IFButton extends GUIComponent {
 	}
 		
 	public void keyEvent(KeyEvent e) {
-		if (e.getID() == KeyEvent.KEY_TYPED && e.getKeyChar() == ' ') {
+		if (e.getAction() == KeyEvent.TYPE && e.getKey() == ' ') {
 			fireEventNotification(this, "Selected");
 		}
 	}
