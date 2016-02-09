@@ -5,7 +5,7 @@
 name = Interfascia
 
 # List of authors. Links can be provided using the syntax [author name](url).
-authorList = [Brendan Berg](http://berg.industries/)
+authors = [Brendan Berg](http://berg.industries/)
 
 # A web page for your library, NOT a direct link to where to download it.
 url = http://github.com/brendanberg/interfascia
@@ -18,7 +18,7 @@ url = http://github.com/brendanberg/interfascia
 # 
 # If a value other than those listed is used, your library will listed as 
 # "Other".
-category = GUI, Utilities
+categories = GUI, Utilities
 
 # A short sentence (or fragment) to summarize the library's function. This will 
 # be shown from inside the PDE when the library is being installed. Avoid 
@@ -47,3 +47,13 @@ version = 4  # This must be parsable as an int
 # The version as the user will see it. If blank, the version attribute will be 
 # used here.
 prettyVersion = 004
+
+# The min and max revision of Processing compatible with your library.
+# Note that these fields use the revision and not the version of Processing,
+# parsable as an int. For example, the revision number for 2.2.1 is 227.
+# You can find the revision numbers in the change log:
+# https://raw.githubusercontent.com/processing/processing/master/build/shared/revisions.txt
+# Only use maxRevision (or minRevision), when your library is known to
+# break in a later (or earlier) release. Otherwise, use the default value 0.
+minRevision = 0
+maxRevision = 0
