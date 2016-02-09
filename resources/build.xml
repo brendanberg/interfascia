@@ -48,7 +48,7 @@
 	<property name="project.examples" location="examples"/>
 	<property name="project.reference" location="reference"/>
 	<property name="project.dist" location="distribution"/>
-	<property name="project.dist.version" location="distribution/${project.name}-${library.version}"/>
+	<property name="project.dist.version" location="distribution/${project.name}-${library.prettyVersion}"/>
 	<property name="install.source" location="resources/README.md"/>
 	<property name="install.destination" location="${project.dist.version}/README.md"/>
 	<property name="libprops.source" location="resources/library.properties"/>
@@ -159,13 +159,13 @@ ${line}
 	  	<mkdir dir="${project.tmp}/${project.name}/${folder}" />
   		<mkdir dir="${project.tmp}/${project.name}/examples" />
 	  	<mkdir dir="${project.tmp}/${project.name}/reference" />
-  		<mkdir dir="${project.tmp}/${project.name}/src" />
+  		<mkdir dir="${project.tmp}/${project.name}/src/${project.name}" />
   		<copy todir="${project.tmp}/${project.name}/examples">
   			<fileset dir="${project.examples}">
 	  			<exclude name="**/*README*"/>
   			</fileset>
 	  	</copy>
-  		<copy todir="${project.tmp}/${project.name}/src">
+  		<copy todir="${project.tmp}/${project.name}/src/${project.name}">
   			<fileset dir="${project.src}"/>
 	  	</copy>
 	  	<copy todir="${project.tmp}/${project.name}/${folder}">
@@ -312,8 +312,8 @@ ${line}
 		
         <move file="${project.dist.version}/${project.name}.zip" todir="${project.dist.version}/web/download" />
 		
-		<copy file="${project.dist.version}/web/download/${project.name}.zip" tofile="${project.dist.version}/web/download/${project.name}-${library.version}.zip" />
-		<copy file="${project.dist.version}/web/download/${project.name}.txt" tofile="${project.dist.version}/web/download/${project.name}-${library.version}.txt" />
+		<copy file="${project.dist.version}/web/download/${project.name}.zip" tofile="${project.dist.version}/web/download/${project.name}-${library.prettyVersion}.zip" />
+		<copy file="${project.dist.version}/web/download/${project.name}.txt" tofile="${project.dist.version}/web/download/${project.name}-${library.prettyVersion}.txt" />
 		
 		<move todir="${project.dist.version}">
 			<fileset dir="${project.dist.version}/web" />
