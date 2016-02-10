@@ -22,7 +22,7 @@ and maintain an inclusive, welcoming, and supportive community. You can read
 more in the [community guidelines][cg].
 
 Questions, comments, and suggestions can be addressed to
-[interfascia &Auml;T plusminusfive D&Oslash;T com][mailto].
+[interfascia&#x40;berg&#x2Eindustries][mailto].
 
 
 [p5]: http://processing.org/
