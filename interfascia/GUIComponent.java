@@ -30,7 +30,7 @@ package interfascia;
 
 import processing.event.*;
 
-abstract class GUIComponent {
+public abstract class GUIComponent {
 	private int x, y, wid, hgt;
 	private String label;
 	
