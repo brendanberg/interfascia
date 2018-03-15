@@ -11,7 +11,7 @@ Furthermore, contributors should be conscious that when they interact with
 people outside the community, their actions reflect on the Interfascia project
 in general.
 We respect that everyone has a life outside of this community, but when acting
-as a representative of Interfascia, these guidelines should still apply.
+as a representative of Interfascia, these guidelines still apply.
 
 
 # Specific Guidelines
