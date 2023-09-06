@@ -30,9 +30,9 @@ In the future, there will be a roadmap page in the wiki that discusses new
 features and future directions for the library.
 
 Questions, comments, and suggestions can be addressed to
-[interfascia &Auml;T berg D&Oslash;T industries][mailto].
+[interfascia&#x40;berg&#x2E;industries][mailto].
 
 
 [cg]: community_guidelines.md
 [issues]: https://github.com/brendanberg/interfascia/issues
-[mailto]: mailto:interfascia%20%C3%84T%20berg%20D%C3%98Tindustries
+[mailto]: mailto:interfascia%40berg%2Eindustries
