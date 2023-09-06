@@ -1,8 +1,8 @@
-// Interfascia ALPHA 004 -- http://interfascia.plusminusfive.com/
+// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
 // Copyright (C) 2006-2016 Brendan Berg
-// interfascia (at) plusminusfive (dot) com
+// interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or 
 // modify it under the terms of the GNU Lesser General Public 
