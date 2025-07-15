@@ -26,15 +26,12 @@ Example
 
 	import interfascia.*;
 	
-	GUIController c;
-	IFButton b1, b2;
-	
+	IFButton b1 = new IFButton ("One", 30, 20, 40, 17);
+	IFButton b2 = new IFButton ("Two", 30, 60, 40, 17);
+
 	void setup() {
-	  c = new GUIController (this);
+	  GUIController c = new GUIController (this);
 	  
-	  b1 = new IFButton ("One", 30, 20, 40, 17);
-	  b2 = new IFButton ("Two", 30, 60, 40, 17);
-	
 	  b1.addActionListener(this);
 	  b2.addActionListener(this);
 	
@@ -43,6 +40,7 @@ Example
 	}
 	
 	void draw() {
+	  background(200);
 	}
 	
 	void actionPerformed (GUIEvent e) {

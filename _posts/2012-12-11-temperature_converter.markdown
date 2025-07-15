@@ -4,12 +4,12 @@ title: Temperature Converter
 category: examples
 skill_level: advanced
 description: An application to convert temperatures from Fahrenheit to Celsius and vice versa
-# applet_html: temperature_converter.html
 
 ---
 
 ```java
 import interfascia.*;
+import java.text.DecimalFormat;
 
 GUIController c;
 IFTextField fahrenheit, celsius;
@@ -19,15 +19,14 @@ DecimalFormat format;
 
 void setup() {
   size(200, 100);
-  background(200);
   
   c = new GUIController(this);
   
   fahrenheit = new IFTextField("F", 20, 45, 50);
   celsius = new IFTextField("C", 110, 45, 50);
   
-  label1 = new IFLabel("&deg;F  = ", 75, 50);
-  label2 = new IFLabel("&deg;C", 165, 50);
+  label1 = new IFLabel("°F  = ", 75, 50);
+  label2 = new IFLabel("°C", 165, 50);
   
   fahrenheit.addActionListener(this);
   celsius.addActionListener(this);
@@ -42,6 +41,7 @@ void setup() {
 }
 
 void draw() {
+  background(200);
 }
 
 void actionPerformed(GUIEvent e) {

@@ -92,3 +92,7 @@ Example
 	   c.add(b3);
 	}
 
+	void draw() {
+	   background(200);
+	}
+

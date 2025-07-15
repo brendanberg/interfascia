@@ -137,13 +137,11 @@ Example
 
 	import interfascia.*;
 	
-	GUIController c;
-	ProgressBar p;
+	IFProgressBar p = new IFProgressBar(10, 10, 80);
 	float percent = 0;
 	
 	void setup() {
-	   c = new GUIController(this);
-	   p = new ProgressBar(10, 10, 80);
+	   GUIController c = new GUIController(this);
 	
 	   c.add(p);
 	   p.setProgress(percent);
@@ -151,6 +149,7 @@ Example
 	
 	void draw() {
 	   p.setProgress(percent);
+
 	   if (percent < 1) {
 	      percent += 0.01;
 	   } else {

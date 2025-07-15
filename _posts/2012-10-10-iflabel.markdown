@@ -123,17 +123,15 @@ Example
 
 	import interfascia.*;
 	
-	GUIController c;
-	IFLabel l;
+	IFLabel l = new IFLabel ("Descriptive Text", 30, 30);
 	
 	void setup() {
-	  c = new GUIController (this);
-	  
-	  l = new IFLabel ("Descriptive Text", 30, 30);
-	
-	  c.add (l);
+	  size(150, 75);
+	  GUIController c = new GUIController (this);	
+	  c.add(l);
 	}
 	
 	void draw() {
+	  background(200);
 	}
 

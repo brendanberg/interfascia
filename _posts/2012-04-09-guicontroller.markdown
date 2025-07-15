@@ -80,16 +80,16 @@ Method Summary
 Example
 -------
 
-	GUIController c;
-	Button b;
+	import interfascia.*;
+	
+	IFButton b = new IFButton("Click!", 20, 20, 40);;
 
 	void setup() {
-	   c = new GUIController(this);
-	   b = new Button("Click!", 20, 20, 40);
+	   GUIController c = new GUIController(this);
 
 	   c.add(b);
 	}
 
 	void draw() {
-
+	   background(200);
 	}

@@ -4,7 +4,6 @@ title: Custom Widget Color
 category: examples
 skill_level: advanced
 description: Specify custom colors for GUIComponents
-# applet_html: custom_color.html
 
 ---
 
@@ -21,7 +20,7 @@ boolean running = false;
 
 void setup() {
   size(200, 100);
-  framerate(60);
+  frameRate(60);
   background(155);
   
   c = new GUIController (this);

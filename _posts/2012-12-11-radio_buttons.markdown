@@ -4,7 +4,6 @@ title: Radio Buttons
 category: examples
 skill_level: easy
 description: Create an IFRadioController object to manage IFRadioButton objects
-# applet_html: radiobutton.html
 
 ---
 
@@ -18,7 +17,6 @@ IFRadioButton b1, b2, b3;
 
 void setup() {
   size(200, 100);
-  background(150);
   
   c = new GUIController(this);
   rc = new IFRadioController("Mode Selector");
@@ -33,6 +31,7 @@ void setup() {
 }
 
 void draw() {
+  background(200);
 }
 ```
 

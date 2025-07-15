@@ -4,7 +4,6 @@ title: Button
 category: examples
 skill_level: easy
 description: Attach action listeners to IFButton objects to react to click events
-# applet_html: buttons.html
 
 ---
 

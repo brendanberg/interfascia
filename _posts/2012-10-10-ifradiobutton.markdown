@@ -142,6 +142,11 @@ Example
 	   b2 = new IFRadioButton("Two", 30, 40, rc);
 	   b3 = new IFRadioButton("Three", 30, 60, rc);
 	
-	   c.add(rc);
+	   c.add(b1);
+	   c.add(b2);
+	   c.add(b3);
 	}
 
+	void draw() {
+	   background(200);
+	}

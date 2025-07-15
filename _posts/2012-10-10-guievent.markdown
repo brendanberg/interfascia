@@ -34,7 +34,7 @@ Example
 -------
 
 	void actionPerformed (GUIEvent e) {
-		print ("Component: " + e.getSource().getLabel());
-		print ("Message: " + e.getMessage());
+		println("Component: " + e.getSource().getLabel());
+		println("Message: " + e.getMessage());
 	}
 

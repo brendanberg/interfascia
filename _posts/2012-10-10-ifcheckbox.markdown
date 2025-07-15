@@ -144,27 +144,26 @@ Example
 
 	import interfascia.*;
 	
-	GUIController c;
-	IFCheckBox b;
+	IFCheckBox b = new IFCheckBox("Enable", 20, 20);
 	
 	void setup() {
-	   c = new GUIController(this);
-	   b = new IFCheckBox("Enable", 20, 20);
+	   GUIController c = new GUIController(this);
 	
 	   c.add(b);
 	   b.addActionListener(this);
 	}
 	
 	void draw() {
+	   background(200);
 	}
 	
 	void actionPerformed(GUIEvent e) {
-		if (e.getSource() == b) {
-			if (b.isSelected()) {
-				println("Checked");
-			} else {
-				println("Unchecked");
-			}
-		}
+	   if (e.getSource() == b) {
+	      if (b.isSelected()) {
+	         println("Checked");
+	      } else {
+	         println("Unchecked");
+	      }
+	   }
 	}
 

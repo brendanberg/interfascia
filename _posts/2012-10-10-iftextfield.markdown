@@ -163,8 +163,11 @@ Example
 	IFTextField t;
 	
 	void setup() {
+	   size(160, 100);
 	   c = new GUIController(this);
 	   t = new IFTextField("Input", 30, 30);
+
+	   c.add(t);
 	}
 	
 	void draw() {
