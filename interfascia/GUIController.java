@@ -225,6 +225,9 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	}
 	
 	private void giveFocusToPreviousComponent() {
+		if (numItems == 0)
+			return;
+
 		int oldFocus = focusIndex;
 		focusIndex = (focusIndex - 1) % numItems;
 		while (!contents[focusIndex].canReceiveFocus() && focusIndex != oldFocus) {
@@ -233,6 +236,9 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	}
 	
 	private void giveFocusToNextComponent() {
+		if (numItems == 0)
+			return;
+
 		int oldFocus = focusIndex;
 		focusIndex = (focusIndex + 1) % numItems;
 		while (!contents[focusIndex].canReceiveFocus() && focusIndex != oldFocus) {
