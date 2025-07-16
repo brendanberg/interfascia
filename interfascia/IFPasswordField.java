@@ -1,4 +1,4 @@
-// Interfascia BETA 005 -- http://interfascia.berg.industries/
+// Interfascia BETA 006 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
 // Copyright (C) 2006-2025 Brendan Berg

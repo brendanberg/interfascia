@@ -1,4 +1,4 @@
-// Interfascia BETA 005 -- http://interfascia.berg.industries/
+// Interfascia BETA 006 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
 // Copyright (C) 2006-2025 Brendan Berg
@@ -29,6 +29,14 @@ public class IFLookAndFeel {
 			activeColor, textColor, lightGrayColor, darkGrayColor;
 	public IFPGraphicsState defaultGraphicsState;
 	public static final char DEFAULT = 1;
+
+	public void setFont(PFont font) {
+		defaultGraphicsState.textFont = font;
+	}
+
+	public PFont getFont() {
+		return defaultGraphicsState.textFont;
+	}
 
 	public IFLookAndFeel(char type) {
 		defaultGraphicsState = new IFPGraphicsState();
@@ -62,8 +70,8 @@ public class IFLookAndFeel {
 			 * "\nsmooth:\t" + parent.g.smooth);
 			 */
 
-			PFont tempFont = parent.loadFont("FrutigerLight-13.vlw");
-			parent.textFont(tempFont, 13);
+			PFont font = parent.loadFont("FrutigerLight-15.vlw");
+			parent.textFont(font, 15);
 			parent.textAlign(PApplet.LEFT);
 
 			parent.rectMode(PApplet.CORNER);
