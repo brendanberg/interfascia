@@ -26,8 +26,6 @@
 
 package interfascia;
 
-import org.w3c.dom.events.MouseEvent;
-
 import processing.event.*;
 
 public class IFCheckBox extends GUIComponent {
