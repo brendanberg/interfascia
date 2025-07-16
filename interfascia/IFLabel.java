@@ -35,15 +35,18 @@ public class IFLabel extends GUIComponent {
 	public IFLabel (String newLabel, int newX, int newY, int size) {
 		setLabel(newLabel);
 		setPosition(newX, newY);
-		
+
 		if (size > 8 && size < 20) 
 			textSize = size;
 		else
 			textSize = 13;
 	}
 
-	// ***** SET THE LABEL'S SIZE SO WE CAN GET ITS BOUNDING BOX *****
-	
+	public void initWithParent() {
+		setWidth((int) Math.ceil(controller.parent.textWidth(getLabel())));
+		setHeight(textSize);
+	}
+
 	public boolean canReceiveFocus() {
 		return false;
 	}
