@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,21 +20,20 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
+
 import processing.core.*;
 
 public class IFPGraphicsState {
 	public int smooth;
-	
+
 	public int rectMode, ellipseMode;
-	
+
 	public PFont textFont;
 	public int textAlign;
 	public float textSize;
 	public int textMode;
-	
+
 	public boolean tint;
 	public int tintColor;
 	public boolean fill;
@@ -42,42 +41,40 @@ public class IFPGraphicsState {
 	public boolean stroke;
 	public int strokeColor;
 	public float strokeWeight;
-	
+
 	public int cMode;
 	public float cModeX, cModeY, cModeZ, cModeA;
-	
+
 	public IFPGraphicsState() {
 	}
-	
-	
+
 	/**
-	* Convenience contstructor saves the applet's graphics state into
-	* the newly created IFPGraphicsState object.
-	*
-	* @param applet the PApplet instance whose state we're saving
-	*/
+	 * Convenience contstructor saves the applet's graphics state into
+	 * the newly created IFPGraphicsState object.
+	 *
+	 * @param applet the PApplet instance whose state we're saving
+	 */
 	public IFPGraphicsState(PApplet applet) {
 		saveSettingsForApplet(applet);
 	}
-	
-	
+
 	/**
-	* saves the graphics state for the specified PApplet
-	*
-	* @param applet the PApplet instance whose state we're saving
-	*/
-	
+	 * saves the graphics state for the specified PApplet
+	 *
+	 * @param applet the PApplet instance whose state we're saving
+	 */
+
 	public void saveSettingsForApplet(PApplet applet) {
 		smooth = applet.g.smooth;
-		
+
 		rectMode = applet.g.rectMode;
 		ellipseMode = applet.g.ellipseMode;
-		
+
 		textFont = applet.g.textFont;
 		textAlign = applet.g.textAlign;
 		textSize = applet.g.textSize;
 		textMode = applet.g.textMode;
-		
+
 		tint = applet.g.tint;
 		fill = applet.g.fill;
 		stroke = applet.g.stroke;
@@ -92,15 +89,13 @@ public class IFPGraphicsState {
 		cModeA = applet.g.colorModeA;
 	}
 
-	
 	/**
-	* restores the saved graphics state to the specified PApplet
-	*
-	* @param applet the PApplet instance whose state we're restoring
-	*/
-	
-	public void restoreSettingsToApplet(PApplet applet)
-	{ 
+	 * restores the saved graphics state to the specified PApplet
+	 *
+	 * @param applet the PApplet instance whose state we're restoring
+	 */
+
+	public void restoreSettingsToApplet(PApplet applet) {
 
 		try {
 			if (smooth > 0) {
@@ -111,29 +106,35 @@ public class IFPGraphicsState {
 		} catch (RuntimeException e) {
 			// Can't smooth in P3D, throws exception
 		}
-		
+
 		applet.rectMode(rectMode);
 		applet.ellipseMode(ellipseMode);
-		
-		if(textFont != null){ 
+
+		if (textFont != null) {
 			applet.textFont(textFont);
 			applet.textSize(textSize);
 		}
 		applet.textAlign(textAlign);
 		applet.textMode(textMode);
-		
+
 		// ***** I THINK YOU CAN SET A COLOR FOR A PROPERTY THAT'S NOT ENABLED *****
-		if(tint) applet.tint(tintColor);
-		else applet.noTint();
-		
-		if(fill) applet.fill(fillColor);
-		else applet.noFill();
-		
-		if(stroke) applet.stroke(strokeColor);
-		else applet.noStroke();
-		
+		if (tint)
+			applet.tint(tintColor);
+		else
+			applet.noTint();
+
+		if (fill)
+			applet.fill(fillColor);
+		else
+			applet.noFill();
+
+		if (stroke)
+			applet.stroke(strokeColor);
+		else
+			applet.noStroke();
+
 		applet.strokeWeight(strokeWeight);
-		applet.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);		
+		applet.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);
 	}
-	
+
 }

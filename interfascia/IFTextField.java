@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@
 // anna.giw (at) libero (dot) it
 //
 
-
-
 package interfascia;
 
 import processing.event.*;
@@ -41,53 +39,59 @@ public class IFTextField extends GUIComponent {
 	private float cursorXPos = 0, startSelectXPos = 0, endSelectXPos = 0;
 
 	/**
-	* creates an empty IFTextField with the specified label, with specified position, and a default width of 100 pixels.
-	* @param argLabel the text field's label
-	* @param argX the text field's X location on the screen, relative to the PApplet.
-	* @param argY the text filed's Y location on the screen, relative 
-	* to the PApplet.
-	*/
-	
-	public IFTextField (String newLabel, int newX, int newY) {
-		this (newLabel, newX, newY, 100, "");
+	 * creates an empty IFTextField with the specified label, with specified
+	 * position, and a default width of 100 pixels.
+	 * 
+	 * @param argLabel the text field's label
+	 * @param argX     the text field's X location on the screen, relative to the
+	 *                 PApplet.
+	 * @param argY     the text filed's Y location on the screen, relative
+	 *                 to the PApplet.
+	 */
+
+	public IFTextField(String newLabel, int newX, int newY) {
+		this(newLabel, newX, newY, 100, "");
 	}
 
-
 	/**
-	* creates an empty IFTextField with the specified label and with specified position and width.
-	* @param argLabel the text field's label
-	* @param argX the text field's X location on the screen, relative to the PApplet.
-	* @param argY the text filed's Y location on the screen, relative to the PApplet.
-	* @param argWidth the text field's width
-	*/
-	
-	public IFTextField (String argLabel, int argX, int argY, int argWidth) {
-		this (argLabel, argX, argY, argWidth, "");
+	 * creates an empty IFTextField with the specified label and with specified
+	 * position and width.
+	 * 
+	 * @param argLabel the text field's label
+	 * @param argX     the text field's X location on the screen, relative to the
+	 *                 PApplet.
+	 * @param argY     the text filed's Y location on the screen, relative to the
+	 *                 PApplet.
+	 * @param argWidth the text field's width
+	 */
+
+	public IFTextField(String argLabel, int argX, int argY, int argWidth) {
+		this(argLabel, argX, argY, argWidth, "");
 	}
 
-
 	/**
-	* creates an IFTextField with the specified label, with specified position and width, and with specified contents.
-	* @param argLabel the text field's label
-	* @param argX the text field's X location on the screen, relative to the PApplet.
-	* @param argY the text filed's Y location on the screen, relative to the PApplet.
-	* @param argWidth the text field's width
-	* @param argContents the default contents of the text field
-	*/
-	
-	public IFTextField (String argLabel, int argX, int argY, int argWidth, String newValue) {
+	 * creates an IFTextField with the specified label, with specified position and
+	 * width, and with specified contents.
+	 * 
+	 * @param argLabel    the text field's label
+	 * @param argX        the text field's X location on the screen, relative to the
+	 *                    PApplet.
+	 * @param argY        the text filed's Y location on the screen, relative to the
+	 *                    PApplet.
+	 * @param argWidth    the text field's width
+	 * @param argContents the default contents of the text field
+	 */
+
+	public IFTextField(String argLabel, int argX, int argY, int argWidth, String newValue) {
 		setLabel(argLabel);
 		setPosition(argX, argY);
 		setSize(argWidth, 21);
 		setValue(newValue);
 	}
-	
 
-	public static boolean validUnicode(char b)
-	{
-		int c = (int)b;
-		return (
-				(c >= 0x0020 && c <= 0x007E) ||
+	public static boolean validUnicode(char b) {
+		int c = (int) b;
+		return ((c >= 0x0020 && c <= 0x007E) ||
 				(c >= 0x00A1 && c <= 0x017F) ||
 				(c == 0x018F) ||
 				(c == 0x0192) ||
@@ -216,29 +220,36 @@ public class IFTextField extends GUIComponent {
 				(c == 0xF833));
 	}
 
-	public void initWithParent () {
+	public void initWithParent() {
 		controller.parent.registerMethod("mouseEvent", this);
 	}
-	
-
 
 	/**
-	* adds a character to the immediate right of the insertion point or replaces the selected group of characters. This method is called by <pre>public void MouseEvent</pre> if a unicode character is entered via the keyboard.
-	* @param c the character to be added
-	*/
-	
+	 * adds a character to the immediate right of the insertion point or replaces
+	 * the selected group of characters. This method is called by
+	 * 
+	 * <pre>
+	 * public void MouseEvent
+	 * </pre>
+	 * 
+	 * if a unicode character is entered via the keyboard.
+	 * 
+	 * @param c the character to be added
+	 */
+
 	protected void appendToRightOfCursor(char c) {
 		appendToRightOfCursor("" + c);
 	}
-	
-	
+
 	/**
-	* adds a string to the immediate right of the insertion point or replaces the selected group of characters.
-	* @param s the string to be added
-	*/
-	
+	 * adds a string to the immediate right of the insertion point or replaces the
+	 * selected group of characters.
+	 * 
+	 * @param s the string to be added
+	 */
+
 	protected void appendToRightOfCursor(String s) {
-	
+
 		String t1, t2;
 		if (startSelect != -1 && endSelect != -1) {
 			int start = Math.min(startSelect, endSelect);
@@ -248,7 +259,7 @@ public class IFTextField extends GUIComponent {
 				// System.out.println("Brendan needs to check array bounds.");
 				return;
 			}
-			
+
 			t1 = contents.substring(0, start);
 			t2 = contents.substring(end);
 			cursorPos = start;
@@ -257,10 +268,10 @@ public class IFTextField extends GUIComponent {
 			t1 = contents.substring(0, cursorPos);
 			t2 = contents.substring(cursorPos);
 		}
-		
+
 		contents = t1 + s + t2;
 		cursorPos += s.length();
-				
+
 		// Adjust the start and end positions of the visible portion of the string
 		if (controller.parent.textWidth(contents) < getWidth() - 12) {
 			visiblePortionStart = 0;
@@ -273,41 +284,46 @@ public class IFTextField extends GUIComponent {
 				if (cursorPos >= visiblePortionEnd)
 					centerCursor();
 				else {
-					//visiblePortionEnd = visiblePortionStart;
+					// visiblePortionEnd = visiblePortionStart;
 					adjustVisiblePortionEnd();
 				}
-				//while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12)
-				//	visiblePortionEnd++;
+				// while (controller.parent.textWidth(contents.substring(visiblePortionStart,
+				// visiblePortionEnd)) < getWidth() - 12)
+				// visiblePortionEnd++;
 			}
 		}
 
 		fireEventNotification(this, "Modified");
 	}
-	
-	
-	
+
 	/**
-	* deletes either the character directly to the left of the insertion point or the selected group of characters. It automatically handles cases where there is no character to the left of the insertion point (when the insertion point is at the beginning of the string). It is called by <pre>public void keyEvent</pre> when the delete key is pressed.
-	*/
-	
+	 * deletes either the character directly to the left of the insertion point or
+	 * the selected group of characters. It automatically handles cases where there
+	 * is no character to the left of the insertion point (when the insertion point
+	 * is at the beginning of the string). It is called by
+	 * 
+	 * <pre>
+	 * public void keyEvent
+	 * </pre>
+	 * 
+	 * when the delete key is pressed.
+	 */
+
 	protected void backspaceChar() {
 		if (startSelect != -1 && endSelect != -1) {
 			deleteSubstring(startSelect, endSelect);
-		} else if (cursorPos > 0){
+		} else if (cursorPos > 0) {
 			deleteSubstring(cursorPos - 1, cursorPos);
 		}
 	}
 
-
-
 	protected void deleteChar() {
 		if (startSelect != -1 && endSelect != -1) {
 			deleteSubstring(startSelect, endSelect);
-		} else if (cursorPos < contents.length()){
+		} else if (cursorPos < contents.length()) {
 			deleteSubstring(cursorPos, cursorPos + 1);
 		}
 	}
-
 
 	protected void deleteSubstring(int startString, int endString) {
 		int start = Math.min(startString, endString);
@@ -317,10 +333,10 @@ public class IFTextField extends GUIComponent {
 			// System.out.println("Brendan needs to check array bounds.");
 			return;
 		}
-		
+
 		contents = contents.substring(0, start) + contents.substring(end);
 		cursorPos = start;
-		
+
 		if (controller.parent.textWidth(contents) < getWidth() - 12) {
 			visiblePortionStart = 0;
 			visiblePortionEnd = contents.length();
@@ -336,11 +352,11 @@ public class IFTextField extends GUIComponent {
 				}
 			}
 		}
-		
+
 		startSelect = endSelect = -1;
 
 		fireEventNotification(this, "Modified");
-		//controller.userState.restoreSettingsToApplet(controller.parent);		
+		// controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 
 	protected void copySubstring(int start, int end) {
@@ -349,15 +365,14 @@ public class IFTextField extends GUIComponent {
 		controller.copy(getValue().substring(s, e));
 	}
 
-
-	// ***** UNTIL GRAPHICS SETTINGS ARE STORED IN A QUEUE, MAKE SURE		 *****
+	// ***** UNTIL GRAPHICS SETTINGS ARE STORED IN A QUEUE, MAKE SURE *****
 	// ***** TO ALWAYS CALL THESE FUNCTIONS INSIDE THE INTERFASCIA DEFAULT *****
-	// ***** GRAPHICS STATE. I'M NOT TOUCHING THE GRAPHICS STATE HERE.		 *****
+	// ***** GRAPHICS STATE. I'M NOT TOUCHING THE GRAPHICS STATE HERE. *****
 
 	private void updateXPos() {
 		cursorXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, cursorPos));
 		if (startSelect != -1 && endSelect != -1) {
-		
+
 			int tempStart, tempEnd;
 			if (endSelect < startSelect) {
 				tempStart = endSelect;
@@ -366,79 +381,83 @@ public class IFTextField extends GUIComponent {
 				tempStart = startSelect;
 				tempEnd = endSelect;
 			}
-			
+
 			if (tempStart < visiblePortionStart)
 				startSelectXPos = 0;
 			else
 				startSelectXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, tempStart));
-			
+
 			if (tempEnd > visiblePortionEnd)
 				endSelectXPos = getWidth() - 4;
 			else
 				endSelectXPos = controller.parent.textWidth(contents.substring(visiblePortionStart, tempEnd));
 		}
 	}
-	
+
 	private void adjustVisiblePortionStart() {
 		if (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
-			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth()
+					- 12) {
 				if (visiblePortionStart == 0)
 					break;
 				else
 					visiblePortionStart--;
 			}
 		} else {
-			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth()
+					- 12) {
 				visiblePortionStart++;
 			}
 		}
 	}
-	
+
 	private void adjustVisiblePortionEnd() {
-		//System.out.println(visiblePortionStart + " to " + visiblePortionEnd + " out of " + contents.length());
-		
-		// Temporarily correcting for an erroneus precondition. Looking for the real issue
-		visiblePortionEnd = Math.min(visiblePortionEnd, contents.length()); 
-		
+		// System.out.println(visiblePortionStart + " to " + visiblePortionEnd + " out
+		// of " + contents.length());
+
+		// Temporarily correcting for an erroneus precondition. Looking for the real
+		// issue
+		visiblePortionEnd = Math.min(visiblePortionEnd, contents.length());
+
 		if (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
-			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth()
+					- 12) {
 				if (visiblePortionEnd == contents.length())
 					break;
 				else
 					visiblePortionEnd++;
 			}
 		} else {
-			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth() - 12) {
+			while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) > getWidth()
+					- 12) {
 				visiblePortionEnd--;
 			}
 		}
 	}
-	
-	
-
 
 	private void centerCursor() {
 		visiblePortionStart = visiblePortionEnd = cursorPos;
-		
-		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth() - 12) {
+
+		while (controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd)) < getWidth()
+				- 12) {
 			if (visiblePortionStart != 0)
 				visiblePortionStart--;
-				
+
 			if (visiblePortionEnd != contents.length())
 				visiblePortionEnd++;
-				
+
 			if (visiblePortionEnd == contents.length() && visiblePortionStart == 0)
 				break;
 		}
 	}
 
 	/**
-	* given the X position of the mouse in relation to the X
-	* position of the text field, findClosestGap(int x) will
-	* return the index of the closest letter boundary in the 
-	* letterWidths array.
-	*/
-	
+	 * given the X position of the mouse in relation to the X
+	 * position of the text field, findClosestGap(int x) will
+	 * return the index of the closest letter boundary in the
+	 * letterWidths array.
+	 */
+
 	private int findClosestGap(int x) {
 		float prev = 0, cur;
 		if (x < 0) {
@@ -456,73 +475,67 @@ public class IFTextField extends GUIComponent {
 			}
 			prev = cur;
 		}
-		
+
 		// Don't know what else to return
 		return contents.length();
 	}
 
-
-	public int getVisiblePortionStart()
-	{
+	public int getVisiblePortionStart() {
 		return visiblePortionStart;
 	}
-	public void setVisiblePortionStart(int VisiblePortionStart)
-	{
+
+	public void setVisiblePortionStart(int VisiblePortionStart) {
 		visiblePortionStart = VisiblePortionStart;
 	}
-	
-	public int getVisiblePortionEnd()
-	{
+
+	public int getVisiblePortionEnd() {
 		return visiblePortionEnd;
 	}
-	public void setVisiblePortionEnd(int VisiblePortionEnd)
-	{
+
+	public void setVisiblePortionEnd(int VisiblePortionEnd) {
 		visiblePortionEnd = VisiblePortionEnd;
 	}
 
-	public int getStartSelect()
-	{
+	public int getStartSelect() {
 		return startSelect;
 	}
-	public void setStartSelect(int StartSelect)
-	{
+
+	public void setStartSelect(int StartSelect) {
 		startSelect = StartSelect;
 	}
 
-	public int getEndSelect()
-	{
+	public int getEndSelect() {
 		return endSelect;
 	}
-	public void setEndSelect(int EndSelect)
-	{
+
+	public void setEndSelect(int EndSelect) {
 		endSelect = EndSelect;
 	}
 
-	public int getCursorPosition()
-	{
+	public int getCursorPosition() {
 		return cursorPos;
-	} 
-	public void setCursorPosition(int CursorPos)
-	{
+	}
+
+	public void setCursorPosition(int CursorPos) {
 		cursorPos = CursorPos;
 	}
 
-
 	/**
-	* sets the contents of the text box and displays the
-	* specified string in the text box widget.
-	* @param val the string to become the text field's contents
-	*/
-	
+	 * sets the contents of the text box and displays the
+	 * specified string in the text box widget.
+	 * 
+	 * @param val the string to become the text field's contents
+	 */
+
 	public void setValue(String newValue) {
-		
+
 		contents = newValue;
 		cursorPos = contents.length();
 		startSelect = endSelect = -1;
-		
+
 		visiblePortionStart = 0;
 		visiblePortionEnd = contents.length();
-		
+
 		// Adjust the start and end positions of the visible portion of the string
 		if (controller != null) {
 			if (controller.parent.textWidth(contents) > getWidth() - 12) {
@@ -533,30 +546,28 @@ public class IFTextField extends GUIComponent {
 		fireEventNotification(this, "Set");
 	}
 
-
-
 	/**
-	* returns the string that is displayed in the text area.
-	* If the contents have not been initialized, getValue() 
-	* returns NULL, if the contents have been initialized but
-	* not set, it returns an empty string.
-	* @return contents the contents of the text field
-	*/
-	
+	 * returns the string that is displayed in the text area.
+	 * If the contents have not been initialized, getValue()
+	 * returns NULL, if the contents have been initialized but
+	 * not set, it returns an empty string.
+	 * 
+	 * @return contents the contents of the text field
+	 */
+
 	public String getValue() {
 		return contents;
 	}
 
-
-
 	/**
-	* implemented to conform to Processing's mouse event handler
-	* requirements. You shouldn't call this method directly, as
-	* Processing will forward mouse events to this object directly.
-	* mouseEvent() handles mouse clicks, drags, and releases sent
-	* from the parent PApplet. 
-	* @param e the MouseEvent to handle
-	*/
+	 * implemented to conform to Processing's mouse event handler
+	 * requirements. You shouldn't call this method directly, as
+	 * Processing will forward mouse events to this object directly.
+	 * mouseEvent() handles mouse clicks, drags, and releases sent
+	 * from the parent PApplet.
+	 * 
+	 * @param e the MouseEvent to handle
+	 */
 
 	public void mouseEvent(MouseEvent e) {
 		controller.userState.saveSettingsForApplet(controller.parent);
@@ -576,18 +587,21 @@ public class IFTextField extends GUIComponent {
 				}
 			}
 		} else if (e.getAction() == MouseEvent.DRAG) {
-			/*if (controller.parent.millis() % 500 == 0) {
-				System.out.println("MOVE");
-				if (e.getX() < getX() && endSelect > 0) {
-					// move left
-					endSelect = visiblePortionStart = endSelect - 1;
-					shrinkRight();
-				} else if (e.getX() > getX() + getWidth() && endSelect < contents.length() - 1) {
-					// move right
-					endSelect = visiblePortionEnd = endSelect + 1;
-					shrinkLeft();
-				}
-			}*/
+			/*
+			 * if (controller.parent.millis() % 500 == 0) {
+			 * System.out.println("MOVE");
+			 * if (e.getX() < getX() && endSelect > 0) {
+			 * // move left
+			 * endSelect = visiblePortionStart = endSelect - 1;
+			 * shrinkRight();
+			 * } else if (e.getX() > getX() + getWidth() && endSelect < contents.length() -
+			 * 1) {
+			 * // move right
+			 * endSelect = visiblePortionEnd = endSelect + 1;
+			 * shrinkLeft();
+			 * }
+			 * }
+			 */
 			endSelect = cursorPos = findClosestGap(e.getX() - getX());
 		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (endSelect == startSelect) {
@@ -599,13 +613,12 @@ public class IFTextField extends GUIComponent {
 		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
 
-
-	
 	/**
-	* receives KeyEvents forwarded to it by the GUIController
-	* if the current instance is currently in focus.
-	* @param e the KeyEvent to be handled
-	*/
+	 * receives KeyEvents forwarded to it by the GUIController
+	 * if the current instance is currently in focus.
+	 * 
+	 * @param e the KeyEvent to be handled
+	 */
 
 	public void keyEvent(KeyEvent e) {
 		controller.userState.saveSettingsForApplet(controller.parent);
@@ -624,10 +637,9 @@ public class IFTextField extends GUIComponent {
 					startSelect = endSelect = -1;
 					cursorPos = visiblePortionEnd = contents.length();
 				}
-				//visiblePortionStart = visiblePortionEnd;
+				// visiblePortionStart = visiblePortionEnd;
 				adjustVisiblePortionStart();
-			} 
-			else if (e.getKey() == java.awt.event.KeyEvent.VK_UP) {
+			} else if (e.getKey() == java.awt.event.KeyEvent.VK_UP) {
 				if (shiftDown) {
 					if (endSelect == -1)
 						endSelect = cursorPos;
@@ -637,10 +649,9 @@ public class IFTextField extends GUIComponent {
 					startSelect = endSelect = -1;
 					cursorPos = visiblePortionStart = 0;
 				}
-				//visiblePortionEnd = visiblePortionStart;
+				// visiblePortionEnd = visiblePortionStart;
 				adjustVisiblePortionEnd();
-			} 
-			else if (e.getKey() == java.awt.event.KeyEvent.VK_LEFT) {
+			} else if (e.getKey() == java.awt.event.KeyEvent.VK_LEFT) {
 				if (shiftDown) {
 					if (cursorPos > 0) {
 						if (startSelect != -1 && endSelect != -1) {
@@ -661,8 +672,7 @@ public class IFTextField extends GUIComponent {
 					}
 				}
 				centerCursor();
-			} 
-			else if (e.getKey() == java.awt.event.KeyEvent.VK_RIGHT) {
+			} else if (e.getKey() == java.awt.event.KeyEvent.VK_RIGHT) {
 				if (shiftDown) {
 					if (cursorPos < contents.length()) {
 						if (startSelect != -1 && endSelect != -1) {
@@ -683,14 +693,11 @@ public class IFTextField extends GUIComponent {
 					}
 				}
 				centerCursor();
-			} 
-			else if (e.getKey() == java.awt.event.KeyEvent.VK_DELETE) {
+			} else if (e.getKey() == java.awt.event.KeyEvent.VK_DELETE) {
 				deleteChar();
-			}
-			else if (e.getKey() == java.awt.event.KeyEvent.VK_ENTER) {
+			} else if (e.getKey() == java.awt.event.KeyEvent.VK_ENTER) {
 				fireEventNotification(this, "Completed");
-			}
-			else{
+			} else {
 				if ((e.getModifiers() & shortcutMask) == shortcutMask) {
 					switch (e.getKey()) {
 						case java.awt.event.KeyEvent.VK_C:
@@ -712,17 +719,14 @@ public class IFTextField extends GUIComponent {
 							endSelect = contents.length();
 							break;
 					}
-				} 
+				}
 			}
-		} 
-		else if (e.getAction() == KeyEvent.TYPE) {
+		} else if (e.getAction() == KeyEvent.TYPE) {
 			if ((e.getModifiers() & shortcutMask) == shortcutMask) {
-			}
-			else if (e.getKey() == '\b') {
+			} else if (e.getKey() == '\b') {
 				backspaceChar();
-			} 
-			else if (e.getKey() != java.awt.event.KeyEvent.CHAR_UNDEFINED) {
-				if(validUnicode(e.getKey()))
+			} else if (e.getKey() != java.awt.event.KeyEvent.CHAR_UNDEFINED) {
+				if (validUnicode(e.getKey()))
 					appendToRightOfCursor(e.getKey());
 			}
 		}
@@ -730,24 +734,25 @@ public class IFTextField extends GUIComponent {
 
 		controller.userState.restoreSettingsToApplet(controller.parent);
 	}
-	
-	
-	
+
 	/**
-	* draws the text field, contents, selection, and cursor
-	* to the screen.
-	*/
-	
-	public void draw () {
+	 * draws the text field, contents, selection, and cursor
+	 * to the screen.
+	 */
+
+	public void draw() {
 		boolean hasFocus = controller.getFocusStatusForComponent(this);
-		
-		/*if (wasClicked) {
-			currentColor = lookAndFeel.activeColor;
-		} else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY) || hasFocus) {
-			currentColor = lookAndFeel.highlightColor;
-		} else {
-			currentColor = lookAndFeel.baseColor;
-		}*/
+
+		/*
+		 * if (wasClicked) {
+		 * currentColor = lookAndFeel.activeColor;
+		 * } else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY)
+		 * || hasFocus) {
+		 * currentColor = lookAndFeel.highlightColor;
+		 * } else {
+		 * currentColor = lookAndFeel.baseColor;
+		 * }
+		 */
 
 		// Draw the surrounding box
 		controller.parent.stroke(lookAndFeel.highlightColor);
@@ -756,27 +761,32 @@ public class IFTextField extends GUIComponent {
 		controller.parent.noStroke();
 
 		// Compute the left offset for the start of text
-		// ***** MOVE THIS TO SOMEWHERE THAT DOESN'T GET CALLED 50 MILLION TIMES PER SECOND ******
+		// ***** MOVE THIS TO SOMEWHERE THAT DOESN'T GET CALLED 50 MILLION TIMES PER
+		// SECOND ******
 		float offset;
 		if (cursorPos == contents.length() && controller.parent.textWidth(contents) > getWidth() - 8)
-			offset = (getWidth() - 4) - controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd));
+			offset = (getWidth() - 4)
+					- controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd));
 		else
 			offset = 4;
 
 		// Draw the selection rectangle
 		if (hasFocus && startSelect != -1 && endSelect != -1) {
 			controller.parent.fill(lookAndFeel.selectionColor);
-			controller.parent.rect(getX() + startSelectXPos + offset, getY() + 3, endSelectXPos - startSelectXPos + 1, 15);
+			controller.parent.rect(getX() + startSelectXPos + offset, getY() + 3, endSelectXPos - startSelectXPos + 1,
+					15);
 		}
 
 		// Draw the string
-		controller.parent.fill (lookAndFeel.textColor);
-		controller.parent.text (contents.substring(visiblePortionStart, visiblePortionEnd), getX() + offset, getY() + 5, getWidth() - 8, getHeight() - 6);
+		controller.parent.fill(lookAndFeel.textColor);
+		controller.parent.text(contents.substring(visiblePortionStart, visiblePortionEnd), getX() + offset, getY() + 5,
+				getWidth() - 8, getHeight() - 6);
 
 		// Draw the insertion point (it blinks!)
 		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((controller.parent.millis() % 1000) > 500)) {
 			controller.parent.stroke(lookAndFeel.darkGrayColor);
-			controller.parent.line(getX() + (int) cursorXPos + offset, getY() + 3, getX() + (int) cursorXPos + offset, getY() + 18);
+			controller.parent.line(getX() + (int) cursorXPos + offset, getY() + 3, getX() + (int) cursorXPos + offset,
+					getY() + 18);
 		}
 	}
 

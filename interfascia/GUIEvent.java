@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,25 +20,23 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
 
 public class GUIEvent {
-	 private GUIComponent source;
-	 private String message;
+	private GUIComponent source;
+	private String message;
 
-	public GUIEvent (GUIComponent argSource, String argMessage) {
-		 source = argSource;
+	public GUIEvent(GUIComponent argSource, String argMessage) {
+		source = argSource;
 		message = argMessage;
-	 }
+	}
 
 	public GUIComponent getSource() {
-		 return source;
-	 }
+		return source;
+	}
 
 	public String getMessage() {
 		return message;
-	 }
+	}
 
 }

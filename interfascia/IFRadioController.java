@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,8 +20,6 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
 
 //import java.lang.reflect.*;
@@ -34,37 +32,37 @@ public class IFRadioController extends GUIComponent {
 		contents = new IFRadioButton[5];
 	}
 
-	public IFRadioController (String argLabel) {
+	public IFRadioController(String argLabel) {
 		setLabel(argLabel);
 		contents = new IFRadioButton[5];
 	}
-	
-	public IFRadioController (String argLabel, Object l) {
+
+	public IFRadioController(String argLabel, Object l) {
 		setLabel(argLabel);
 		addActionListener(l);
 		contents = new IFRadioButton[5];
 	}
 
-	public void add (IFRadioButton button) {
+	public void add(IFRadioButton button) {
 		if (numItems == contents.length) {
 			IFRadioButton[] temp = contents;
 			contents = new IFRadioButton[contents.length * 2];
 			System.arraycopy(temp, 0, contents, 0, numItems);
 		}
-		
+
 		contents[numItems++] = button;
 	}
 
-	public void remove (IFRadioButton button) {
+	public void remove(IFRadioButton button) {
 		int componentIndex = -1;
-		
+
 		for (int i = 0; i < numItems; i++) {
-			if (button == contents[i]){
+			if (button == contents[i]) {
 				componentIndex = i;
 				break;
 			}
 		}
-		
+
 		if (componentIndex != -1) {
 			contents[componentIndex] = null;
 			if (componentIndex < numItems - 1) {
@@ -75,11 +73,11 @@ public class IFRadioController extends GUIComponent {
 
 	}
 
-	public int getSelectedIndex () {
+	public int getSelectedIndex() {
 		return selected;
 	}
 
-	public IFRadioButton getSelected () {
+	public IFRadioButton getSelected() {
 		if (selected >= 0 && selected < numItems) {
 			return contents[selected];
 		} else {
@@ -87,14 +85,14 @@ public class IFRadioController extends GUIComponent {
 		}
 	}
 
-	public void selectButton (IFRadioButton button) {
+	public void selectButton(IFRadioButton button) {
 		for (int i = 0; i < numItems; i++) {
 			if (contents[i] == button)
-			selected = i;
+				selected = i;
 		}
-		fireEventNotification (button, "Selected");
+		fireEventNotification(button, "Selected");
 	}
-		
+
 	public boolean getSelectionStatusForButton(IFRadioButton button) {
 		if (selected >= 0 && selected < numItems)
 			return button == contents[selected];
@@ -102,11 +100,11 @@ public class IFRadioController extends GUIComponent {
 			return false;
 	}
 
-	public void deselectAll () {
+	public void deselectAll() {
 		selected = -1;
 	}
 
-	public void addActionListener (Object arglistener) {
+	public void addActionListener(Object arglistener) {
 		listener = arglistener;
 	}
 

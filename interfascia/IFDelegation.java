@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,8 +20,6 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
 
 import java.lang.reflect.*;
@@ -31,11 +29,11 @@ public class IFDelegation {
 		Method m;
 		Object o = null;
 		Class[] parameterTypes = new Class[parameters.length];
-		
+
 		for (int i = 0; i < parameters.length; i++) {
 			parameterTypes[i] = parameters[i].getClass();
 		}
-		
+
 		try {
 			m = delegate.getClass().getDeclaredMethod(method, parameterTypes);
 			o = m.invoke(delegate, parameters);
@@ -43,7 +41,7 @@ public class IFDelegation {
 		} catch (IllegalAccessException e) {
 		} catch (InvocationTargetException e) {
 		}
-		
+
 		return o;
 	}
 }

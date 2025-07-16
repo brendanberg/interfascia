@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,44 +20,42 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
 //import processing.core.*;
 
 public class IFPasswordField extends IFTextField {
 	private char displayChar;
 	private String hiddenValue;
-	
-	public IFPasswordField (String newLabel, int newX, int newY) {
-		super (newLabel, newX, newY, 100, "");
+
+	public IFPasswordField(String newLabel, int newX, int newY) {
+		super(newLabel, newX, newY, 100, "");
 		setDisplayCharacter((char) 0x25CF);
 	}
 
-	public IFPasswordField (String argLabel, int argX, int argY, int argWidth) {
-		super (argLabel, argX, argY, argWidth, "");
+	public IFPasswordField(String argLabel, int argX, int argY, int argWidth) {
+		super(argLabel, argX, argY, argWidth, "");
 		setDisplayCharacter((char) 0x25CF);
 	}
-	
-	public IFPasswordField (String argLabel, int argX, int argY, int argWidth, String label) {
-		super (argLabel, argX, argY, argWidth, label);
+
+	public IFPasswordField(String argLabel, int argX, int argY, int argWidth, String label) {
+		super(argLabel, argX, argY, argWidth, label);
 		setDisplayCharacter((char) 0x25CF);
 	}
-	
-	public IFPasswordField (String argLabel, int argX, int argY, int argWidth, String label, char c) {
-		super (argLabel, argX, argY, argWidth, label);
+
+	public IFPasswordField(String argLabel, int argX, int argY, int argWidth, String label, char c) {
+		super(argLabel, argX, argY, argWidth, label);
 		setDisplayCharacter(c);
 	}
-	
+
 	public String getValue() {
 		return hiddenValue;
 	}
-	
+
 	public void appendToRightOfCursor(char c) {
 		appendToRightOfCursor("" + c);
 	}
-	
-	public void appendToRightOfCursor(String s){
+
+	public void appendToRightOfCursor(String s) {
 		String t1, t2;
 		int startSelect = super.getStartSelect();
 		int endSelect = super.getEndSelect();
@@ -78,15 +76,15 @@ public class IFPasswordField extends IFTextField {
 		}
 		hiddenValue = t1 + s + t2;
 		super.appendToRightOfCursor(repeatChar(displayChar, s.length()));
-		//fireEventNotification(this, "Modified");
+		// fireEventNotification(this, "Modified");
 	}
-	
+
 	public void backspaceChar() {
 		String t1 = "", t2 = "";
 		int startSelect = super.getStartSelect();
 		int endSelect = super.getEndSelect();
 		int cursorPos = super.getCursorPosition();
-		
+
 		if (startSelect != -1 && endSelect != -1) {
 			if (startSelect > endSelect) {
 				int temp = startSelect;
@@ -109,27 +107,24 @@ public class IFPasswordField extends IFTextField {
 		}
 		super.backspaceChar();
 	}
-	
-	public void setValue(String value)
-	{
+
+	public void setValue(String value) {
 		hiddenValue = value;
-		super.setValue(repeatChar(displayChar,hiddenValue.length()));
+		super.setValue(repeatChar(displayChar, hiddenValue.length()));
 	}
-	
+
 	protected void copySubstring(int start, int end) {
 		return;
 	}
-	
-	public void setDisplayCharacter(char character)
-	{
+
+	public void setDisplayCharacter(char character) {
 		displayChar = character;
 		setValue(hiddenValue);
 	}
-	
-	private String repeatChar(char text, int number)
-	{
+
+	private String repeatChar(char text, int number) {
 		String repeatedString = "";
-		for(int i = 0; i < number; i++)
+		for (int i = 0; i < number; i++)
 			repeatedString += text;
 		return repeatedString;
 	}

@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,53 +20,50 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
-
 
 import java.awt.event.*;
 
 public class IFProgressBar extends GUIComponent {
 	private float progress = 0;
-	
-	public IFProgressBar (int newX, int newY, int newWidth) {
+
+	public IFProgressBar(int newX, int newY, int newWidth) {
 		setPosition(newX, newY);
 		setSize(newWidth, 14);
 	}
 
-	// Overriding the inherited mouseEvent because the progress bar doesn't 
+	// Overriding the inherited mouseEvent because the progress bar doesn't
 	// need to react to them.
 
-	public void mouseEvent (MouseEvent e) {
+	public void mouseEvent(MouseEvent e) {
 	}
-	
+
 	public boolean canReceiveFocus() {
 		return false;
 	}
 
-	public void draw () {
+	public void draw() {
 		int x = getX(), y = getY(), wid = getWidth(), hgt = getHeight();
-	
-		controller.parent.stroke (lookAndFeel.borderColor);
-		controller.parent.fill (lookAndFeel.baseColor);
-		controller.parent.rect (x, y, wid, hgt);
-		controller.parent.stroke (lookAndFeel.activeColor);
-		controller.parent.fill (lookAndFeel.activeColor);
-		controller.parent.rect (x + 1, y + 1, (int) Math.floor(progress * (wid - 2)), hgt - 2);
+
+		controller.parent.stroke(lookAndFeel.borderColor);
+		controller.parent.fill(lookAndFeel.baseColor);
+		controller.parent.rect(x, y, wid, hgt);
+		controller.parent.stroke(lookAndFeel.activeColor);
+		controller.parent.fill(lookAndFeel.activeColor);
+		controller.parent.rect(x + 1, y + 1, (int) Math.floor(progress * (wid - 2)), hgt - 2);
 
 		if (controller.showBounds) {
 			controller.parent.noFill();
-			controller.parent.stroke(255,0,0);
+			controller.parent.stroke(255, 0, 0);
 			controller.parent.rect(x, y, wid, hgt);
 		}
 	}
 
-	public void setProgress (float argProgress) {
+	public void setProgress(float argProgress) {
 		progress = (argProgress < 0) ? 0 : ((argProgress > 1) ? 1 : argProgress);
 	}
 
-	public float getProgress () {
+	public float getProgress() {
 		return progress;
 	}
 

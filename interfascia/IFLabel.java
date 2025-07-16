@@ -1,7 +1,7 @@
-// Interfascia ALPHA 004 -- http://interfascia.berg.industries/
+// Interfascia BETA 005 -- http://interfascia.berg.industries/
 // GUI Library for Processing -- http://www.processing.org/
 //
-// Copyright (C) 2006-2016 Brendan Berg
+// Copyright (C) 2006-2025 Brendan Berg
 // interfascia (at) berg (dot) industries
 //
 // This library is free software; you can redistribute it and/or
@@ -20,23 +20,20 @@
 // USA
 // --------------------------------------------------------------------
 
-
-
 package interfascia;
-
 
 public class IFLabel extends GUIComponent {
 	private int textSize = 13;
 
-	public IFLabel (String argLabel, int argX, int argY) {
-		this (argLabel, argX, argY, 13);
+	public IFLabel(String argLabel, int argX, int argY) {
+		this(argLabel, argX, argY, 13);
 	}
-	
-	public IFLabel (String newLabel, int newX, int newY, int size) {
+
+	public IFLabel(String newLabel, int newX, int newY, int size) {
 		setLabel(newLabel);
 		setPosition(newX, newY);
 
-		if (size > 8 && size < 20) 
+		if (size > 8 && size < 20)
 			textSize = size;
 		else
 			textSize = 13;
@@ -50,21 +47,21 @@ public class IFLabel extends GUIComponent {
 	public boolean canReceiveFocus() {
 		return false;
 	}
-	
+
 	public void setTextSize(int size) {
-		if (size > 8 && size < 20) 
+		if (size > 8 && size < 20)
 			textSize = size;
 		else
 			textSize = 13;
 	}
-	
+
 	public int getTextSize() {
 		return textSize;
 	}
 
-	public void draw () {
-		controller.parent.fill (lookAndFeel.textColor);
-		controller.parent.text (getLabel(), getX(), getY() + textSize - 3);
+	public void draw() {
+		controller.parent.fill(lookAndFeel.textColor);
+		controller.parent.text(getLabel(), getX(), getY() + textSize - 3);
 	}
 
 }
