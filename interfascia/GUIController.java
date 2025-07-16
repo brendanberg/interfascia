@@ -32,10 +32,12 @@ import processing.event.*;
 
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+
+import interfascia.GUIComponent;
 
 public class GUIController extends GUIComponent implements ClipboardOwner {
-	private GUIComponent[] contents;
-	private int numItems = 0;
+	private ArrayList<GUIComponent> contents;
 	private int focusIndex = -1;
 	private boolean visible;
 	private IFLookAndFeel lookAndFeel;
@@ -59,25 +61,15 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	public GUIController (PApplet newParent, boolean newVisible) {
 		setParent(newParent);
 		setVisible(newVisible);
-		contents = new GUIComponent[5];
+		contents = new ArrayList<GUIComponent>(5);
 		
 		lookAndFeel = new IFLookAndFeel(parent, IFLookAndFeel.DEFAULT);
 		userState = new IFPGraphicsState();
 		
-		SecurityManager security = System.getSecurityManager();
-		if (security != null) {
-			try {
-				security.checkSystemClipboardAccess();
-				clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-			} catch (SecurityException e) {
-				clipboard = new Clipboard("Interfascia Clipboard");
-			}
-		} else {
-			try {
-				clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-			} catch (Exception e) {
-				// THIS IS DUMB
-			}
+		try {
+			clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		} catch (Exception e) {
+			clipboard = new Clipboard("Interfascia Clipboard");
 		}
 		
 		newParent.registerMethod("keyEvent", this);
@@ -93,35 +85,15 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	}
 
 	public void add (GUIComponent component) {
-		if (numItems == contents.length) {
-			GUIComponent[] temp = contents;
-			contents = new GUIComponent[contents.length * 2];
-			System.arraycopy(temp, 0, contents, 0, numItems);
-		}
 		component.setController(this);
 		component.setLookAndFeel(lookAndFeel);
 		//component.setIndex(numItems);
-		contents[numItems++] = component;
+		contents.add(component);
 		component.initWithParent();
 	}
 
 	public void remove (GUIComponent component) {
-		int componentIndex = -1;
-		
-		for (int i = 0; i < numItems; i++) {
-			if (component == contents[i]){
-				componentIndex = i;
-				break;
-			}
-		}
-		
-		if (componentIndex != -1) {
-			contents[componentIndex] = null;
-			if (componentIndex < numItems - 1) {
-				System.arraycopy(contents, componentIndex + 1, contents, componentIndex, numItems - (componentIndex + 1));
-			}
-			numItems--;
-		}
+		contents.remove(component);
 	}
 	
 	public void setParent (PApplet argParent) {
@@ -141,26 +113,23 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	}
 	
 	public void requestFocus(GUIComponent c) {
-		for (int i = 0; i < numItems; i++) {
-			if (c == contents[i])
-				focusIndex = i;
-		}
+		focusIndex = contents.indexOf(c);
 	}
 	
 	// ****** LOOK AT THIS, I DON'T THINK IT'S RIGHT ******
 	public void yieldFocus(GUIComponent c) {
-		if (focusIndex > -1 && focusIndex < numItems && contents[focusIndex] == c) {
+		if (focusIndex > -1 && focusIndex < contents.size() && contents.get(focusIndex) == c) {
 			focusIndex = -1;
 		}
 	}
 	
 	public GUIComponent getComponentWithFocus() {
-		return contents[focusIndex];
+		return contents.get(focusIndex);
 	}
 	
 	public boolean getFocusStatusForComponent(GUIComponent c) {
-		if (focusIndex >= 0 && focusIndex < numItems)
-			return c == contents[focusIndex];
+		if (focusIndex >= 0 && focusIndex < contents.size())
+			return c == contents.get(focusIndex);
 		else
 			return false;
 	}
@@ -200,9 +169,9 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	public void keyEvent(KeyEvent e) {
 		if (visible) {
 			if (e.getAction() == KeyEvent.PRESS && e.getKeyCode() == java.awt.event.KeyEvent.VK_TAB) {
-				if (focusIndex != -1 && contents[focusIndex] != null) {
-					contents[focusIndex].actionPerformed(
-						new GUIEvent(contents[focusIndex], "Lost Focus")
+				if (focusIndex != -1 && contents.get(focusIndex) != null) {
+					contents.get(focusIndex).actionPerformed(
+						new GUIEvent(contents.get(focusIndex), "Lost Focus")
 					);
 				}
 				
@@ -211,37 +180,41 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 				else
 					giveFocusToNextComponent();
 				
-				if (focusIndex != -1 && contents[focusIndex] != null) {
-					contents[focusIndex].actionPerformed(
-						new GUIEvent(contents[focusIndex], "Received Focus")
+				if (focusIndex != -1 && contents.get(focusIndex) != null) {
+					contents.get(focusIndex).actionPerformed(
+						new GUIEvent(contents.get(focusIndex), "Received Focus")
 					);
 				}
 
 			} else if (e.getKeyCode() != java.awt.event.KeyEvent.VK_TAB) {
-				if (focusIndex >= 0 && focusIndex < contents.length)
-					contents[focusIndex].keyEvent(e);
+				if (focusIndex >= 0 && focusIndex < contents.size())
+					contents.get(focusIndex).keyEvent(e);
 			}
 		}
 	}
 	
 	private void giveFocusToPreviousComponent() {
+		int numItems = contents.size();
+
 		if (numItems == 0)
 			return;
 
 		int oldFocus = focusIndex;
 		focusIndex = (focusIndex - 1) % numItems;
-		while (!contents[focusIndex].canReceiveFocus() && focusIndex != oldFocus) {
+		while (!contents.get(focusIndex).canReceiveFocus() && focusIndex != oldFocus) {
 			focusIndex = (focusIndex - 1) % numItems;
 		}
 	}
 	
 	private void giveFocusToNextComponent() {
+		int numItems = contents.size();
+
 		if (numItems == 0)
 			return;
 
 		int oldFocus = focusIndex;
 		focusIndex = (focusIndex + 1) % numItems;
-		while (!contents[focusIndex].canReceiveFocus() && focusIndex != oldFocus) {
+		while (!contents.get(focusIndex).canReceiveFocus() && focusIndex != oldFocus) {
 			focusIndex = (focusIndex + 1) % numItems;
 		}
 	}
@@ -253,10 +226,10 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 			//parent.background(parent.g.backgroundColor);
 			parent.fill(parent.color(0));
 			parent.rect(getX(), getY(), getWidth(), getHeight());
-			for(int i = 0; i < contents.length; i++){
-				if(contents[i] != null){
+			for(int i = 0; i < contents.size(); i++){
+				if (contents.get(i) != null){
 					//parent.smooth();
-					contents[i].draw();
+					contents.get(i).draw();
 				}
 			}
 			userState.restoreSettingsToApplet(parent);	 
