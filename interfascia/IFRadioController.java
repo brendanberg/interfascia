@@ -22,8 +22,6 @@
 
 package interfascia;
 
-//import java.lang.reflect.*;
-
 public class IFRadioController extends GUIComponent {
 	private IFRadioButton[] contents;
 	private int numItems = 0, selected = -1;

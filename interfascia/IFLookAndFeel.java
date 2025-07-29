@@ -42,64 +42,50 @@ public class IFLookAndFeel {
 		defaultGraphicsState = new IFPGraphicsState();
 	}
 
-	public IFLookAndFeel(PApplet parent, char type) {
+	// public IFLookAndFeel(PApplet sketch, char type) {
+	// this(sketch, sketch.getGraphics(), type);
+	// }
+
+	public IFLookAndFeel(PApplet sketch, char type) {
 		defaultGraphicsState = new IFPGraphicsState();
 
 		if (type == DEFAULT) {
 			// Play nicely with other people's draw methods. They
 			// may have changed the color mode.
-			IFPGraphicsState temp = new IFPGraphicsState(parent);
+			IFPGraphicsState temp = new IFPGraphicsState(sketch);
 
-			parent.colorMode(PApplet.RGB, 255);
+			sketch.g.colorMode(PApplet.RGB, 255);
 
-			baseColor = parent.color(153, 153, 204);
-			highlightColor = parent.color(102, 102, 204);
-			activeColor = parent.color(255, 153, 51);
-			selectionColor = parent.color(255, 255, 0);
-			borderColor = parent.color(255);
-			textColor = parent.color(0);
-			lightGrayColor = parent.color(100);
-			darkGrayColor = parent.color(50);
+			baseColor = sketch.g.color(153, 153, 204);
+			highlightColor = sketch.g.color(102, 102, 204);
+			activeColor = sketch.g.color(255, 153, 51);
+			selectionColor = sketch.g.color(255, 255, 0);
+			borderColor = sketch.g.color(255);
+			textColor = sketch.g.color(0, 0, 0);
+			lightGrayColor = sketch.g.color(100);
+			darkGrayColor = sketch.g.color(50);
 
-			/*
-			 * System.out.println("===== DEFAULT GRAPHICS STATE =====\ntextAlign:\t" +
-			 * parent.g.textAlign +
-			 * "\nrectMode:\t" + parent.g.rectMode +
-			 * "\nellipseMode:\t" + parent.g.ellipseMode +
-			 * "\ncolorMode:\t" + parent.g.colorMode + ", " + parent.g.colorModeX +
-			 * "\nsmooth:\t" + parent.g.smooth);
-			 */
+			PFont font = sketch.loadFont("FrutigerLight-15.vlw");
+			sketch.g.textFont(font, 15);
+			sketch.g.textAlign(PApplet.LEFT, PApplet.BOTTOM);
 
-			PFont font = parent.loadFont("FrutigerLight-15.vlw");
-			parent.textFont(font, 15);
-			parent.textAlign(PApplet.LEFT);
+			sketch.g.rectMode(PApplet.CORNER);
+			sketch.g.ellipseMode(PApplet.CORNER);
 
-			parent.rectMode(PApplet.CORNER);
-			parent.ellipseMode(PApplet.CORNER);
+			sketch.g.strokeWeight(1);
 
-			parent.strokeWeight(1);
-
-			parent.colorMode(PApplet.RGB, 255);
+			sketch.g.colorMode(PApplet.RGB, 255);
 
 			try {
-				parent.smooth();
+				sketch.g.smooth();
 			} catch (RuntimeException e) {
 				// Can't smooth in P3D, throws exception
 			}
 
-			/*
-			 * System.out.println("\n===== INTERFASCIA SETUP ======\ntextAlign:\t" +
-			 * parent.g.textAlign +
-			 * "\nrectMode:\t" + parent.g.rectMode +
-			 * "\nellipseMode:\t" + parent.g.ellipseMode +
-			 * "\ncolorMode:\t" + parent.g.colorMode + ", " + parent.g.colorModeX +
-			 * "\nsmooth:\t" + parent.g.smooth);
-			 */
+			defaultGraphicsState.saveSettingsForGraphics(sketch.g);
 
-			defaultGraphicsState.saveSettingsForApplet(parent);
-			// System.out.println("Class: " + parent.g.getClass() + "/n");
 			// Set the color mode back
-			temp.restoreSettingsToApplet(parent);
+			temp.restoreSettingsToApplet(sketch);
 		}
 	}
 }

@@ -63,7 +63,7 @@ public class IFButton extends GUIComponent {
 		}
 	}
 
-	public void draw() {
+	public void render(PGraphics graphics) {
 		boolean hasFocus = controller.getFocusStatusForComponent(this);
 
 		if (wasClicked) {
@@ -76,19 +76,19 @@ public class IFButton extends GUIComponent {
 
 		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 
-		controller.parent.stroke(lookAndFeel.borderColor);
-		controller.parent.fill(currentColor);
-		controller.parent.rect(x, y, wid, hgt);
-		controller.parent.fill(lookAndFeel.textColor);
+		graphics.stroke(lookAndFeel.borderColor);
+		graphics.fill(currentColor);
+		graphics.rect(x, y, wid, hgt);
+		graphics.fill(lookAndFeel.textColor);
 
-		controller.parent.textAlign(PApplet.CENTER);
-		controller.parent.text(getLabel(), x, y + 3, wid, hgt);
-		controller.parent.textAlign(PApplet.LEFT);
+		graphics.textAlign(PApplet.CENTER);
+		graphics.text(getLabel(), x, y + 3, wid, hgt);
+		graphics.textAlign(PApplet.LEFT);
 
 		if (controller.showBounds) {
-			controller.parent.noFill();
-			controller.parent.stroke(255, 0, 0);
-			controller.parent.rect(x, y, wid, hgt);
+			graphics.noFill();
+			graphics.stroke(255, 0, 0);
+			graphics.rect(x, y, wid, hgt);
 		}
 	}
 

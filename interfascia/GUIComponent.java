@@ -26,6 +26,7 @@
 
 package interfascia;
 
+import processing.core.*;
 import processing.event.*;
 
 public abstract class GUIComponent {
@@ -57,6 +58,9 @@ public abstract class GUIComponent {
 	}
 
 	public void draw() {
+	}
+
+	public void render(PGraphics graphics) {
 	}
 
 	public void setController(GUIController c) {

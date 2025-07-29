@@ -26,6 +26,7 @@
 
 package interfascia;
 
+import processing.core.*;
 import processing.event.*;
 
 public class IFCheckBox extends GUIComponent {
@@ -44,12 +45,12 @@ public class IFCheckBox extends GUIComponent {
 		if (lookAndFeel == null)
 			return;
 
-		controller.userState.saveSettingsForApplet(controller.parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+		controller.userState.saveSettingsForGraphics(controller.graphics);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(controller.graphics);
 
 		setSize((int) Math.ceil(controller.parent.textWidth(getLabel())) + getHeight() + 5, 14);
 
-		controller.userState.restoreSettingsToApplet(controller.parent);
+		controller.userState.restoreSettingsToGraphics(controller.graphics);
 	}
 
 	public void mouseEvent(MouseEvent e) {
@@ -84,7 +85,7 @@ public class IFCheckBox extends GUIComponent {
 		}
 	}
 
-	public void draw() {
+	public void render(PGraphics graphics) {
 		if (isMouseOver(controller.parent.mouseX, controller.parent.mouseY)) {
 			currentColor = lookAndFeel.highlightColor;
 		} else if (controller.getFocusStatusForComponent(this)) {
@@ -95,26 +96,26 @@ public class IFCheckBox extends GUIComponent {
 
 		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 
-		controller.parent.stroke(lookAndFeel.borderColor);
-		controller.parent.fill(currentColor);
-		controller.parent.rect(x, y, hgt, hgt);
+		graphics.stroke(lookAndFeel.borderColor);
+		graphics.fill(currentColor);
+		graphics.rect(x, y, hgt, hgt);
 		if (selected == true) {
-			controller.parent.stroke(lookAndFeel.darkGrayColor);
-			controller.parent.line(x + 3, y + 2, hgt + x - 3, hgt + y - 4);
-			controller.parent.line(x + 3, y + 3, hgt + x - 4, hgt + y - 4);
-			controller.parent.line(x + 4, y + 2, hgt + x - 3, hgt + y - 5);
-			controller.parent.line(x + 3, hgt + y - 4, hgt + x - 3, y + 2);
-			controller.parent.line(x + 4, hgt + y - 4, hgt + x - 3, y + 3);
-			controller.parent.line(x + 3, hgt + y - 5, hgt + x - 4, y + 2);
+			graphics.stroke(lookAndFeel.darkGrayColor);
+			graphics.line(x + 3, y + 2, hgt + x - 3, hgt + y - 4);
+			graphics.line(x + 3, y + 3, hgt + x - 4, hgt + y - 4);
+			graphics.line(x + 4, y + 2, hgt + x - 3, hgt + y - 5);
+			graphics.line(x + 3, hgt + y - 4, hgt + x - 3, y + 2);
+			graphics.line(x + 4, hgt + y - 4, hgt + x - 3, y + 3);
+			graphics.line(x + 3, hgt + y - 5, hgt + x - 4, y + 2);
 		}
 
-		controller.parent.fill(lookAndFeel.textColor);
-		controller.parent.text(getLabel(), hgt + x + 5, (hgt - 2) + y);
+		graphics.fill(lookAndFeel.textColor);
+		graphics.text(getLabel(), hgt + x + 5, (hgt - 2) + y);
 
 		if (controller.showBounds) {
-			controller.parent.noFill();
-			controller.parent.stroke(255, 0, 0);
-			controller.parent.rect(x, y, wid, hgt);
+			graphics.noFill();
+			graphics.stroke(255, 0, 0);
+			graphics.rect(x, y, wid, hgt);
 		}
 	}
 

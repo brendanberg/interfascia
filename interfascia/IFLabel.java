@@ -22,6 +22,8 @@
 
 package interfascia;
 
+import processing.core.*;
+
 public class IFLabel extends GUIComponent {
 	private int textSize = 13;
 
@@ -59,9 +61,9 @@ public class IFLabel extends GUIComponent {
 		return textSize;
 	}
 
-	public void draw() {
-		controller.parent.fill(lookAndFeel.textColor);
-		controller.parent.text(getLabel(), getX(), getY() + textSize - 3);
+	public void render(PGraphics graphics) {
+		graphics.fill(lookAndFeel.textColor);
+		graphics.text(getLabel(), getX(), getY() + textSize - 3);
 	}
 
 }

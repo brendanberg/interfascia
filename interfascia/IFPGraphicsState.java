@@ -49,92 +49,120 @@ public class IFPGraphicsState {
 	}
 
 	/**
-	 * Convenience contstructor saves the applet's graphics state into
+	 * Convenience contstructor saves the graphics state into
 	 * the newly created IFPGraphicsState object.
 	 *
-	 * @param applet the PApplet instance whose state we're saving
+	 * @param graphics the PGraphics instance whose state we're saving
 	 */
-	public IFPGraphicsState(PApplet applet) {
-		saveSettingsForApplet(applet);
+	public IFPGraphicsState(PGraphics graphics) {
+		saveSettingsForGraphics(graphics);
 	}
 
 	/**
-	 * saves the graphics state for the specified PApplet
+	 * Convenience contstructor saves the sketch's graphics state into
+	 * the newly created IFPGraphicsState object.
 	 *
-	 * @param applet the PApplet instance whose state we're saving
+	 * @param sketch the PApplet instance whose state we're saving
 	 */
-
-	public void saveSettingsForApplet(PApplet applet) {
-		smooth = applet.g.smooth;
-
-		rectMode = applet.g.rectMode;
-		ellipseMode = applet.g.ellipseMode;
-
-		textFont = applet.g.textFont;
-		textAlign = applet.g.textAlign;
-		textSize = applet.g.textSize;
-		textMode = applet.g.textMode;
-
-		tint = applet.g.tint;
-		fill = applet.g.fill;
-		stroke = applet.g.stroke;
-		tintColor = applet.g.tintColor;
-		fillColor = applet.g.fillColor;
-		strokeColor = applet.g.strokeColor;
-		strokeWeight = applet.g.strokeWeight;
-		cMode = applet.g.colorMode;
-		cModeX = applet.g.colorModeX;
-		cModeY = applet.g.colorModeY;
-		cModeZ = applet.g.colorModeZ;
-		cModeA = applet.g.colorModeA;
+	public IFPGraphicsState(PApplet sketch) {
+		saveSettingsForApplet(sketch);
 	}
 
 	/**
-	 * restores the saved graphics state to the specified PApplet
+	 * saves the graphics state for the specified PGraphics
 	 *
-	 * @param applet the PApplet instance whose state we're restoring
+	 * @param graphics the PGraphics instance whose state we're saving
 	 */
 
-	public void restoreSettingsToApplet(PApplet applet) {
+	public void saveSettingsForGraphics(PGraphics graphics) {
+		smooth = graphics.smooth;
 
+		rectMode = graphics.rectMode;
+		ellipseMode = graphics.ellipseMode;
+
+		textFont = graphics.textFont;
+		textAlign = graphics.textAlign;
+		textSize = graphics.textSize;
+		textMode = graphics.textMode;
+
+		tint = graphics.tint;
+		fill = graphics.fill;
+		stroke = graphics.stroke;
+		tintColor = graphics.tintColor;
+		fillColor = graphics.fillColor;
+		strokeColor = graphics.strokeColor;
+		strokeWeight = graphics.strokeWeight;
+		cMode = graphics.colorMode;
+		cModeX = graphics.colorModeX;
+		cModeY = graphics.colorModeY;
+		cModeZ = graphics.colorModeZ;
+		cModeA = graphics.colorModeA;
+	}
+
+	/**
+	 * restores the saved graphics state to the specified PGraphics
+	 *
+	 * @param graphics the PGraphics instance whose state we're restoring
+	 */
+
+	public void restoreSettingsToGraphics(PGraphics graphics) {
 		try {
 			if (smooth > 0) {
-				applet.smooth();
+				graphics.smooth();
 			} else {
-				applet.noSmooth();
+				graphics.noSmooth();
 			}
 		} catch (RuntimeException e) {
 			// Can't smooth in P3D, throws exception
 		}
 
-		applet.rectMode(rectMode);
-		applet.ellipseMode(ellipseMode);
+		graphics.rectMode(rectMode);
+		graphics.ellipseMode(ellipseMode);
 
 		if (textFont != null) {
-			applet.textFont(textFont);
-			applet.textSize(textSize);
+			graphics.textFont(textFont);
+			graphics.textSize(textSize);
 		}
-		applet.textAlign(textAlign);
-		applet.textMode(textMode);
+		graphics.textAlign(textAlign);
+		graphics.textMode(textMode);
 
 		// ***** I THINK YOU CAN SET A COLOR FOR A PROPERTY THAT'S NOT ENABLED *****
 		if (tint)
-			applet.tint(tintColor);
+			graphics.tint(tintColor);
 		else
-			applet.noTint();
+			graphics.noTint();
 
 		if (fill)
-			applet.fill(fillColor);
+			graphics.fill(fillColor);
 		else
-			applet.noFill();
+			graphics.noFill();
 
 		if (stroke)
-			applet.stroke(strokeColor);
+			graphics.stroke(strokeColor);
 		else
-			applet.noStroke();
+			graphics.noStroke();
 
-		applet.strokeWeight(strokeWeight);
-		applet.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);
+		graphics.strokeWeight(strokeWeight);
+		graphics.colorMode(cMode, cModeX, cModeY, cModeZ, cModeA);
 	}
 
+	/**
+	 * saves the graphics state for the specified PApplet
+	 *
+	 * @param sketch the PApplet instance whose state we're saving
+	 */
+
+	public void saveSettingsForApplet(PApplet sketch) {
+		saveSettingsForGraphics(sketch.g);
+	}
+
+	/**
+	 * restores the saved graphics state to the specified PApplet
+	 *
+	 * @param sketch the PApplet instance whose state we're restoring
+	 */
+
+	public void restoreSettingsToApplet(PApplet sketch) {
+		restoreSettingsToGraphics(sketch.g);
+	}
 }

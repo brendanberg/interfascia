@@ -22,6 +22,7 @@
 
 package interfascia;
 
+import processing.core.*;
 import java.awt.event.*;
 
 public class IFProgressBar extends GUIComponent {
@@ -42,20 +43,20 @@ public class IFProgressBar extends GUIComponent {
 		return false;
 	}
 
-	public void draw() {
+	public void render(PGraphics graphics) {
 		int x = getX(), y = getY(), wid = getWidth(), hgt = getHeight();
 
-		controller.parent.stroke(lookAndFeel.borderColor);
-		controller.parent.fill(lookAndFeel.baseColor);
-		controller.parent.rect(x, y, wid, hgt);
-		controller.parent.stroke(lookAndFeel.activeColor);
-		controller.parent.fill(lookAndFeel.activeColor);
-		controller.parent.rect(x + 1, y + 1, (int) Math.floor(progress * (wid - 2)), hgt - 2);
+		graphics.stroke(lookAndFeel.borderColor);
+		graphics.fill(lookAndFeel.baseColor);
+		graphics.rect(x, y, wid, hgt);
+		graphics.stroke(lookAndFeel.activeColor);
+		graphics.fill(lookAndFeel.activeColor);
+		graphics.rect(x + 1, y + 1, (int) Math.floor(progress * (wid - 2)), hgt - 2);
 
 		if (controller.showBounds) {
-			controller.parent.noFill();
-			controller.parent.stroke(255, 0, 0);
-			controller.parent.rect(x, y, wid, hgt);
+			graphics.noFill();
+			graphics.stroke(255, 0, 0);
+			graphics.rect(x, y, wid, hgt);
 		}
 	}
 

@@ -26,6 +26,7 @@
 
 package interfascia;
 
+import processing.core.*;
 import processing.event.*;
 
 public class IFRadioButton extends GUIComponent {
@@ -47,12 +48,12 @@ public class IFRadioButton extends GUIComponent {
 		if (lookAndFeel == null)
 			return;
 
-		controller.userState.saveSettingsForApplet(controller.parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+		// controller.userState.saveSettingsForGraphics(controller.graphics);
+		// lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(controller.graphics);
 
 		setSize((int) Math.ceil(controller.parent.textWidth(getLabel())) + getHeight() + 5, 14);
 
-		controller.userState.restoreSettingsToApplet(controller.parent);
+		// controller.userState.restoreSettingsToGraphics(controller.graphics);
 	}
 
 	public void mouseEvent(MouseEvent e) {
@@ -74,7 +75,7 @@ public class IFRadioButton extends GUIComponent {
 		}
 	}
 
-	public void draw() {
+	public void render(PGraphics graphics) {
 		if (isMouseOver(controller.parent.mouseX, controller.parent.mouseY)) {
 			currentColor = lookAndFeel.highlightColor;
 		} else if (controller.getFocusStatusForComponent(this)) {
@@ -85,22 +86,22 @@ public class IFRadioButton extends GUIComponent {
 
 		int x = getX(), y = getY(), hgt = getHeight(), wid = getWidth();
 
-		controller.parent.stroke(lookAndFeel.borderColor);
-		controller.parent.fill(currentColor);
+		graphics.stroke(lookAndFeel.borderColor);
+		graphics.fill(currentColor);
 
-		controller.parent.ellipse(x, y, hgt, hgt);
+		graphics.ellipse(x, y, hgt, hgt);
 		if (radioController.getSelectionStatusForButton(this)) {
-			controller.parent.fill(lookAndFeel.lightGrayColor);
-			controller.parent.ellipse(x + 2, y + 2, hgt - 4, hgt - 4);
+			graphics.fill(lookAndFeel.lightGrayColor);
+			graphics.ellipse(x + 2, y + 2, hgt - 4, hgt - 4);
 		}
 
-		controller.parent.fill(lookAndFeel.textColor);
-		controller.parent.text(getLabel(), hgt + x + 5, (hgt - 3) + y);
+		graphics.fill(lookAndFeel.textColor);
+		graphics.text(getLabel(), hgt + x + 5, (hgt - 2) + y);
 
 		if (controller.showBounds) {
-			controller.parent.noFill();
-			controller.parent.stroke(255, 0, 0);
-			controller.parent.rect(x, y, wid, hgt);
+			graphics.noFill();
+			graphics.stroke(255, 0, 0);
+			graphics.rect(x, y, wid, hgt);
 		}
 	}
 

@@ -26,6 +26,7 @@
 
 package interfascia;
 
+import processing.core.*;
 import processing.event.*;
 
 /** The IFTextField class is used for a simple one-line text field */
@@ -570,8 +571,8 @@ public class IFTextField extends GUIComponent {
 	 */
 
 	public void mouseEvent(MouseEvent e) {
-		controller.userState.saveSettingsForApplet(controller.parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+		controller.userState.saveSettingsForGraphics(controller.graphics);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(controller.graphics);
 
 		if (e.getAction() == MouseEvent.PRESS) {
 			if (isMouseOver(e.getX(), e.getY())) {
@@ -610,7 +611,7 @@ public class IFTextField extends GUIComponent {
 			}
 		}
 		updateXPos();
-		controller.userState.restoreSettingsToApplet(controller.parent);
+		controller.userState.restoreSettingsToGraphics(controller.graphics);
 	}
 
 	/**
@@ -621,13 +622,17 @@ public class IFTextField extends GUIComponent {
 	 */
 
 	public void keyEvent(KeyEvent e) {
-		controller.userState.saveSettingsForApplet(controller.parent);
-		lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(controller.parent);
+		controller.userState.saveSettingsForGraphics(controller.graphics);
+		lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(controller.graphics);
 
 		int shortcutMask = java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 		boolean shiftDown = e.isShiftDown();
+		System.out.println((int) e.getKey());
+		System.out.println((int) java.awt.event.KeyEvent.VK_DELETE);
+
 		if (e.getAction() == KeyEvent.PRESS) {
-			if (e.getKey() == java.awt.event.KeyEvent.VK_DOWN) {
+			System.out.println("keypress");
+			if (e.getKeyCode() == java.awt.event.KeyEvent.VK_DOWN) {
 				if (shiftDown) {
 					if (startSelect == -1)
 						startSelect = cursorPos;
@@ -639,7 +644,7 @@ public class IFTextField extends GUIComponent {
 				}
 				// visiblePortionStart = visiblePortionEnd;
 				adjustVisiblePortionStart();
-			} else if (e.getKey() == java.awt.event.KeyEvent.VK_UP) {
+			} else if (e.getKeyCode() == java.awt.event.KeyEvent.VK_UP) {
 				if (shiftDown) {
 					if (endSelect == -1)
 						endSelect = cursorPos;
@@ -651,7 +656,7 @@ public class IFTextField extends GUIComponent {
 				}
 				// visiblePortionEnd = visiblePortionStart;
 				adjustVisiblePortionEnd();
-			} else if (e.getKey() == java.awt.event.KeyEvent.VK_LEFT) {
+			} else if (e.getKeyCode() == java.awt.event.KeyEvent.VK_LEFT) {
 				if (shiftDown) {
 					if (cursorPos > 0) {
 						if (startSelect != -1 && endSelect != -1) {
@@ -695,6 +700,8 @@ public class IFTextField extends GUIComponent {
 				centerCursor();
 			} else if (e.getKey() == java.awt.event.KeyEvent.VK_DELETE) {
 				deleteChar();
+			} else if (e.getKey() == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+				backspaceChar();
 			} else if (e.getKey() == java.awt.event.KeyEvent.VK_ENTER) {
 				fireEventNotification(this, "Completed");
 			} else {
@@ -722,8 +729,10 @@ public class IFTextField extends GUIComponent {
 				}
 			}
 		} else if (e.getAction() == KeyEvent.TYPE) {
+			System.out.println("KeyEvent.TYPE");
 			if ((e.getModifiers() & shortcutMask) == shortcutMask) {
 			} else if (e.getKey() == '\b') {
+				System.out.println("backspace");
 				backspaceChar();
 			} else if (e.getKey() != java.awt.event.KeyEvent.CHAR_UNDEFINED) {
 				if (validUnicode(e.getKey()))
@@ -732,7 +741,7 @@ public class IFTextField extends GUIComponent {
 		}
 		updateXPos();
 
-		controller.userState.restoreSettingsToApplet(controller.parent);
+		controller.userState.restoreSettingsToGraphics(controller.graphics);
 	}
 
 	/**
@@ -740,52 +749,43 @@ public class IFTextField extends GUIComponent {
 	 * to the screen.
 	 */
 
-	public void draw() {
+	public void render(PGraphics graphics) {
+		lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(graphics);
 		boolean hasFocus = controller.getFocusStatusForComponent(this);
 
-		/*
-		 * if (wasClicked) {
-		 * currentColor = lookAndFeel.activeColor;
-		 * } else if (isMouseOver (controller.parent.mouseX, controller.parent.mouseY)
-		 * || hasFocus) {
-		 * currentColor = lookAndFeel.highlightColor;
-		 * } else {
-		 * currentColor = lookAndFeel.baseColor;
-		 * }
-		 */
-
 		// Draw the surrounding box
-		controller.parent.stroke(lookAndFeel.highlightColor);
-		controller.parent.fill(lookAndFeel.borderColor);
-		controller.parent.rect(getX(), getY(), getWidth(), getHeight());
-		controller.parent.noStroke();
+		graphics.stroke(lookAndFeel.highlightColor);
+		graphics.fill(lookAndFeel.borderColor);
+		graphics.rect(getX(), getY(), getWidth(), getHeight());
+		graphics.noStroke();
 
 		// Compute the left offset for the start of text
 		// ***** MOVE THIS TO SOMEWHERE THAT DOESN'T GET CALLED 50 MILLION TIMES PER
 		// SECOND ******
 		float offset;
-		if (cursorPos == contents.length() && controller.parent.textWidth(contents) > getWidth() - 8)
+		if (cursorPos == contents.length() && controller.parent.g.textWidth(contents) > getWidth() - 8)
 			offset = (getWidth() - 4)
-					- controller.parent.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd));
+					- controller.parent.g.textWidth(contents.substring(visiblePortionStart, visiblePortionEnd));
 		else
 			offset = 4;
 
 		// Draw the selection rectangle
 		if (hasFocus && startSelect != -1 && endSelect != -1) {
-			controller.parent.fill(lookAndFeel.selectionColor);
-			controller.parent.rect(getX() + startSelectXPos + offset, getY() + 3, endSelectXPos - startSelectXPos + 1,
-					15);
+			graphics.fill(lookAndFeel.selectionColor);
+			graphics.rect(getX() + startSelectXPos + offset, getY() + 3, endSelectXPos -
+					startSelectXPos + 1, 15);
 		}
 
 		// Draw the string
-		controller.parent.fill(lookAndFeel.textColor);
-		controller.parent.text(contents.substring(visiblePortionStart, visiblePortionEnd), getX() + offset, getY() + 5,
-				getWidth() - 8, getHeight() - 6);
+		graphics.fill(lookAndFeel.textColor);
+		graphics.text(contents.substring(visiblePortionStart, visiblePortionEnd), getX() + offset, getY() + 4,
+				getWidth() - offset, getHeight());
 
 		// Draw the insertion point (it blinks!)
-		if (hasFocus && (startSelect == -1 || endSelect == -1) && ((controller.parent.millis() % 1000) > 500)) {
-			controller.parent.stroke(lookAndFeel.darkGrayColor);
-			controller.parent.line(getX() + (int) cursorXPos + offset, getY() + 3, getX() + (int) cursorXPos + offset,
+		if (hasFocus && (startSelect == -1 || endSelect == -1) &&
+				((controller.parent.millis() % 1000) > 500)) {
+			graphics.stroke(lookAndFeel.darkGrayColor);
+			graphics.line(getX() + (int) cursorXPos + offset, getY() + 3, getX() + (int) cursorXPos + offset,
 					getY() + 18);
 		}
 	}
@@ -797,12 +797,15 @@ public class IFTextField extends GUIComponent {
 				if (contents != "") {
 					startSelect = 0;
 					endSelect = contents.length();
+				} else {
+					startSelect = endSelect = 0;
 				}
 			} else if (e.getMessage().equals("Lost Focus")) {
 				if (contents != "") {
 					startSelect = endSelect = -1;
 				}
 			}
+			System.out.println("Selection range [" + startSelect + ".." + endSelect + "]");
 		}
 	}
 }

@@ -33,8 +33,6 @@ import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
-import interfascia.GUIComponent;
-
 public class GUIController extends GUIComponent implements ClipboardOwner {
 	private ArrayList<GUIComponent> contents;
 	private int focusIndex = -1;
@@ -44,6 +42,8 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 	private Clipboard clipboard;
 
 	public PApplet parent;
+	public PGraphics graphics;
+	protected PMatrix defaultMatrix;
 
 	public boolean showBounds = false;
 
@@ -57,13 +57,10 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 		setSize(width, height);
 	}
 
-	public GUIController(PApplet newParent, boolean newVisible) {
-		setParent(newParent);
+	public GUIController(PApplet sketch, boolean newVisible) {
+		setParent(sketch);
 		setVisible(newVisible);
 		contents = new ArrayList<GUIComponent>(5);
-
-		lookAndFeel = new IFLookAndFeel(parent, IFLookAndFeel.DEFAULT);
-		userState = new IFPGraphicsState();
 
 		try {
 			clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -71,8 +68,17 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 			clipboard = new Clipboard("Interfascia Clipboard");
 		}
 
-		newParent.registerMethod("keyEvent", this);
-		newParent.registerMethod("draw", this);
+		if (sketch.sketchRenderer().equals(PApplet.P3D) || sketch.sketchRenderer().equals(PApplet.P2D)) {
+			defaultMatrix = sketch.g.getMatrix();
+		}
+
+		graphics = sketch.createGraphics(sketch.width, sketch.height);
+
+		lookAndFeel = new IFLookAndFeel(sketch, IFLookAndFeel.DEFAULT);
+		userState = new IFPGraphicsState();
+
+		sketch.registerMethod("keyEvent", this);
+		sketch.registerMethod("draw", this);
 	}
 
 	public void setLookAndFeel(IFLookAndFeel lf) {
@@ -211,18 +217,46 @@ public class GUIController extends GUIComponent implements ClipboardOwner {
 
 	public void draw() {
 		if (visible) {
-			userState.saveSettingsForApplet(parent);
-			lookAndFeel.defaultGraphicsState.restoreSettingsToApplet(parent);
-			// parent.background(parent.g.backgroundColor);
-			parent.fill(parent.color(0));
-			parent.rect(getX(), getY(), getWidth(), getHeight());
-			for (int i = 0; i < contents.size(); i++) {
-				if (contents.get(i) != null) {
-					// parent.smooth();
-					contents.get(i).draw();
-				}
+			boolean isOpenGL = parent.sketchRenderer().equals(PApplet.P2D)
+					|| parent.sketchRenderer().equals(PApplet.P3D);
+
+			graphics.beginDraw();
+			graphics.clear();
+			render(graphics);
+			graphics.endDraw();
+
+			if (isOpenGL) {
+				parent.pushMatrix();
 			}
-			userState.restoreSettingsToApplet(parent);
+
+			if (parent.sketchRenderer().equals(PApplet.P3D)) {
+				parent.setMatrix(defaultMatrix);
+				parent.hint(PApplet.DISABLE_DEPTH_MASK);
+				parent.hint(PApplet.DISABLE_DEPTH_TEST);
+				parent.noLights();
+			}
+
+			parent.image(graphics, 0, 0);
+
+			if (parent.sketchRenderer().equals(PApplet.P3D)) {
+				parent.hint(PApplet.ENABLE_DEPTH_MASK);
+				parent.hint(PApplet.ENABLE_DEPTH_TEST);
+			}
+
+			if (isOpenGL) {
+				parent.popMatrix();
+			}
+
+		}
+	}
+
+	public void render(PGraphics gfx) {
+		lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(gfx);
+
+		for (int i = 0; i < contents.size(); i++) {
+			if (contents.get(i) != null) {
+				contents.get(i).render(gfx);
+			}
 		}
 	}
 }
