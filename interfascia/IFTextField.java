@@ -625,7 +625,9 @@ public class IFTextField extends GUIComponent {
 		controller.userState.saveSettingsForGraphics(controller.graphics);
 		lookAndFeel.defaultGraphicsState.restoreSettingsToGraphics(controller.graphics);
 
+		@SuppressWarnings("deprecation")
 		int shortcutMask = java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
 		boolean shiftDown = e.isShiftDown();
 		System.out.println((int) e.getKey());
 		System.out.println((int) java.awt.event.KeyEvent.VK_DELETE);

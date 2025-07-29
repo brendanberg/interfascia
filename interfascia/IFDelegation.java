@@ -28,7 +28,7 @@ public class IFDelegation {
 	public static Object callDelegate(Object delegate, String method, Object[] parameters) {
 		Method m;
 		Object o = null;
-		Class[] parameterTypes = new Class[parameters.length];
+		Class<? extends Object>[] parameterTypes = new Class<?>[parameters.length];
 
 		for (int i = 0; i < parameters.length; i++) {
 			parameterTypes[i] = parameters[i].getClass();
