@@ -1,4 +1,5 @@
 permalink: /:categories/:title/index.html
+baseurl: ""
 safe: true
 lsi: false
 markdown: kramdown
