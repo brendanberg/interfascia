@@ -1,0 +1,39 @@
+name: Build static assets and upload to S3
+
+on: workflow_dispatch
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout Latest Revisions
+        uses: actions/checkout@v4
+
+      - name: Build Site Assets
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+    #   - name: Configure AWS Credentials
+    #     uses: aws-actions/configure-aws-credentials@v3-node20
+    #     with:
+    #       role-to-assume: ${{ secrets.AWS_IAM_ROLE_GITHUB_ACTIONS_DEPLOY }}
+    #       role-session-name: 'GithubActionsDeploy'
+    #       aws-region: us-east-2
+
+    #   - name: Upload Static Assets
+    #     uses: ./.github/actions/s3-upload
+    #     with:
+    #         aws_s3_bucket_name: ${{ vars.AWS_S3_BUCKET_NAME }}
+    #         upload_directory_path: ${{ vars.UPLOAD_DIRECTORY_PATH }}
+
+    #   - name: Create CloudFront Invalidation
+    #     uses: ./.github/actions/cloudfront-invalidation
+    #     with:
+    #         aws_cloudfront_distribution_id: ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
