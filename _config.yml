@@ -7,3 +7,4 @@ kramdown:
   input: GFM
 exclude:
   - params.json
+  - README.md

@@ -23,5 +23,5 @@ runs:
         AWS_S3_PREFIX: ${{ inputs.aws_s3_prefix }}
         UPLOAD_DIRECTORY_PATH: ${{ inputs.upload_directory_path }}
       run: |
-        aws s3 sync $UPLOAD_DIRECTORY_PATH s3://$AWS_S3_BUCKET_NAME/$AWS_S3_PREFIX
+        aws s3 sync $UPLOAD_DIRECTORY_PATH s3://$AWS_S3_BUCKET_NAME/$AWS_S3_PREFIX --delete
         echo "### :arrow_up: Successfully uploaded files to $AWS_S3_BUCKET_NAME" >> $GITHUB_STEP_SUMMARY
