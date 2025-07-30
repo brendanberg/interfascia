@@ -33,7 +33,7 @@ jobs:
           aws_s3_bucket_name: ${{ vars.AWS_S3_BUCKET_NAME }}
           upload_directory_path: ./_site
 
-    #   - name: Create CloudFront Invalidation
-    #     uses: ./.github/actions/cloudfront-invalidation
-    #     with:
-    #         aws_cloudfront_distribution_id: ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+      - name: Create CloudFront Invalidation
+        uses: ./.github/actions/cloudfront-invalidation
+        with:
+          aws_cloudfront_distribution_id: ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
