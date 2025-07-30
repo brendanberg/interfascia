@@ -1,7 +1,9 @@
-permalink: /:categories/:title
+permalink: /:categories/:title/index.html
 safe: true
 lsi: false
 markdown: kramdown
 highlighter: rouge
 kramdown:
   input: GFM
+exclude:
+  - params.json
