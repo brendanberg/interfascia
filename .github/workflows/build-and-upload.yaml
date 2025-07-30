@@ -1,6 +1,9 @@
 name: Build static assets and upload to S3
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - "interfascia.berg.industries"
 
 jobs:
   upload:
