@@ -20,18 +20,18 @@ jobs:
           source: ./
           destination: ./_site
 
-    #   - name: Configure AWS Credentials
-    #     uses: aws-actions/configure-aws-credentials@v3-node20
-    #     with:
-    #       role-to-assume: ${{ secrets.AWS_IAM_ROLE_GITHUB_ACTIONS_DEPLOY }}
-    #       role-session-name: 'GithubActionsDeploy'
-    #       aws-region: us-east-2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3-node20
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_GITHUB_ACTIONS_DEPLOY }}
+          role-session-name: "GithubActionsDeploy"
+          aws-region: us-east-2
 
-    #   - name: Upload Static Assets
-    #     uses: ./.github/actions/s3-upload
-    #     with:
-    #         aws_s3_bucket_name: ${{ vars.AWS_S3_BUCKET_NAME }}
-    #         upload_directory_path: ${{ vars.UPLOAD_DIRECTORY_PATH }}
+      - name: Upload Static Assets
+        uses: ./.github/actions/s3-upload
+        with:
+          aws_s3_bucket_name: ${{ vars.AWS_S3_BUCKET_NAME }}
+          upload_directory_path: ./_site
 
     #   - name: Create CloudFront Invalidation
     #     uses: ./.github/actions/cloudfront-invalidation
